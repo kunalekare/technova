@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: technova
+    env: node
+    rootDir: server
+    buildCommand: "npm install && cd ../client && npm install && npm run build"
+    startCommand: "npm start"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # The PORT variable is automatically provided by Render
+      # Other variables (MONGO_URI, JWT_SECRET, GOOGLE_*) must be set manually in the Render dashboard.
