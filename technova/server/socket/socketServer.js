@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import Notification from '../models/Notification.js';
 
 let io;
 
@@ -49,12 +50,13 @@ export const initSocketServer = (httpServer) => {
 
     // Handle project chat messages
     socket.on('sendMessage', async (data) => {
-      const { projectId, content } = data;
+      const { projectId, content, attachments } = data;
       
       const message = {
-        _id: new Date().getTime().toString(), // mock ID
+        _id: new Date().getTime().toString(),
         projectId,
         content,
+        attachments: attachments || [],
         sender: {
           _id: socket.user._id,
           name: socket.user.name,
@@ -65,6 +67,20 @@ export const initSocketServer = (httpServer) => {
 
       // Broadcast to everyone in the project room
       io.to(`project_${projectId}`).emit('receiveMessage', message);
+    });
+
+    // Handle typing indicators
+    socket.on('typing', ({ projectId }) => {
+      socket.to(`project_${projectId}`).emit('userTyping', {
+        userId: socket.user._id,
+        name: socket.user.name,
+      });
+    });
+
+    socket.on('stopTyping', ({ projectId }) => {
+      socket.to(`project_${projectId}`).emit('userStopTyping', {
+        userId: socket.user._id,
+      });
     });
 
     socket.on('disconnect', () => {
@@ -80,4 +96,22 @@ export const getIO = () => {
     throw new Error('Socket.io not initialized!');
   }
   return io;
+};
+
+// Helper to send real-time notification to a user
+export const sendNotification = async (userId, notification) => {
+  try {
+    const notif = await Notification.create({
+      user: userId,
+      ...notification,
+    });
+
+    if (io) {
+      io.to(userId.toString()).emit('notification', notif);
+    }
+
+    return notif;
+  } catch (error) {
+    console.error('Failed to send notification:', error);
+  }
 };

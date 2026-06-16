@@ -1,0 +1,91 @@
+import { Helmet } from 'react-helmet-async';
+import { motion } from 'framer-motion';
+import { HiBriefcase, HiClock, HiDocumentText } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
+
+const mockInternships = [
+  {
+    id: 'a1',
+    title: 'Frontend React Intern',
+    company: 'TechNova Core Team',
+    status: 'Selected',
+    appliedDate: '2026-06-01',
+    nextAction: 'Pending Offer Letter Acceptance'
+  }
+];
+
+const MyInternships = () => {
+  return (
+    <>
+      <Helmet>
+        <title>My Internships | TechNova Dashboard</title>
+      </Helmet>
+
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-white mb-2">My Internships</h1>
+          <p className="text-surface-400">Track your applications and active internship programs.</p>
+        </div>
+        <Link to="/internships" className="btn-primary">Browse Internships</Link>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {mockInternships.map((app, i) => (
+          <motion.div 
+            key={app.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="glass-card p-6"
+          >
+            <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center">
+                  <HiBriefcase className="w-5 h-5 text-primary-400" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white">{app.title}</h3>
+                  <p className="text-xs text-surface-400">{app.company}</p>
+                </div>
+              </div>
+              <span className="badge-primary !bg-emerald-500/10 !text-emerald-400 border border-emerald-500/20">
+                {app.status}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div>
+                <p className="text-xs text-surface-500 flex items-center gap-1 mb-1"><HiClock /> Applied On</p>
+                <p className="text-sm text-white font-medium">{app.appliedDate}</p>
+              </div>
+              <div>
+                <p className="text-xs text-surface-500 flex items-center gap-1 mb-1"><HiDocumentText /> Next Step</p>
+                <p className="text-sm text-accent-400 font-medium">{app.nextAction}</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <button className="btn-secondary flex-1 !py-2 text-sm">View Status</button>
+              {app.status === 'Selected' && (
+                <button className="btn-primary flex-1 !py-2 text-sm">Intern Dashboard</button>
+              )}
+            </div>
+          </motion.div>
+        ))}
+
+        {mockInternships.length === 0 && (
+          <div className="col-span-full glass-card p-12 text-center border-dashed">
+            <div className="w-16 h-16 rounded-full bg-primary-500/10 flex items-center justify-center mx-auto mb-4">
+              <HiBriefcase className="w-8 h-8 text-primary-400" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">No Applications Yet</h3>
+            <p className="text-surface-400 mb-6">You haven't applied to any internships.</p>
+            <Link to="/internships" className="btn-primary">Find Internships</Link>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
+export default MyInternships;

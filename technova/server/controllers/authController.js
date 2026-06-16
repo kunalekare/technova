@@ -334,3 +334,48 @@ export const googleCallback = async (req, res) => {
     res.redirect(`${process.env.CLIENT_URL}/login?error=oauth_failed`);
   }
 };
+
+// @desc    Update Password
+// @route   PUT /api/v1/auth/update-password
+// @access  Private
+export const updatePassword = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).select('+password');
+
+    // If Google auth user with no password
+    if (!user.password) {
+      return res.status(400).json({
+        success: false,
+        message: 'You signed in with Google. You cannot change your password here.',
+      });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide both current and new passwords',
+      });
+    }
+
+    // Check current password
+    const isMatch = await user.matchPassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Current password is incorrect',
+      });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Password updated successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};

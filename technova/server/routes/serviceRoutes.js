@@ -5,12 +5,14 @@ import {
   createService,
   updateService,
   deleteService,
+  fixCategories
 } from '../controllers/serviceController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // Public routes
+router.get('/seed', fixCategories);
 router.get('/', getServices);
 router.get('/:id', getServiceById);
 

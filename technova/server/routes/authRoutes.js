@@ -9,6 +9,7 @@ import {
   forgotPassword,
   resetPassword,
   googleCallback,
+  updatePassword,
 } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { authLimiter } from '../middleware/rateLimiter.js';
@@ -53,7 +54,8 @@ router.get(
 );
 
 // Protected routes
+router.post('/logout', logout);
 router.get('/me', protect, getMe);
-router.post('/logout', protect, logout);
+router.put('/update-password', protect, updatePassword);
 
 export default router;

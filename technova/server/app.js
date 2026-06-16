@@ -1,8 +1,8 @@
-
 import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
+import { createServer } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
@@ -11,9 +11,14 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 
+import connectDB from './config/db.js';
+import { initSocketServer } from './socket/socketServer.js';
+
 import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import serviceRoutes, { adminServiceRouter } from './routes/serviceRoutes.js';
+import internshipRoutes from './routes/internshipRoutes.js';
+import jobRoutes from './routes/jobRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
@@ -21,13 +26,27 @@ import orderRoutes from './routes/orderRoutes.js';
 import ticketRoutes from './routes/ticketRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import invoiceRoutes from './routes/invoiceRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import blogRoutes from './routes/blogRoutes.js';
+import portfolioRoutes from './routes/portfolioRoutes.js';
+import teamRoutes from './routes/teamRoutes.js';
+import customRequestRoutes from './routes/customRequestRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
 import configurePassport from './config/passport.js';
 
 const app = express();
+const httpServer = createServer(app);
 
-// ---- Core Middleware ----
+// Connect to Database
+connectDB();
+
+// Initialize Socket.io
+initSocketServer(httpServer);
+
+// ---- Middleware ----
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
@@ -40,19 +59,19 @@ app.use(cors({
 }));
 
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// ---- Passport ----
+// Passport Initialization
+configurePassport(passport);
 app.use(passport.initialize());
-configurePassport();
 
-// ---- Rate Limiting ----
-app.use('/api/', apiLimiter);
+// Apply rate limiting to all requests
+app.use('/api', apiLimiter);
 
 // ---- Health Check ----
 app.get('/api/health', (req, res) => {
@@ -65,16 +84,25 @@ app.get('/api/health', (req, res) => {
 
 // ---- API Routes ----
 app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/categories', categoryRoutes);
+app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/services', serviceRoutes);
 app.use('/api/v1/admin/services', adminServiceRouter);
-app.use('/api/v1/leads', leadRoutes);
-app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/categories', categoryRoutes);
+app.use('/api/v1/internships', internshipRoutes);
+app.use('/api/v1/jobs', jobRoutes);
 app.use('/api/v1/projects', projectRoutes);
 app.use('/api/v1/orders', orderRoutes);
+app.use('/api/v1/leads', leadRoutes);
 app.use('/api/v1/tickets', ticketRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/ai', aiRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
+app.use('/api/v1/invoices', invoiceRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
+app.use('/api/v1/blogs', blogRoutes);
+app.use('/api/v1/portfolio', portfolioRoutes);
+app.use('/api/v1/team', teamRoutes);
+app.use('/api/v1/custom-requests', customRequestRoutes);
 
 // ---- Static Files for Production ----
 if (process.env.NODE_ENV === 'production') {

@@ -7,6 +7,8 @@ import { logout } from '../../redux/slices/authSlice';
 
 const navLinks = [
   { name: 'Services', path: '/services' },
+  { name: 'Careers', path: '/careers' },
+  { name: 'Internships', path: '/internships' },
   { name: 'Portfolio', path: '/portfolio' },
   { name: 'Blog', path: '/blog' },
   { name: 'About', path: '/about' },

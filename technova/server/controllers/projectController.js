@@ -90,3 +90,47 @@ export const getProjectById = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Send a proposal for a project
+// @route   PUT /api/v1/projects/:id/proposal
+// @access  Private/Admin
+export const sendProjectProposal = async (req, res, next) => {
+  try {
+    const { price, timeline, message } = req.body;
+
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      res.status(404);
+      throw new Error('Project not found');
+    }
+
+    project.proposal = {
+      price,
+      timeline,
+      message,
+      sentAt: new Date(),
+      isAccepted: false,
+    };
+    
+    project.status = 'proposal_sent';
+
+    await project.save();
+
+    // Ideally send a Socket.io notification here
+    import('../socket/socketServer.js').then(({ sendNotification }) => {
+      sendNotification(project.client, {
+        type: 'project',
+        title: 'Proposal Received',
+        message: `Admin has sent a proposal for project: ${project.title}`,
+        link: `/dashboard/projects/${project._id}`
+      });
+    }).catch(err => console.error(err));
+
+    res.status(200).json({
+      success: true,
+      data: project,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

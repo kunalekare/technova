@@ -1,5 +1,5 @@
 import express from 'express';
-import { createLead, getLeads, updateLeadStatus } from '../controllers/leadController.js';
+import { createLead, getLeads, updateLeadStatus, communicateWithLead } from '../controllers/leadController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -13,5 +13,6 @@ router.use(authorize('admin', 'super_admin'));
 
 router.get('/', getLeads);
 router.put('/:id/status', updateLeadStatus);
+router.post('/:id/communicate', communicateWithLead);
 
 export default router;

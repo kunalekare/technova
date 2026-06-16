@@ -87,3 +87,24 @@ export const getOrderById = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get all orders (Admin)
+// @route   GET /api/v1/orders
+// @access  Private/Admin
+export const getAllOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find()
+      .populate('user', 'name email')
+      .populate('service', 'title')
+      .populate('project', 'title')
+      .sort('-createdAt');
+
+    res.status(200).json({
+      success: true,
+      count: orders.length,
+      data: orders,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

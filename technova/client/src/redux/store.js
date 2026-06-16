@@ -7,6 +7,11 @@ import projectReducer from './slices/projectSlice';
 import orderReducer from './slices/orderSlice';
 import adminReducer from './slices/adminSlice';
 import aiReducer from './slices/aiSlice';
+import ticketReducer from './slices/ticketSlice';
+import dashboardReducer from './slices/dashboardSlice';
+import blogReducer from './slices/blogSlice';
+import portfolioReducer from './slices/portfolioSlice';
+import teamReducer from './slices/teamSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,9 +23,15 @@ export const store = configureStore({
     order: orderReducer,
     admin: adminReducer,
     ai: aiReducer,
+    ticket: ticketReducer,
+    dashboard: dashboardReducer,
+    blog: blogReducer,
+    portfolio: portfolioReducer,
+    team: teamReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
 });
+

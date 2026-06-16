@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   HiViewGrid, HiFolderOpen, HiHeart,
   HiUser, HiLogout, HiCog, HiCreditCard, HiTicket,
-  HiUsers, HiCollection, HiChartPie, HiInbox, HiSparkles
+  HiUsers, HiCollection, HiChartPie, HiInbox, HiSparkles, HiBell,
+  HiUserGroup, HiStar, HiPencilAlt, HiPhotograph, HiBriefcase
 } from 'react-icons/hi';
 import { logout } from '../../redux/slices/authSlice';
 
@@ -11,18 +12,32 @@ const clientLinks = [
   { name: 'Overview', path: '/dashboard', icon: HiViewGrid },
   { name: 'AI Scoper', path: '/dashboard/scoper', icon: HiSparkles },
   { name: 'My Projects', path: '/dashboard/projects', icon: HiFolderOpen },
+  { name: 'My Applications', path: '/dashboard/jobs', icon: HiBriefcase },
+  { name: 'Internships', path: '/dashboard/internships', icon: HiBriefcase },
   { name: 'Wishlist', path: '/dashboard/wishlist', icon: HiHeart },
   { name: 'Orders & Payments', path: '/dashboard/orders', icon: HiCreditCard },
   { name: 'Support Tickets', path: '/dashboard/tickets', icon: HiTicket },
+  { name: 'Notifications', path: '/dashboard/notifications', icon: HiBell },
   { name: 'Profile', path: '/dashboard/profile', icon: HiUser },
 ];
 
 const adminLinks = [
-  { name: 'KPIs & Analytics', path: '/admin', icon: HiChartPie },
+  { name: 'Dashboard KPIs', path: '/admin', icon: HiChartPie },
+  { name: 'Analytics', path: '/admin/analytics', icon: HiChartPie },
   { name: 'Leads CRM', path: '/admin/leads', icon: HiInbox },
-  { name: 'All Projects', path: '/admin/projects', icon: HiFolderOpen },
+  { name: 'Projects', path: '/admin/projects', icon: HiFolderOpen },
   { name: 'Services Mgmt', path: '/admin/services', icon: HiCollection },
+  { name: 'Custom Requests', path: '/admin/custom-requests', icon: HiInbox },
+  { name: 'Jobs Mgmt', path: '/admin/jobs', icon: HiBriefcase },
+  { name: 'Internships Mgmt', path: '/admin/internships', icon: HiBriefcase },
   { name: 'Users', path: '/admin/users', icon: HiUsers },
+  { name: 'Team Mgmt', path: '/admin/team', icon: HiUserGroup },
+  { name: 'Payments', path: '/admin/payments', icon: HiCreditCard },
+  { name: 'Reviews', path: '/admin/reviews', icon: HiStar },
+  { name: 'Blog', path: '/admin/blog', icon: HiPencilAlt },
+  { name: 'Portfolio', path: '/admin/portfolio', icon: HiPhotograph },
+  { name: 'Tickets', path: '/admin/tickets', icon: HiTicket },
+  { name: 'Broadcasts', path: '/admin/broadcasts', icon: HiBell },
 ];
 
 const Sidebar = ({ isMobile, closeMobileSidebar }) => {
@@ -90,7 +105,7 @@ const Sidebar = ({ isMobile, closeMobileSidebar }) => {
       {/* Bottom Actions */}
       <div className="p-4 border-t border-white/5 space-y-1">
         <Link
-          to="/dashboard/settings"
+          to={(user?.role?.name === 'admin' || user?.role?.name === 'super_admin') ? '/admin/settings' : '/dashboard/settings'}
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-surface-300 hover:text-white hover:bg-white/5 transition-all"
         >
           <HiCog className="w-5 h-5 text-surface-400" />

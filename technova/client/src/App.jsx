@@ -18,6 +18,10 @@ import About from './pages/public/About';
 import Contact from './pages/public/Contact';
 import Portfolio from './pages/public/Portfolio';
 import Blog from './pages/public/Blog';
+import Careers from './pages/public/Careers';
+import JobDetail from './pages/public/JobDetail';
+import Internships from './pages/public/Internships';
+import InternshipDetail from './pages/public/InternshipDetail';
 
 // Auth Pages
 import Login from './pages/auth/Login';
@@ -34,7 +38,11 @@ import Projects from './pages/user/Projects';
 import ProjectDetail from './pages/user/ProjectDetail';
 import Orders from './pages/user/Orders';
 import Tickets from './pages/user/Tickets';
+import Notifications from './pages/user/Notifications';
 import ProjectScoper from './components/ai/ProjectScoper';
+import MyJobApplications from './pages/user/MyJobApplications';
+import MyInternships from './pages/user/MyInternships';
+import Settings from './pages/user/Settings';
 
 // Admin Pages
 import { AdminRoute } from './routes/ProtectedRoute';
@@ -43,6 +51,18 @@ import LeadsCRM from './pages/admin/LeadsCRM';
 import UsersManager from './pages/admin/UsersManager';
 import ServicesManager from './pages/admin/ServicesManager';
 import ProjectsManager from './pages/admin/ProjectsManager';
+import AdminProjectDetail from './pages/admin/AdminProjectDetail';
+import TeamManager from './pages/admin/TeamManager';
+import PaymentsManager from './pages/admin/PaymentsManager';
+import AnalyticsDashboard from './pages/admin/AnalyticsDashboard';
+import BlogManager from './pages/admin/BlogManager';
+import PortfolioManager from './pages/admin/PortfolioManager';
+import ReviewModerator from './pages/admin/ReviewModerator';
+import SupportTickets from './pages/admin/SupportTickets';
+import BroadcastNotifications from './pages/admin/BroadcastNotifications';
+import AdminJobs from './pages/admin/AdminJobs';
+import AdminInternships from './pages/admin/AdminInternships';
+import AdminCustomRequests from './pages/admin/AdminCustomRequests';
 
 import { Outlet } from 'react-router-dom';
 
@@ -81,6 +101,11 @@ const App = () => {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/blog" element={<Blog />} />
 
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/careers/:id" element={<JobDetail />} />
+          <Route path="/internships" element={<Internships />} />
+          <Route path="/internships/:id" element={<InternshipDetail />} />
+
           {/* Auth routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -113,11 +138,15 @@ const App = () => {
         >
           <Route index element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
           <Route path="wishlist" element={<Wishlist />} />
           <Route path="projects" element={<Projects />} />
           <Route path="projects/:id" element={<ProjectDetail />} />
+          <Route path="jobs" element={<MyJobApplications />} />
+          <Route path="internships" element={<MyInternships />} />
           <Route path="orders" element={<Orders />} />
           <Route path="tickets" element={<Tickets />} />
+          <Route path="notifications" element={<Notifications />} />
           <Route path="scoper" element={
             <div className="max-w-4xl mx-auto"><ProjectScoper /></div>
           } />
@@ -133,10 +162,23 @@ const App = () => {
           }
         >
           <Route index element={<AdminDashboard />} />
+          <Route path="settings" element={<Settings />} />
           <Route path="leads" element={<LeadsCRM />} />
           <Route path="users" element={<UsersManager />} />
           <Route path="services" element={<ServicesManager />} />
+          <Route path="custom-requests" element={<AdminCustomRequests />} />
           <Route path="projects" element={<ProjectsManager />} />
+          <Route path="projects/:id" element={<AdminProjectDetail />} />
+          <Route path="team" element={<TeamManager />} />
+          <Route path="jobs" element={<AdminJobs />} />
+          <Route path="internships" element={<AdminInternships />} />
+          <Route path="payments" element={<PaymentsManager />} />
+          <Route path="analytics" element={<AnalyticsDashboard />} />
+          <Route path="blog" element={<BlogManager />} />
+          <Route path="portfolio" element={<PortfolioManager />} />
+          <Route path="reviews" element={<ReviewModerator />} />
+          <Route path="tickets" element={<SupportTickets />} />
+          <Route path="broadcasts" element={<BroadcastNotifications />} />
         </Route>
       </Routes>
       <ChatbotWidget />

@@ -33,6 +33,21 @@ export const protect = async (req, res, next) => {
       });
     }
 
+    // Fallback: If user exists but role is missing (e.g. legacy user or deleted role), assign client role
+    if (!req.user.role) {
+      let clientRole = await Role.findOne({ name: 'client' });
+      if (!clientRole) {
+        clientRole = await Role.create({
+          name: 'client',
+          permissions: ['view_services', 'create_projects', 'manage_profile'],
+        });
+      }
+      req.user.role = clientRole._id;
+      await req.user.save();
+      // Repopulate for the current request
+      req.user = await User.findById(decoded.id).populate('role');
+    }
+
     if (req.user.status === 'suspended') {
       return res.status(403).json({
         success: false,

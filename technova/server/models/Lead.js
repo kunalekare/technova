@@ -45,6 +45,7 @@ const leadSchema = new mongoose.Schema(
     notes: [
       {
         text: String,
+        isEmail: { type: Boolean, default: false },
         addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         createdAt: { type: Date, default: Date.now },
       },

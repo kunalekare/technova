@@ -19,6 +19,7 @@ const ServiceDetail = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(fetchServiceById(id));
     return () => { dispatch(clearCurrentService()); };
   }, [dispatch, id]);
@@ -117,7 +118,8 @@ const ServiceDetail = () => {
                     ))}
                   </ul>
                   <Link
-                    to={isAuthenticated ? `/request?service=${service._id}&tier=${tier.name}` : '/login'}
+                    to={isAuthenticated ? `/dashboard/projects?new=true&service=${service._id}&tier=${tier.name}` : '/login'}
+                    state={!isAuthenticated ? { from: { pathname: '/dashboard/projects', search: `?new=true&service=${service._id}&tier=${tier.name}` } } : null}
                     className={`w-full text-center py-3 rounded-xl font-semibold transition-all duration-300 ${
                       tier.name === 'Standard'
                         ? 'btn-primary'

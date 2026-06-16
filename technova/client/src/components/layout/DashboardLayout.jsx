@@ -1,16 +1,35 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { HiMenuAlt2, HiBell, HiSearch } from 'react-icons/hi';
+import { useDispatch } from 'react-redux';
+import { HiMenuAlt2, HiSearch } from 'react-icons/hi';
 import Sidebar from './Sidebar';
+import NotificationBell from '../dashboard/NotificationBell';
+import { useSocket } from '../../hooks/useSocket';
+import { addNotification } from '../../redux/slices/notificationSlice';
 
 const DashboardLayout = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const dispatch = useDispatch();
+  const { socket, connected } = useSocket();
 
   useEffect(() => {
     // Scroll to top on route change within dashboard
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  // Listen for real-time notifications via socket
+  useEffect(() => {
+    if (socket && connected) {
+      socket.on('notification', (notification) => {
+        dispatch(addNotification(notification));
+      });
+
+      return () => {
+        socket.off('notification');
+      };
+    }
+  }, [socket, connected, dispatch]);
 
   return (
     <div className="min-h-screen bg-surface-950">
@@ -45,11 +64,8 @@ const DashboardLayout = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              {/* Notification Bell */}
-              <button className="relative p-2 text-surface-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors">
-                <HiBell className="w-5 h-5" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-surface-950"></span>
-              </button>
+              {/* Notification Bell with dropdown */}
+              <NotificationBell />
             </div>
           </div>
         </header>

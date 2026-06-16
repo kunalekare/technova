@@ -19,7 +19,9 @@ const Login = () => {
   const [searchParams] = useSearchParams();
   const { isAuthenticated, loading, error, user } = useSelector((state) => state.auth);
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  const fromPath = location.state?.from?.pathname || '/dashboard';
+  const fromSearch = location.state?.from?.search || '';
+  const from = fromPath + fromSearch;
 
   // Handle Google OAuth callback
   useEffect(() => {
@@ -35,8 +37,9 @@ const Login = () => {
     if (isAuthenticated && user) {
       const isAdmin = user.role?.name === 'admin' || user.role?.name === 'super_admin';
       const defaultRoute = isAdmin ? '/admin' : '/dashboard';
-      const target = location.state?.from?.pathname || defaultRoute;
-      navigate(target, { replace: true });
+      const targetPath = location.state?.from?.pathname || defaultRoute;
+      const targetSearch = location.state?.from?.search || '';
+      navigate(targetPath + targetSearch, { replace: true });
     }
   }, [isAuthenticated, user, navigate, location]);
 

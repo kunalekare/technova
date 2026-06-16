@@ -62,6 +62,16 @@ const projectSchema = new mongoose.Schema(
       default: 0,
     },
     deadline: Date,
+    proposal: {
+      price: Number,
+      timeline: String,
+      message: String,
+      sentAt: Date,
+      isAccepted: {
+        type: Boolean,
+        default: false,
+      },
+    },
     aiEstimate: {
       estimatedCost: Number,
       estimatedDays: Number,
