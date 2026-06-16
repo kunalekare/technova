@@ -59,9 +59,8 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Index for fast lookups
-userSchema.index({ email: 1 });
-userSchema.index({ googleId: 1 });
+// Index for fast lookups (email and googleId are already indexed via unique/sparse on schema)
+
 
 // Hash password before saving
 userSchema.pre('save', async function (next) {
