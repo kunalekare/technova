@@ -49,6 +49,16 @@ initSocketServer(httpServer);
 // ---- Middleware ----
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      connectSrc: ["'self'", "https://*", "wss://*", "http://localhost:*", "ws://localhost:*"],
+      imgSrc: ["'self'", "data:", "blob:", "https://*"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://*"],
+      fontSrc: ["'self'", "data:", "https://*"],
+    },
+  },
 }));
 
 app.use(cors({
