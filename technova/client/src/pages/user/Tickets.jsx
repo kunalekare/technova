@@ -110,7 +110,7 @@ const Tickets = () => {
   if (view === 'list') {
     return (
       <>
-        <Helmet><title>Support Tickets | TechNova</title></Helmet>
+        <Helmet><title>Support Tickets | Velixora</title></Helmet>
         <div className="max-w-7xl mx-auto space-y-8">
           
           {/* Header section with glow */}
@@ -253,7 +253,7 @@ const Tickets = () => {
   if (view === 'create') {
     return (
       <>
-        <Helmet><title>New Ticket | TechNova</title></Helmet>
+        <Helmet><title>New Ticket | Velixora</title></Helmet>
         <div className="max-w-3xl mx-auto space-y-6">
           <button onClick={() => setView('list')} className="inline-flex items-center text-sm font-bold text-surface-400 hover:text-white transition-colors group">
             <HiArrowLeft className="w-4 h-4 mr-1.5 group-hover:-translate-x-1 transition-transform" /> Back to Tickets
@@ -349,7 +349,7 @@ const Tickets = () => {
   // DETAIL VIEW (Thread)
   return (
     <>
-      <Helmet><title>{currentTicket?.subject || 'Ticket'} | TechNova</title></Helmet>
+      <Helmet><title>{currentTicket?.subject || 'Ticket'} | Velixora</title></Helmet>
       <div className="max-w-4xl mx-auto space-y-6">
         <button onClick={handleBack} className="inline-flex items-center text-sm font-bold text-surface-400 hover:text-white transition-colors group">
           <HiArrowLeft className="w-4 h-4 mr-1.5 group-hover:-translate-x-1 transition-transform" /> Back to Tickets

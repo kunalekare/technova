@@ -27,8 +27,8 @@ const About = () => {
   return (
     <>
       <Helmet>
-        <title>About Us | TechNova Solutions</title>
-        <meta name="description" content="TechNova Solutions is a premium technology agency delivering scalable software, AI integration, and cloud infrastructure to global enterprises." />
+        <title>About Us | Velixora Solutions</title>
+        <meta name="description" content="Velixora Solutions is a premium technology agency delivering scalable software, AI integration, and cloud infrastructure to global enterprises." />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16 bg-surface-950">
@@ -62,7 +62,7 @@ const About = () => {
               transition={{ delay: 0.2, duration: 0.5 }}
               className="text-xl text-surface-400 leading-relaxed mb-10"
             >
-              We are an elite collective of engineers, designers, and strategists. TechNova partners with ambitious brands to build scalable software and integrate transformative AI solutions.
+              We are an elite collective of engineers, designers, and strategists. Velixora partners with ambitious brands to build scalable software and integrate transformative AI solutions.
             </motion.p>
 
             <motion.div
@@ -176,7 +176,7 @@ const About = () => {
                 Ready to accelerate your roadmap?
               </h2>
               <p className="text-xl text-surface-300 mb-10 max-w-2xl mx-auto">
-                Join the fastest-growing enterprises that trust TechNova to scale their digital infrastructure.
+                Join the fastest-growing enterprises that trust Velixora to scale their digital infrastructure.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Link to="/contact" className="btn-primary px-8 py-4 text-lg">

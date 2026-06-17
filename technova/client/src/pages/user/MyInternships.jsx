@@ -27,7 +27,7 @@ const MyInternships = () => {
   return (
     <>
       <Helmet>
-        <title>My Internships | TechNova Dashboard</title>
+        <title>My Internships | Velixora Dashboard</title>
       </Helmet>
 
       <div className="max-w-7xl mx-auto space-y-8">
@@ -72,7 +72,7 @@ const MyInternships = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white group-hover:text-primary-300 transition-colors line-clamp-1">{app.internship?.title || 'Unknown Internship'}</h3>
-                    <p className="text-sm text-surface-400 mt-1 font-medium">{app.internship?.company || 'TechNova'}</p>
+                    <p className="text-sm text-surface-400 mt-1 font-medium">{app.internship?.company || 'Velixora'}</p>
                   </div>
                 </div>
                 <span className={`px-3 py-1 text-xs font-black tracking-widest rounded-lg border uppercase w-fit bg-${color}-500/10 text-${color}-400 border-${color}-500/20`}>
@@ -146,7 +146,7 @@ const MyInternships = () => {
       {/* Detailed Status Modal */}
       <AnimatePresence>
         {selectedApp && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <motion.div key="modal-overlay" className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -168,7 +168,7 @@ const MyInternships = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white">{selectedApp.internship?.title || 'Unknown Internship'}</h3>
-                    <p className="text-sm text-surface-400">{selectedApp.internship?.company || 'TechNova'}</p>
+                    <p className="text-sm text-surface-400">{selectedApp.internship?.company || 'Velixora'}</p>
                   </div>
                 </div>
                 <button 
@@ -184,16 +184,16 @@ const MyInternships = () => {
                 
                 {/* Status Banner */}
                 <div className={`p-4 rounded-2xl border flex items-center justify-between ${
-                  selectedApp.status === 'Selected' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
+                  selectedApp.status === 'Hired' || selectedApp.status === 'Offered' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
                   selectedApp.status === 'Rejected' ? 'bg-red-500/10 border-red-500/20 text-red-400' :
-                  selectedApp.status === 'Interviewing' || selectedApp.status === 'Technical Assessment' ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' :
+                  selectedApp.status === 'Interviewing' ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' :
                   'bg-primary-500/10 border-primary-500/20 text-primary-400'
                 }`}>
                   <div>
                     <p className="text-xs font-bold uppercase tracking-wider mb-1 opacity-80">Current Status</p>
                     <p className="text-lg font-bold">{selectedApp.status || 'Pending Review'}</p>
                   </div>
-                  <HiOutlineAcademicCap className="w-8 h-8 opacity-50" />
+                  <HiBriefcase className="w-8 h-8 opacity-50" />
                 </div>
 
                 {/* Recruiter Feedback */}
@@ -215,16 +215,16 @@ const MyInternships = () => {
                     <p className="text-sm text-white font-medium">{new Date(selectedApp.createdAt).toLocaleDateString()}</p>
                   </div>
                   <div className="bg-surface-800/30 p-4 rounded-xl border border-white/5">
-                    <p className="text-xs font-bold text-surface-500 uppercase tracking-wider mb-1">Current University</p>
-                    <p className="text-sm text-white font-medium">{selectedApp.university || 'Not specified'}</p>
-                  </div>
-                  <div className="bg-surface-800/30 p-4 rounded-xl border border-white/5">
-                    <p className="text-xs font-bold text-surface-500 uppercase tracking-wider mb-1">Graduation Year</p>
-                    <p className="text-sm text-white font-medium">{selectedApp.graduationYear || 'Not specified'}</p>
-                  </div>
-                  <div className="bg-surface-800/30 p-4 rounded-xl border border-white/5">
-                    <p className="text-xs font-bold text-surface-500 uppercase tracking-wider mb-1">Phone</p>
+                    <p className="text-xs font-bold text-surface-500 uppercase tracking-wider mb-1">Phone Number</p>
                     <p className="text-sm text-white font-medium">{selectedApp.phone || 'Not specified'}</p>
+                  </div>
+                  <div className="bg-surface-800/30 p-4 rounded-xl border border-white/5">
+                    <p className="text-xs font-bold text-surface-500 uppercase tracking-wider mb-1">University / College</p>
+                    <p className="text-sm text-white font-medium">{selectedApp.universityName || 'Not specified'}</p>
+                  </div>
+                  <div className="bg-surface-800/30 p-4 rounded-xl border border-white/5">
+                    <p className="text-xs font-bold text-surface-500 uppercase tracking-wider mb-1">Major / Degree</p>
+                    <p className="text-sm text-white font-medium">{selectedApp.majorOrDegree || 'Not specified'}</p>
                   </div>
                 </div>
 
@@ -270,7 +270,7 @@ const MyInternships = () => {
               </div>
 
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

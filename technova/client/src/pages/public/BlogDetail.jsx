@@ -41,7 +41,7 @@ const BlogDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{post.title} — TechNova Blog</title>
+        <title>{post.title} — Velixora Blog</title>
         <meta name="description" content={post.excerpt} />
       </Helmet>
 

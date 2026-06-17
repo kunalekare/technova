@@ -1,4 +1,4 @@
-# TechNova Solutions
+# Velixora Solutions
 
 Full-stack Technology Services Marketplace & Agency Platform built on the **MERN Stack** (MongoDB, Express.js, React.js, Node.js).
 

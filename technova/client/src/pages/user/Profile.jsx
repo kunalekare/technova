@@ -85,7 +85,7 @@ const Profile = () => {
   return (
     <>
       <Helmet>
-        <title>Profile Settings | TechNova</title>
+        <title>Profile Settings | Velixora</title>
       </Helmet>
       <div className="max-w-4xl mx-auto space-y-8">
         

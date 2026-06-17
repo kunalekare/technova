@@ -88,7 +88,7 @@ const Projects = () => {
   return (
     <>
       <Helmet>
-        <title>My Projects | TechNova</title>
+        <title>My Projects | Velixora</title>
       </Helmet>
       
       <div className="space-y-8 max-w-7xl mx-auto">

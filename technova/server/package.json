@@ -1,12 +1,13 @@
 {
   "name": "technova-server",
   "version": "1.0.0",
-  "description": "TechNova Solutions - Technology Services Marketplace API",
+  "description": "Velixora Solutions - Technology Services Marketplace API",
   "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "replace": "node ../replace.js",
     "seed": "node seeds/index.js",
     "seed:missing": "node seedMissingServices.js",
     "fix": "node fixDB.js",

@@ -44,8 +44,8 @@ const Hire = () => {
   return (
     <>
       <Helmet>
-        <title>Hire Top Tech Talent — TechNova</title>
-        <meta name="description" content="Hire verified professionals directly from TechNova. Full Stack Developers, AI Engineers, UX Designers and more." />
+        <title>Hire Top Tech Talent — Velixora</title>
+        <meta name="description" content="Hire verified professionals directly from Velixora. Full Stack Developers, AI Engineers, UX Designers and more." />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
@@ -142,7 +142,7 @@ const Hire = () => {
           <div className="mt-20 p-10 rounded-3xl bg-gradient-to-br from-surface-800 to-surface-900 border border-white/5 text-center">
             <h2 className="text-2xl font-bold text-white mb-4">Are you a tech professional?</h2>
             <p className="text-surface-400 mb-8 max-w-2xl mx-auto">
-              Join our network of elite freelancers and experts. Set your own rates, choose your projects, and build your career on TechNova.
+              Join our network of elite freelancers and experts. Set your own rates, choose your projects, and build your career on Velixora.
             </p>
             <button className="btn-primary">Apply as Talent</button>
           </div>

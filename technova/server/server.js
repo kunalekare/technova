@@ -21,7 +21,7 @@ const startServer = async () => {
     await connectDB();
 
     server.listen(PORT, () => {
-      logger.success(`🚀 TechNova Server running on port ${PORT}`);
+      logger.success(`🚀 Velixora Server running on port ${PORT}`);
       logger.info(`📡 Environment: ${process.env.NODE_ENV}`);
       logger.info(`🌐 Client URL: ${process.env.CLIENT_URL}`);
       logger.info(`📋 API Health: http://localhost:${PORT}/api/health`);

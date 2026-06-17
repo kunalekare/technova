@@ -13,7 +13,7 @@ export const generateChatResponse = async (messages) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     return {
       role: 'assistant',
-      content: "Hello! I am the TechNova mock assistant. Please add your OPENAI_API_KEY to the .env file to enable real AI responses. How can I help you with your project today?",
+      content: "Hello! I am the Velixora mock assistant. Please add your OPENAI_API_KEY to the .env file to enable real AI responses. How can I help you with your project today?",
     };
   }
 
@@ -22,7 +22,7 @@ export const generateChatResponse = async (messages) => {
   try {
     const systemPrompt = {
       role: 'system',
-      content: "You are Nova, an expert technology consultant and project manager at TechNova Solutions. Your job is to help clients understand tech services (web dev, mobile apps, AI, marketing) and guide them to submit their project requirements. Be professional, concise, and helpful."
+      content: "You are Nova, an expert technology consultant and project manager at Velixora Solutions. Your job is to help clients understand tech services (web dev, mobile apps, AI, marketing) and guide them to submit their project requirements. Be professional, concise, and helpful."
     };
 
     const response = await openai.chat.completions.create({

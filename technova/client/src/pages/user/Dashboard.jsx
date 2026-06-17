@@ -63,7 +63,7 @@ const Dashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Client Dashboard | TechNova</title>
+        <title>Client Dashboard | Velixora</title>
       </Helmet>
       
       <div className="space-y-8 max-w-7xl mx-auto">

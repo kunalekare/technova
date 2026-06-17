@@ -27,7 +27,7 @@ const MyJobApplications = () => {
   return (
     <>
       <Helmet>
-        <title>Job Applications | TechNova</title>
+        <title>Job Applications | Velixora</title>
       </Helmet>
 
       <div className="max-w-7xl mx-auto space-y-8">
@@ -72,7 +72,7 @@ const MyJobApplications = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white group-hover:text-primary-300 transition-colors line-clamp-1">{app.job?.title || 'Unknown Job'}</h3>
-                    <p className="text-sm text-surface-400 mt-1 font-medium">{app.job?.department || 'TechNova'}</p>
+                    <p className="text-sm text-surface-400 mt-1 font-medium">{app.job?.department || 'Velixora'}</p>
                   </div>
                 </div>
                 <span className={`px-3 py-1 text-xs font-black tracking-widest rounded-lg border uppercase w-fit bg-${color}-500/10 text-${color}-400 border-${color}-500/20`}>
@@ -139,7 +139,7 @@ const MyJobApplications = () => {
       {/* Detailed Status Modal */}
       <AnimatePresence>
         {selectedApp && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <motion.div key="modal-overlay" className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -161,7 +161,7 @@ const MyJobApplications = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white">{selectedApp.job?.title || 'Unknown Job'}</h3>
-                    <p className="text-sm text-surface-400">{selectedApp.job?.department || 'TechNova'}</p>
+                    <p className="text-sm text-surface-400">{selectedApp.job?.department || 'Velixora'}</p>
                   </div>
                 </div>
                 <button 
@@ -263,7 +263,7 @@ const MyJobApplications = () => {
               </div>
 
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

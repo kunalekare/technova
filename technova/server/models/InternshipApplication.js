@@ -38,6 +38,8 @@ const internshipApplicationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+internshipApplicationSchema.index({ internship: 1, applicant: 1 }, { unique: true });
+
 const InternshipApplication = mongoose.model('InternshipApplication', internshipApplicationSchema);
 
 export default InternshipApplication;

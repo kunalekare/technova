@@ -48,8 +48,8 @@ const Footer = () => {
                 </svg>
               </div>
               <span className="text-xl font-display font-bold">
-                <span className="text-white">Tech</span>
-                <span className="gradient-text">Nova</span>
+                <span className="text-white">Tark</span>
+                <span className="gradient-text">ko</span>
               </span>
             </Link>
             <p className="text-surface-400 text-sm leading-relaxed mb-6">
@@ -107,9 +107,9 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-display font-semibold mb-4">Contact Us</h3>
             <div className="space-y-3">
-              <a href="mailto:hello@technova.com" className="flex items-center gap-3 text-sm text-surface-400 hover:text-primary-400 transition-colors">
+              <a href="mailto:hello@velixora.com" className="flex items-center gap-3 text-sm text-surface-400 hover:text-primary-400 transition-colors">
                 <HiMail className="w-4 h-4 flex-shrink-0" />
-                hello@technova.com
+                hello@velixora.com
               </a>
               <a href="tel:+919876543210" className="flex items-center gap-3 text-sm text-surface-400 hover:text-primary-400 transition-colors">
                 <HiPhone className="w-4 h-4 flex-shrink-0" />
@@ -142,7 +142,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-surface-500">
-            © {currentYear} TechNova Solutions. All rights reserved.
+            © {currentYear} Velixora Solutions. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link to="/privacy" className="text-sm text-surface-500 hover:text-surface-300 transition-colors">

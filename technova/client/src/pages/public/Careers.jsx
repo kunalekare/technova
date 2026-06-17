@@ -36,8 +36,8 @@ const Careers = () => {
   return (
     <>
       <Helmet>
-        <title>Careers — Join TechNova</title>
-        <meta name="description" content="Explore open positions at TechNova. We are hiring talented engineers, designers, and marketers." />
+        <title>Careers — Join Velixora</title>
+        <meta name="description" content="Explore open positions at Velixora. We are hiring talented engineers, designers, and marketers." />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
@@ -45,7 +45,7 @@ const Careers = () => {
           
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center max-w-3xl mx-auto mb-16">
             <h1 className="text-4xl md:text-5xl font-display font-bold text-white mb-6">
-              Join the <span className="gradient-text">TechNova</span> Team
+              Join the <span className="gradient-text">Velixora</span> Team
             </h1>
             <p className="text-lg text-surface-400">
               We're on a mission to build the future of digital products. Help us shape the next generation of software solutions.

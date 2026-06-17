@@ -90,7 +90,7 @@ const Settings = () => {
   return (
     <>
       <Helmet>
-        <title>Settings — Account | TechNova</title>
+        <title>Settings — Account | Velixora</title>
       </Helmet>
 
       <div className="space-y-8 max-w-5xl mx-auto">
@@ -319,7 +319,7 @@ const Settings = () => {
                     </div>
                     <div>
                       <h2 className="text-xl font-display font-bold text-white">Application Preferences</h2>
-                      <p className="text-xs text-surface-400 mt-0.5">Customize your TechNova viewing experience.</p>
+                      <p className="text-xs text-surface-400 mt-0.5">Customize your Velixora viewing experience.</p>
                     </div>
                   </div>
                   
@@ -328,7 +328,7 @@ const Settings = () => {
                       <label className="text-sm font-bold text-white mb-3 block">Primary Color Theme</label>
                       <div className="flex flex-wrap items-center gap-4">
                         {[
-                          { id: 'purple', color: 'bg-[#6c5ce7]', name: 'TechNova Purple' },
+                          { id: 'purple', color: 'bg-[#6c5ce7]', name: 'Velixora Purple' },
                           { id: 'blue', color: 'bg-blue-500', name: 'Ocean Blue' },
                           { id: 'emerald', color: 'bg-emerald-500', name: 'Emerald Green' },
                           { id: 'rose', color: 'bg-rose-500', name: 'Rose Red' },

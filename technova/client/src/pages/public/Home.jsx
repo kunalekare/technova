@@ -106,7 +106,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>TechNova Solutions — Premium Technology Services & AI Solutions</title>
+        <title>Velixora Solutions — Premium Technology Services & AI Solutions</title>
         <meta name="description" content="Discover 16+ categories of technology services with transparent pricing, AI-powered estimation, and real-time project tracking." />
       </Helmet>
 
@@ -117,14 +117,14 @@ const Home = () => {
           <div className="absolute inset-0 bg-[#020617]" />
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-900 via-[#020617] to-[#020617]" />
           <div className="absolute inset-0 grid-pattern opacity-10 mix-blend-screen" />
-          
+
           {/* Animated Orbs */}
           <motion.div style={{ y: y1 }} className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-primary-600/20 rounded-full blur-[120px]" />
           <motion.div style={{ y: y2 }} className="absolute bottom-1/4 -right-32 w-[600px] h-[600px] bg-accent-600/15 rounded-full blur-[150px]" />
 
           <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-5xl mx-auto text-center flex flex-col items-center">
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -135,7 +135,7 @@ const Home = () => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-accent-500"></span>
                 </div>
-                <span className="text-sm font-medium text-surface-200">TechNova AI Engine 2.0 is now live</span>
+                <span className="text-sm font-medium text-surface-200">Velixora AI Engine 2.0 is now live</span>
                 <HiChevronRight className="w-4 h-4 text-surface-400" />
               </motion.div>
 
@@ -180,10 +180,16 @@ const Home = () => {
               </motion.div>
             </div>
           </div>
-          
+
           {/* Scroll Indicator */}
-          <motion.div style={{ opacity }} className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-            <span className="text-xs text-surface-500 font-medium tracking-widest uppercase">Scroll to explore</span>
+          <motion.div
+            style={{ opacity }}
+            className="absolute bottom-1 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          >
+            <span className="text-xs text-surface-500 font-medium tracking-widest uppercase">
+              Scroll to explore
+            </span>
+
             <div className="w-[1px] h-12 bg-gradient-to-b from-surface-500 to-transparent" />
           </motion.div>
         </section>
@@ -192,7 +198,7 @@ const Home = () => {
         <section className="py-12 border-y border-white/5 bg-surface-900/30 overflow-hidden relative backdrop-blur-sm">
           <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-surface-950 to-transparent z-10" />
           <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-surface-950 to-transparent z-10" />
-          
+
           <div className="flex w-[200%] animate-marquee">
             <div className="flex w-1/2 justify-around items-center opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
               {['Acme Corp', 'GlobalTech', 'Nexus Systems', 'Quantum AI', 'Nova Labs', 'Stellar Media', 'CloudSync'].map((logo, i) => (
@@ -251,7 +257,7 @@ const Home = () => {
                   <p className="text-surface-400 text-lg leading-relaxed mb-10">
                     Your intellectual property is protected by enterprise-grade NDAs. Payments are securely held in escrow until you approve the final delivery.
                   </p>
-                  
+
                   <div className="mt-auto space-y-4">
                     {[1, 2, 3].map(i => (
                       <div key={i} className="h-12 w-full rounded-xl bg-surface-800 border border-white/5 flex items-center px-4 gap-3 relative overflow-hidden group/item">
@@ -325,7 +331,7 @@ const Home = () => {
                           <HiArrowRight className="w-5 h-5 text-white -rotate-45" />
                         </div>
                       </div>
-                      
+
                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-surface-800 to-surface-900 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                         <IconComponent className="w-8 h-8 text-white group-hover:text-primary-400 transition-colors duration-300" />
                       </div>
@@ -333,7 +339,7 @@ const Home = () => {
                       <p className="text-surface-400 leading-relaxed group-hover:text-surface-300 transition-colors">
                         {cat.description || "Discover premium solutions tailored to your unique business requirements."}
                       </p>
-                      
+
                       {cat.subCategories && (
                         <div className="mt-6 flex flex-wrap gap-2">
                           {cat.subCategories.slice(0, 2).map((sub, idx) => (
@@ -360,38 +366,36 @@ const Home = () => {
         <section className="py-32 relative overflow-hidden">
           <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="flex flex-col lg:flex-row gap-16 items-center">
-              
+
               <div className="w-full lg:w-1/2 space-y-8">
                 <FadeInSection>
                   <h2 className="text-4xl md:text-5xl font-display font-bold text-white leading-tight mb-8">
-                    Why the best teams choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">TechNova</span>
+                    Why the best teams choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">Velixora</span>
                   </h2>
                 </FadeInSection>
 
                 <div className="space-y-4">
                   {differentiators.map((item, i) => (
                     <FadeInSection key={i} delay={i * 0.1}>
-                      <button 
+                      <button
                         onClick={() => setActiveTab(i)}
-                        className={`w-full text-left p-6 rounded-[24px] transition-all duration-300 border ${
-                          activeTab === i 
-                            ? 'bg-surface-800 border-primary-500/30 shadow-lg shadow-primary-500/5' 
-                            : 'bg-transparent border-transparent hover:bg-surface-900 hover:border-white/5'
-                        }`}
+                        className={`w-full text-left p-6 rounded-[24px] transition-all duration-300 border ${activeTab === i
+                          ? 'bg-surface-800 border-primary-500/30 shadow-lg shadow-primary-500/5'
+                          : 'bg-transparent border-transparent hover:bg-surface-900 hover:border-white/5'
+                          }`}
                       >
                         <div className="flex items-center justify-between mb-2">
                           <h3 className={`text-xl font-bold transition-colors ${activeTab === i ? 'text-white' : 'text-surface-300'}`}>
                             {item.title}
                           </h3>
-                          <span className={`text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${
-                            activeTab === i ? 'bg-primary-500/20 text-primary-300 border-primary-500/30' : 'bg-surface-800 text-surface-500 border-white/5'
-                          }`}>
+                          <span className={`text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${activeTab === i ? 'bg-primary-500/20 text-primary-300 border-primary-500/30' : 'bg-surface-800 text-surface-500 border-white/5'
+                            }`}>
                             {item.badge}
                           </span>
                         </div>
                         <AnimatePresence>
                           {activeTab === i && (
-                            <motion.p 
+                            <motion.p
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
@@ -411,7 +415,7 @@ const Home = () => {
                 <FadeInSection direction="left">
                   <div className="aspect-square relative rounded-[40px] border border-white/10 bg-surface-900 overflow-hidden flex items-center justify-center p-12 group">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-accent-500/5" />
-                    
+
                     {/* Abstract Representation of active tab */}
                     <AnimatePresence mode="wait">
                       <motion.div
@@ -493,7 +497,7 @@ const Home = () => {
           <div className="absolute inset-0 bg-surface-950" />
           {/* Huge Radial Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-primary-600/30 via-accent-500/10 to-transparent blur-3xl rounded-full" />
-          
+
           <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <FadeInSection>
               <div className="w-20 h-20 mx-auto bg-surface-900 rounded-3xl border border-white/10 flex items-center justify-center mb-8 shadow-2xl">
@@ -503,9 +507,9 @@ const Home = () => {
                 Ready to <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">transform</span> <br className="hidden md:block" /> your ideas?
               </h2>
               <p className="text-xl text-surface-400 max-w-2xl mx-auto mb-12">
-                Join hundreds of innovative companies scaling their technology infrastructure with TechNova. Get your AI-powered estimate in minutes.
+                Join hundreds of innovative companies scaling their technology infrastructure with Velixora. Get your AI-powered estimate in minutes.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                 <Link
                   to="/register"

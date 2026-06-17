@@ -93,7 +93,7 @@ const InternshipDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{internship.title} | Internships at TechNova</title>
+        <title>{internship.title} | Internships at Velixora</title>
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16 relative">

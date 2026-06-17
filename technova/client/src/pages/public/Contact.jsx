@@ -31,8 +31,8 @@ const Contact = () => {
   return (
     <>
       <Helmet>
-        <title>Contact Us — TechNova Solutions</title>
-        <meta name="description" content="Get in touch with TechNova Solutions. Contact us for project inquiries, free quotes, or any questions about our 16+ technology services." />
+        <title>Contact Us — Velixora Solutions</title>
+        <meta name="description" content="Get in touch with Velixora Solutions. Contact us for project inquiries, free quotes, or any questions about our 16+ technology services." />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
@@ -58,13 +58,13 @@ const Contact = () => {
               <div className="glass-card p-6">
                 <h3 className="text-lg font-display font-semibold text-white mb-6">Contact Information</h3>
                 <div className="space-y-5">
-                  <a href="mailto:hello@technova.com" className="flex items-center gap-4 text-surface-300 hover:text-primary-400 transition-colors">
+                  <a href="mailto:hello@velixora.com" className="flex items-center gap-4 text-surface-300 hover:text-primary-400 transition-colors">
                     <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center flex-shrink-0">
                       <HiMail className="w-5 h-5 text-primary-400" />
                     </div>
                     <div>
                       <div className="text-xs text-surface-500">Email</div>
-                      <div className="text-sm">hello@technova.com</div>
+                      <div className="text-sm">hello@velixora.com</div>
                     </div>
                   </a>
                   <a href="tel:+919876543210" className="flex items-center gap-4 text-surface-300 hover:text-primary-400 transition-colors">

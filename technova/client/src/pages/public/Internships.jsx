@@ -34,8 +34,8 @@ const Internships = () => {
   return (
     <>
       <Helmet>
-        <title>Internships — TechNova</title>
-        <meta name="description" content="Find premium internships in software, design, and marketing. Launch your career with TechNova and our partner companies." />
+        <title>Internships — Velixora</title>
+        <meta name="description" content="Find premium internships in software, design, and marketing. Launch your career with Velixora and our partner companies." />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
@@ -46,7 +46,7 @@ const Internships = () => {
               Launch Your <span className="gradient-text">Tech Career</span>
             </h1>
             <p className="text-lg text-surface-400">
-              Apply for exclusive internships at TechNova and our partner companies. Learn from industry experts and build real-world products.
+              Apply for exclusive internships at Velixora and our partner companies. Learn from industry experts and build real-world products.
             </p>
           </motion.div>
 

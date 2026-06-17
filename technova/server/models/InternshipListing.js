@@ -10,12 +10,12 @@ const internshipListingSchema = new mongoose.Schema(
     company: {
       type: String,
       required: [true, 'Company name is required'],
-      default: 'TechNova',
+      default: 'Velixora',
     },
     client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      // Optional: Null if internal TechNova internship, populated if a client posts it
+      // Optional: Null if internal Velixora internship, populated if a client posts it
     },
     department: {
       type: String,

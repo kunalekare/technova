@@ -106,8 +106,8 @@ const Services = () => {
   return (
     <>
       <Helmet>
-        <title>Services — TechNova Solutions</title>
-        <meta name="description" content="Browse our catalog of premium technology services including Software Engineering, AI, Cloud, Design, and Digital Marketing." />
+        <title>Services — Velixora Solutions</title>
+        <meta name="description" content="Browse our catalog of premium velixoralogy services including Software Engineering, AI, Cloud, Design, and Digital Marketing." />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-20 bg-surface-950">

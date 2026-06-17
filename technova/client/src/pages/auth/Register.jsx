@@ -76,8 +76,8 @@ const Register = () => {
                   </svg>
                 </div>
                 <span className="text-2xl font-display font-bold">
-                  <span className="text-white">Tech</span>
-                  <span className="gradient-text">Nova</span>
+                  <span className="text-white">Tark</span>
+                  <span className="gradient-text">ko</span>
                 </span>
               </Link>
               <h1 className="text-2xl font-display font-bold text-white mb-1">Create Account</h1>

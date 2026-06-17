@@ -95,7 +95,7 @@ const JobDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{job.title} | Careers at TechNova</title>
+        <title>{job.title} | Careers at Velixora</title>
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16 relative">

@@ -46,7 +46,7 @@ const Notifications = () => {
   return (
     <>
       <Helmet>
-        <title>Notifications | TechNova</title>
+        <title>Notifications | Velixora</title>
       </Helmet>
       <div className="max-w-4xl mx-auto space-y-8">
         

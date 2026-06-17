@@ -2,7 +2,7 @@ export const knowledgeBase = [
   // ---------------- GENERAL & CONTACT ----------------
   {
     keywords: ['hi', 'hello', 'hey', 'greetings', 'morning', 'afternoon'],
-    response: 'Hello! I am Nova, the TechNova AI Assistant 🤖. I can answer any questions you have about our services, pricing, processes, or technologies. How can I help you today?'
+    response: 'Hello! I am Nova, the Velixora AI Assistant 🤖. I can answer any questions you have about our services, pricing, processes, or technologies. How can I help you today?'
   },
   {
     keywords: ['services do you offer', 'what do you do', 'categories'],
@@ -14,11 +14,11 @@ export const knowledgeBase = [
   },
   {
     keywords: ['how long', 'in business', 'experience'],
-    response: 'TechNova has been delivering cutting-edge technology solutions for over a decade. We have successfully completed 500+ projects for clients globally.'
+    response: 'Velixora has been delivering cutting-edge technology solutions for over a decade. We have successfully completed 500+ projects for clients globally.'
   },
   {
     keywords: ['why choose', 'why you', 'differentiator', 'best'],
-    response: 'You should choose TechNova because we offer AI-powered transparent scoping, 100% vetted global talent, strict NDA-backed security, real-time tracking, and we guarantee the quality of our deliverables before any funds are released.'
+    response: 'You should choose Velixora because we offer AI-powered transparent scoping, 100% vetted global talent, strict NDA-backed security, real-time tracking, and we guarantee the quality of our deliverables before any funds are released.'
   },
   {
     keywords: ['startups', 'sme', 'enterprises', 'size'],
@@ -42,7 +42,7 @@ export const knowledgeBase = [
   },
   {
     keywords: ['start a project', 'begin', 'how to start', 'onboard'],
-    response: 'Starting is easy! You can use our AI Estimator, fill out the form on our Contact page, or email us at hello@technova.com. We will set up a discovery call to kick things off.'
+    response: 'Starting is easy! You can use our AI Estimator, fill out the form on our Contact page, or email us at hello@velixora.com. We will set up a discovery call to kick things off.'
   },
 
   // ---------------- SOFTWARE DEVELOPMENT ----------------
@@ -168,4 +168,4 @@ export const knowledgeBase = [
   }
 ];
 
-export const fallbackResponse = "I'm still learning! While I couldn't find a specific answer to that, we handle almost all technology requests. Please reach out to our human experts at hello@technova.com or use the Contact page for a detailed answer.";
+export const fallbackResponse = "I'm still learning! While I couldn't find a specific answer to that, we handle almost all technology requests. Please reach out to our human experts at hello@velixora.com or use the Contact page for a detailed answer.";

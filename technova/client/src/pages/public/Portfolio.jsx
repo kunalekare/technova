@@ -114,7 +114,7 @@ const projects = [
       { metric: '< 150ms', label: 'Avg Response' },
       { metric: '45%', label: 'Cost Reduction' },
     ],
-    testimonial: { text: 'TechNova delivered our banking platform 2 weeks ahead of schedule. The quality and communication were exceptional.', author: 'Sarah Chen', role: 'CTO, FinStack' },
+    testimonial: { text: 'Velixora delivered our banking platform 2 weeks ahead of schedule. The quality and communication were exceptional.', author: 'Sarah Chen', role: 'CTO, FinStack' },
     duration: '6 months',
     year: '2024',
   },
@@ -171,7 +171,7 @@ const projects = [
       { metric: '10x', label: 'Deployment Frequency' },
       { metric: '99.99%', label: 'Uptime SLA Met' },
     ],
-    testimonial: { text: 'Our infrastructure costs dropped by 65% and we now deploy 10x more frequently. TechNova made cloud migration painless.', author: 'Marcus Lee', role: 'CTO, ScaleUp SaaS' },
+    testimonial: { text: 'Our infrastructure costs dropped by 65% and we now deploy 10x more frequently. Velixora made cloud migration painless.', author: 'Marcus Lee', role: 'CTO, ScaleUp SaaS' },
     duration: '4 months',
     year: '2023',
   },
@@ -209,7 +209,7 @@ const projects = [
       { metric: '50+', label: 'Clients Managed' },
       { metric: '12hrs', label: 'Saved Weekly / Client' },
     ],
-    testimonial: { text: 'We\'ve used TechNova for 3 projects now — SaaS development, cloud setup, and SEO. They\'re our one-stop tech partner.', author: 'Raj Patel', role: 'Founder, GrowthOS' },
+    testimonial: { text: 'We\'ve used Velixora for 3 projects now — SaaS development, cloud setup, and SEO. They\'re our one-stop tech partner.', author: 'Raj Patel', role: 'Founder, GrowthOS' },
     duration: '5 months',
     year: '2023',
   },
@@ -304,7 +304,7 @@ const projects = [
       { metric: '99.99%', label: 'Uptime' },
       { metric: '80%', label: 'Faster Onboarding' },
     ],
-    testimonial: { text: 'Going from single-tenant to multi-tenant seemed impossible. TechNova made it look easy.', author: 'Jordan Blake', role: 'CEO, NexGen Solutions' },
+    testimonial: { text: 'Going from single-tenant to multi-tenant seemed impossible. Velixora made it look easy.', author: 'Jordan Blake', role: 'CEO, NexGen Solutions' },
     duration: '6 months',
     year: '2024',
   },
@@ -597,8 +597,8 @@ const Portfolio = () => {
   return (
     <>
       <Helmet>
-        <title>Portfolio — TechNova Solutions</title>
-        <meta name="description" content="Explore TechNova's portfolio of 500+ successful projects across web development, mobile apps, AI/ML, cloud infrastructure, UI/UX design, and digital marketing." />
+        <title>Portfolio — Velixora Solutions</title>
+        <meta name="description" content="Explore Velixora's portfolio of 500+ successful projects across web development, mobile apps, AI/ML, cloud infrastructure, UI/UX design, and digital marketing." />
       </Helmet>
 
       {/* ═══════════════ PREMIUM HERO ═══════════════ */}
@@ -728,7 +728,7 @@ const Portfolio = () => {
               Let's build your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">success story.</span>
             </h2>
             <p className="text-xl text-surface-400 max-w-2xl mx-auto mb-10">
-              Join the hundreds of companies that have already transformed their digital presence with TechNova.
+              Join the hundreds of companies that have already transformed their digital presence with Velixora.
             </p>
             <Link
               to="/contact"

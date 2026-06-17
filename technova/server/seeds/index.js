@@ -360,7 +360,7 @@ const sampleJobs = [
 const sampleInternships = [
   {
     title: 'Software Engineering Intern',
-    company: 'TechNova',
+    company: 'Velixora',
     department: 'Engineering',
     description: 'Great opportunity for students to gain hands-on experience in full-stack development.',
     responsibilities: ['Assist in API development', 'Write unit tests', 'Fix UI bugs'],

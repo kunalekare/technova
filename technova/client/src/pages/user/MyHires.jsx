@@ -20,7 +20,7 @@ const MyHires = () => {
   return (
     <>
       <Helmet>
-        <title>My Hires | TechNova Dashboard</title>
+        <title>My Hires | Velixora Dashboard</title>
       </Helmet>
 
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -58,7 +58,6 @@ const MyHires = () => {
             <div className="p-4 bg-surface-900 rounded-xl border border-white/5 mb-6">
               <p className="text-xs text-surface-500 mb-1">Project</p>
               <p className="text-sm font-medium text-white mb-3">{hire.projectTitle}</p>
-              
               <p className="text-xs text-surface-500 mb-1">Budget / Rate</p>
               <p className="text-sm font-medium text-white">{hire.budget}</p>
             </div>

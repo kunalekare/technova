@@ -57,7 +57,7 @@ const ProjectDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{project.title} — TechNova</title>
+        <title>{project.title} — Velixora</title>
       </Helmet>
       
       <div className="space-y-6">

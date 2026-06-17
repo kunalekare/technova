@@ -81,7 +81,7 @@ const Orders = () => {
 <body>
   <div class="header">
     <div>
-      <div class="brand">TechNova</div>
+      <div class="brand">Velixora</div>
       <div class="invoice-number">Invoice ${invoice.invoiceNumber}</div>
       <div style="font-size: 13px; color: #666; margin-top: 4px;">
         Date: ${format(new Date(invoice.createdAt), 'MMMM d, yyyy')}
@@ -100,7 +100,7 @@ const Orders = () => {
     </div>
     <div class="info-block" style="text-align: right;">
       <h3>From</h3>
-      <p><strong>TechNova Technologies</strong></p>
+      <p><strong>Velixora Technologies</strong></p>
       <p>support@technova.in</p>
     </div>
   </div>
@@ -141,7 +141,7 @@ const Orders = () => {
   </table>
   ${invoice.dueDate ? `<p style="font-size: 13px; color: #666;">Due Date: ${format(new Date(invoice.dueDate), 'MMMM d, yyyy')}</p>` : ''}
   <div class="footer">
-    <p>Thank you for choosing TechNova! This is a computer-generated invoice.</p>
+    <p>Thank you for choosing Velixora! This is a computer-generated invoice.</p>
   </div>
 </body>
 </html>`;
@@ -158,7 +158,7 @@ const Orders = () => {
   return (
     <>
       <Helmet>
-        <title>Order History | TechNova</title>
+        <title>Order History | Velixora</title>
       </Helmet>
       
       <div className="max-w-7xl mx-auto space-y-8">
