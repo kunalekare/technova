@@ -8,6 +8,8 @@ import Category from '../models/Category.js';
 import Service from '../models/Service.js';
 import User from '../models/User.js';
 import logger from '../utils/logger.js';
+import JobListing from '../models/JobListing.js';
+import InternshipListing from '../models/InternshipListing.js';
 
 const roles = [
   {
@@ -272,6 +274,54 @@ const sampleServices = [
   },
 ];
 
+const sampleJobs = [
+  {
+    title: 'Senior Frontend Developer',
+    department: 'Engineering',
+    description: 'We are looking for an experienced Frontend Developer to lead our UI development.',
+    responsibilities: ['Build robust UIs using React', 'Collaborate with design team', 'Mentor junior developers'],
+    requirements: ['5+ years React experience', 'Strong CSS/Tailwind skills', 'Experience with state management'],
+    benefits: ['Competitive salary', 'Remote work', 'Health insurance'],
+    salaryRange: '$90,000 - $130,000',
+    type: 'Full-time',
+    mode: 'Remote',
+    location: 'Global',
+    status: 'Active',
+  },
+  {
+    title: 'Product Marketing Manager',
+    department: 'Marketing',
+    description: 'Join our marketing team to drive product growth and go-to-market strategies.',
+    responsibilities: ['Develop GTM strategies', 'Market research', 'Create marketing collateral'],
+    requirements: ['3+ years in B2B SaaS marketing', 'Strong analytical skills', 'Excellent writing'],
+    benefits: ['Flexible hours', 'Performance bonuses', 'Team retreats'],
+    salaryRange: '$80,000 - $110,000',
+    type: 'Full-time',
+    mode: 'Hybrid',
+    location: 'New York, USA',
+    status: 'Active',
+  }
+];
+
+const sampleInternships = [
+  {
+    title: 'Software Engineering Intern',
+    company: 'TechNova',
+    department: 'Engineering',
+    description: 'Great opportunity for students to gain hands-on experience in full-stack development.',
+    responsibilities: ['Assist in API development', 'Write unit tests', 'Fix UI bugs'],
+    requirements: ['Currently pursuing CS degree', 'Basic knowledge of JavaScript/React', 'Eagerness to learn'],
+    perks: ['Mentorship from senior devs', 'Flexible hours', 'Letter of recommendation'],
+    stipend: '$1,000/month',
+    duration: '3 Months',
+    mode: 'Remote',
+    location: 'Global',
+    deadline: new Date(new Date().setMonth(new Date().getMonth() + 1)), // 1 month from now
+    openings: 3,
+    status: 'Active',
+  }
+];
+
 const seedDatabase = async () => {
   try {
     await connectDB();
@@ -280,6 +330,8 @@ const seedDatabase = async () => {
     await Role.deleteMany({});
     await Category.deleteMany({});
     await Service.deleteMany({});
+    await JobListing.deleteMany({});
+    await InternshipListing.deleteMany({});
     logger.info('Cleared existing seed data');
 
     // Seed roles
@@ -326,6 +378,14 @@ const seedDatabase = async () => {
       await adminExists.save();
       logger.success('Promoted existing admin@technova.com to super_admin and reset password to password123');
     }
+
+    // Seed jobs
+    const createdJobs = await JobListing.insertMany(sampleJobs);
+    logger.success(`Seeded ${createdJobs.length} jobs`);
+
+    // Seed internships
+    const createdInternships = await InternshipListing.insertMany(sampleInternships);
+    logger.success(`Seeded ${createdInternships.length} internships`);
 
     const clientExists = await User.findOne({ email: 'client@technova.com' });
     const clientRole = createdRoles.find(r => r.name === 'client');
