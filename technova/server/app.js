@@ -30,6 +30,7 @@ import blogRoutes from './routes/blogRoutes.js';
 import portfolioRoutes from './routes/portfolioRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
 import customRequestRoutes from './routes/customRequestRoutes.js';
+import seedProdRoute from './routes/seedProdRoute.js';
 import errorHandler from './middleware/errorHandler.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
 import configurePassport from './config/passport.js';
@@ -104,6 +105,9 @@ app.use('/api/v1/blogs', blogRoutes);
 app.use('/api/v1/portfolio', portfolioRoutes);
 app.use('/api/v1/team', teamRoutes);
 app.use('/api/v1/custom-requests', customRequestRoutes);
+
+// Temporary production seeding route
+app.use('/api/v1/seed-production', seedProdRoute);
 
 // ---- Static Files for Production ----
 if (process.env.NODE_ENV === 'production') {
