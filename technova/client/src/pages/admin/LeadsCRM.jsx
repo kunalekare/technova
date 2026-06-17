@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllLeads, updateLeadStatus, communicateWithLead } from '../../redux/slices/adminSlice';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { format } from 'date-fns';
-import { HiMail, HiChatAlt2, HiPaperAirplane, HiX } from 'react-icons/hi';
+import { HiMail, HiChatAlt2, HiPaperAirplane, HiX, HiPlus, HiSearch } from 'react-icons/hi';
 import toast from 'react-hot-toast';
+import api from '../../services/api';
 
 const leadStages = ['new', 'contacted', 'qualified', 'converted', 'lost'];
 
@@ -16,6 +17,14 @@ const LeadsCRM = () => {
   const [message, setMessage] = useState('');
   const [commType, setCommType] = useState('note'); // 'note' or 'email'
   const [sending, setSending] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+  
+  // New Lead Form State
+  const [newLeadForm, setNewLeadForm] = useState({
+    name: '', email: '', phone: '', company: '', requirement: '', source: 'referral'
+  });
+
   const chatEndRef = useRef(null);
 
   useEffect(() => {
@@ -52,7 +61,31 @@ const LeadsCRM = () => {
     }
   };
 
-  const getLeadsByStage = (stage) => leads.filter(l => l.status === stage);
+  const handleCreateLead = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post('/leads', newLeadForm);
+      toast.success('Lead added successfully!');
+      setShowAddModal(false);
+      setNewLeadForm({ name: '', email: '', phone: '', company: '', requirement: '', source: 'referral' });
+      dispatch(fetchAllLeads());
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to add lead');
+    }
+  };
+
+  const getFilteredLeads = () => {
+    if (!searchQuery.trim()) return leads;
+    const query = searchQuery.toLowerCase();
+    return leads.filter(l => 
+      l.name?.toLowerCase().includes(query) || 
+      l.email?.toLowerCase().includes(query) || 
+      l.company?.toLowerCase().includes(query)
+    );
+  };
+
+  const filteredLeads = getFilteredLeads();
+  const getLeadsByStage = (stage) => filteredLeads.filter(l => l.status === stage);
 
   return (
     <>
@@ -61,9 +94,26 @@ const LeadsCRM = () => {
       </Helmet>
 
       <div className="h-full flex flex-col space-y-6">
-        <div>
-          <h1 className="text-2xl font-display font-bold text-white">Leads Pipeline</h1>
-          <p className="text-surface-400 text-sm mt-1">Drag and drop leads to update status. Click a lead to communicate.</p>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+          <div>
+            <h1 className="text-2xl font-display font-bold text-white">Leads Pipeline</h1>
+            <p className="text-surface-400 text-sm mt-1">Manage prospects and track conversions.</p>
+          </div>
+          <div className="flex gap-3 w-full sm:w-auto">
+            <div className="relative flex-1 sm:w-64">
+              <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400 w-5 h-5" />
+              <input 
+                type="text" 
+                placeholder="Search leads..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-surface-900 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-primary-500 transition-colors"
+              />
+            </div>
+            <button onClick={() => setShowAddModal(true)} className="btn-primary whitespace-nowrap flex items-center gap-2">
+              <HiPlus className="w-5 h-5"/> Add Lead
+            </button>
+          </div>
         </div>
 
         {loading && leads.length === 0 ? (
@@ -106,14 +156,20 @@ const LeadsCRM = () => {
                                     }`}
                                   >
                                     <div className="flex justify-between items-start mb-2">
-                                      <h4 className="font-medium text-white text-sm leading-tight">{lead.name}</h4>
-                                      {lead.notes?.length > 0 && <span className="w-2 h-2 rounded-full bg-accent-500"></span>}
+                                      <h4 className="font-medium text-white text-sm leading-tight max-w-[80%] truncate">{lead.name}</h4>
+                                      <div className="flex items-center gap-1">
+                                        {lead.score > 0 && <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-mono">{lead.score}</span>}
+                                        {lead.notes?.length > 0 && <span className="w-2 h-2 rounded-full bg-accent-500 ml-1"></span>}
+                                      </div>
                                     </div>
                                     <p className="text-xs text-surface-400 line-clamp-2 mb-3 leading-relaxed">{lead.requirement || 'No details provided'}</p>
                                     
                                     <div className="flex items-center justify-between text-[10px] text-surface-500">
-                                      <span className="truncate max-w-[120px]">{lead.company || lead.email}</span>
-                                      <span>{format(new Date(lead.createdAt), 'MMM d')}</span>
+                                      <span className="truncate max-w-[90px]">{lead.company || lead.email}</span>
+                                      <div className="flex items-center gap-2">
+                                        <span className="bg-surface-800 px-1.5 py-0.5 rounded capitalize">{lead.source}</span>
+                                        <span>{format(new Date(lead.createdAt), 'MMM d')}</span>
+                                      </div>
                                     </div>
                                   </div>
                                 )}
@@ -137,7 +193,10 @@ const LeadsCRM = () => {
                   <div>
                     <h3 className="text-white font-bold">{selectedLead.name}</h3>
                     <p className="text-xs text-surface-400 mb-1">{selectedLead.email} {selectedLead.phone ? `• ${selectedLead.phone}` : ''}</p>
-                    <span className="text-[10px] bg-primary-500/20 text-primary-400 px-2 py-0.5 rounded-full uppercase tracking-wider">{selectedLead.status}</span>
+                    <div className="flex gap-2 items-center mt-1">
+                      <span className="text-[10px] bg-primary-500/20 text-primary-400 px-2 py-0.5 rounded-full uppercase tracking-wider">{selectedLead.status}</span>
+                      <span className="text-[10px] bg-surface-700 text-surface-300 px-2 py-0.5 rounded-full capitalize">Src: {selectedLead.source}</span>
+                    </div>
                   </div>
                   <button onClick={() => setSelectedLeadId(null)} className="p-1 hover:bg-white/10 rounded-lg text-surface-400">
                     <HiX className="w-5 h-5" />
@@ -148,7 +207,7 @@ const LeadsCRM = () => {
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-surface-950/50">
                   <div className="bg-surface-800 p-3 rounded-xl rounded-tl-sm border border-white/5 w-11/12">
                     <span className="text-[10px] text-primary-400 block mb-1">Initial Request</span>
-                    <p className="text-sm text-surface-200">{selectedLead.requirement}</p>
+                    <p className="text-sm text-surface-200">{selectedLead.requirement || 'No initial requirement provided.'}</p>
                     <span className="text-[9px] text-surface-500 mt-2 block text-right">{format(new Date(selectedLead.createdAt), 'MMM d, h:mm a')}</span>
                   </div>
 
@@ -204,6 +263,58 @@ const LeadsCRM = () => {
           </div>
         )}
       </div>
+
+      {/* Add Lead Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAddModal(false)} />
+          <div className="bg-surface-900 border border-white/10 rounded-3xl p-6 w-full max-w-lg relative z-10 shadow-2xl">
+            <button onClick={() => setShowAddModal(false)} className="absolute top-6 right-6 text-surface-400 hover:text-white">
+              <HiX className="w-6 h-6" />
+            </button>
+            <h2 className="text-xl font-bold text-white mb-6">Add New Lead</h2>
+            
+            <form onSubmit={handleCreateLead} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-surface-300 mb-1">Name</label>
+                  <input required type="text" value={newLeadForm.name} onChange={e => setNewLeadForm({...newLeadForm, name: e.target.value})} className="input-field" placeholder="John Doe" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-surface-300 mb-1">Email</label>
+                  <input required type="email" value={newLeadForm.email} onChange={e => setNewLeadForm({...newLeadForm, email: e.target.value})} className="input-field" placeholder="john@example.com" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-surface-300 mb-1">Phone</label>
+                  <input type="text" value={newLeadForm.phone} onChange={e => setNewLeadForm({...newLeadForm, phone: e.target.value})} className="input-field" placeholder="+1 234 567 890" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-surface-300 mb-1">Company</label>
+                  <input type="text" value={newLeadForm.company} onChange={e => setNewLeadForm({...newLeadForm, company: e.target.value})} className="input-field" placeholder="Acme Corp" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-surface-300 mb-1">Source</label>
+                <select value={newLeadForm.source} onChange={e => setNewLeadForm({...newLeadForm, source: e.target.value})} className="input-field">
+                  <option value="website">Website</option>
+                  <option value="referral">Referral</option>
+                  <option value="ads">Ads</option>
+                  <option value="contact_form">Contact Form</option>
+                  <option value="chatbot">Chatbot</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-surface-300 mb-1">Requirement / Notes</label>
+                <textarea required value={newLeadForm.requirement} onChange={e => setNewLeadForm({...newLeadForm, requirement: e.target.value})} rows="3" className="input-field resize-none" placeholder="What are they looking for?"></textarea>
+              </div>
+              
+              <button type="submit" className="btn-primary w-full py-3 mt-2">Create Lead</button>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -80,6 +80,10 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // Apply saved theme
+    const savedTheme = localStorage.getItem('technova_theme') || 'purple';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     const token = localStorage.getItem('accessToken');
     if (token) {
       dispatch(getMe());

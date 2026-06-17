@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProject, getMyProjects, getProjectById, sendProjectProposal } from '../controllers/projectController.js';
+import { createProject, getMyProjects, getProjectById, sendProjectProposal, updateProjectAdmin } from '../controllers/projectController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 import { upload } from '../middleware/upload.js';
 
@@ -13,6 +13,9 @@ router.route('/')
 
 router.route('/:id/proposal')
   .put(authorize('admin', 'super_admin'), sendProjectProposal);
+
+router.route('/:id/admin')
+  .put(authorize('admin', 'super_admin'), updateProjectAdmin);
 
 router.route('/:id')
   .get(getProjectById);

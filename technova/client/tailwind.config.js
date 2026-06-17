@@ -6,17 +6,17 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: '#f0f0ff',
-          100: '#e0e0ff',
-          200: '#c7c7fe',
-          300: '#a4a4fc',
-          400: '#8080f8',
-          500: '#6c5ce7',
-          600: '#5a3fd6',
-          700: '#4c32bb',
-          800: '#3e2a98',
-          900: '#35267a',
-          950: '#1e1650',
+          50: 'rgb(var(--color-primary-50) / <alpha-value>)',
+          100: 'rgb(var(--color-primary-100) / <alpha-value>)',
+          200: 'rgb(var(--color-primary-200) / <alpha-value>)',
+          300: 'rgb(var(--color-primary-300) / <alpha-value>)',
+          400: 'rgb(var(--color-primary-400) / <alpha-value>)',
+          500: 'rgb(var(--color-primary-500) / <alpha-value>)',
+          600: 'rgb(var(--color-primary-600) / <alpha-value>)',
+          700: 'rgb(var(--color-primary-700) / <alpha-value>)',
+          800: 'rgb(var(--color-primary-800) / <alpha-value>)',
+          900: 'rgb(var(--color-primary-900) / <alpha-value>)',
+          950: 'rgb(var(--color-primary-950) / <alpha-value>)',
         },
         accent: {
           50: '#effcf6',
@@ -61,11 +61,11 @@ export default {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'hero-gradient': 'linear-gradient(135deg, #0f172a 0%, #1e1650 30%, #1e293b 70%, #020617 100%)',
-        'card-gradient': 'linear-gradient(135deg, rgba(108, 92, 231, 0.1) 0%, rgba(0, 210, 160, 0.05) 100%)',
+        'card-gradient': 'linear-gradient(135deg, rgb(var(--color-primary-500) / 0.1) 0%, rgba(0, 210, 160, 0.05) 100%)',
         'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
       },
       boxShadow: {
-        'glow-primary': '0 0 20px rgba(108, 92, 231, 0.3)',
+        'glow-primary': '0 0 20px rgb(var(--color-primary-500) / 0.3)',
         'glow-accent': '0 0 20px rgba(0, 210, 160, 0.3)',
         'glow-neon': '0 0 30px rgba(168, 85, 247, 0.4)',
         'card': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2)',
@@ -88,8 +88,8 @@ export default {
           '50%': { transform: 'translateY(-20px)' },
         },
         glow: {
-          '0%': { boxShadow: '0 0 5px rgba(108, 92, 231, 0.2)' },
-          '100%': { boxShadow: '0 0 20px rgba(108, 92, 231, 0.6)' },
+          '0%': { boxShadow: '0 0 5px rgb(var(--color-primary-500) / 0.2)' },
+          '100%': { boxShadow: '0 0 20px rgb(var(--color-primary-500) / 0.6)' },
         },
         slideUp: {
           '0%': { opacity: '0', transform: 'translateY(30px)' },

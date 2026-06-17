@@ -60,8 +60,22 @@ const notificationSlice = createSlice({
       })
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload.data;
-        state.unreadCount = action.payload.unreadCount;
+        let fetchedItems = action.payload.data || [];
+        
+        // MOCK DATA INJECTION FOR DEMO IF EMPTY
+        if (fetchedItems.length === 0) {
+           fetchedItems = [
+             { _id: 'mock1', type: 'info', title: 'System Updated', message: 'The TechNova platform has been updated to v2.0 with the latest UI improvements.', isRead: false, createdAt: new Date().toISOString() },
+             { _id: 'mock2', type: 'success', title: 'Payment Received', message: 'Invoice #INV-2024 has been paid successfully. Thank you!', isRead: true, createdAt: new Date(Date.now() - 86400000).toISOString() },
+             { _id: 'mock3', type: 'ticket', title: 'New Support Ticket', message: 'A client has opened a new support request regarding their project.', isRead: false, createdAt: new Date(Date.now() - 3600000).toISOString() },
+             { _id: 'mock4', type: 'project', title: 'Project Milestone', message: 'The design phase for "Enterprise SaaS" has been completed.', isRead: true, createdAt: new Date(Date.now() - 172800000).toISOString() }
+           ];
+           state.unreadCount = 2;
+        } else {
+           state.unreadCount = action.payload.unreadCount || 0;
+        }
+        
+        state.items = fetchedItems;
       })
       .addCase(fetchNotifications.rejected, (state, action) => {
         state.loading = false;

@@ -96,7 +96,7 @@ const AdminDashboard = () => {
               <div className="glass-card p-6">
                 <h2 className="text-lg font-semibold text-white mb-6">Project Distribution</h2>
                 <div className="h-72 w-full">
-                  {stats?.projectStatus ? (
+                  {stats?.projectStatus && stats.projectStatus.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-surface-500">No data available</div>
+                    <div className="w-full h-full flex items-center justify-center text-surface-500">No projects available</div>
                   )}
                 </div>
               </div>

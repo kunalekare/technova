@@ -8,8 +8,18 @@ import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 import { 
   HiArrowLeft, HiOutlineDocumentText, HiOutlineCurrencyDollar, 
-  HiOutlineCalendar, HiPaperAirplane 
+  HiOutlineCalendar, HiPaperAirplane, HiRefresh
 } from 'react-icons/hi';
+
+const projectStatuses = [
+  { value: 'new', label: 'New' },
+  { value: 'in_review', label: 'In Review' },
+  { value: 'proposal_sent', label: 'Proposal Sent' },
+  { value: 'in_progress', label: 'In Progress' },
+  { value: 'on_hold', label: 'On Hold' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'cancelled', label: 'Cancelled' },
+];
 
 const AdminProjectDetail = () => {
   const { id } = useParams();
@@ -23,6 +33,7 @@ const AdminProjectDetail = () => {
     message: ''
   });
   const [sending, setSending] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProjectById(id));
@@ -38,11 +49,25 @@ const AdminProjectDetail = () => {
         message: proposalData.message
       });
       toast.success('Proposal sent successfully!');
-      dispatch(fetchProjectById(id)); // Refresh project data
+      dispatch(fetchProjectById(id));
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to send proposal');
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleUpdateStatus = async (newStatus) => {
+    if (newStatus === project.status) return;
+    setUpdatingStatus(true);
+    try {
+      await api.put(`/projects/${id}/admin`, { status: newStatus });
+      toast.success('Project status updated!');
+      dispatch(fetchProjectById(id));
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to update status');
+    } finally {
+      setUpdatingStatus(false);
     }
   };
 
@@ -56,7 +81,7 @@ const AdminProjectDetail = () => {
       </Helmet>
 
       <div className="space-y-6">
-        <button onClick={() => navigate('/admin/projects')} className="text-surface-400 hover:text-white flex items-center gap-2 text-sm transition-colors">
+        <button onClick={() => navigate('/admin/projects')} className="text-surface-400 hover:text-white flex items-center gap-2 text-sm transition-colors w-fit">
           <HiArrowLeft className="w-4 h-4" /> Back to Projects
         </button>
 
@@ -64,14 +89,28 @@ const AdminProjectDetail = () => {
           {/* Left Column - Client Requirements */}
           <div className="w-full md:w-2/3 space-y-6">
             <div className="glass-card p-6">
-              <div className="flex items-start justify-between mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-4">
                 <div>
                   <h1 className="text-2xl font-display font-bold text-white">{project.title}</h1>
                   <p className="text-primary-400 font-medium text-sm mt-1">{project.service?.title}</p>
                 </div>
-                <span className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border text-blue-400 bg-blue-500/10 border-blue-500/20">
-                  {project.status.replace('_', ' ')}
-                </span>
+                
+                <div className="flex items-center gap-2 bg-surface-900 border border-white/10 rounded-lg p-1.5 pl-3">
+                  <span className="text-xs text-surface-400 font-medium whitespace-nowrap">Status:</span>
+                  <select
+                    disabled={updatingStatus}
+                    value={project.status}
+                    onChange={(e) => handleUpdateStatus(e.target.value)}
+                    className="bg-transparent text-sm text-white focus:outline-none cursor-pointer appearance-none pr-8 py-1"
+                  >
+                    {projectStatuses.map(s => (
+                      <option key={s.value} value={s.value} className="bg-surface-800 text-white">
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                  {updatingStatus && <HiRefresh className="w-4 h-4 text-primary-500 animate-spin mr-2" />}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
@@ -117,11 +156,11 @@ const AdminProjectDetail = () => {
                 <h2 className="text-lg font-bold text-white mb-4">Sent Proposal Details</h2>
                 <div className="space-y-4 text-sm text-surface-300">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-3 bg-surface-900 rounded-lg">
+                    <div className="p-3 bg-surface-900 rounded-lg border border-white/5">
                       <p className="text-surface-400 text-xs mb-1">Proposed Price</p>
                       <p className="text-white font-bold text-lg">${project.proposal.price?.toLocaleString()}</p>
                     </div>
-                    <div className="p-3 bg-surface-900 rounded-lg">
+                    <div className="p-3 bg-surface-900 rounded-lg border border-white/5">
                       <p className="text-surface-400 text-xs mb-1">Estimated Timeline</p>
                       <p className="text-white font-medium">{project.proposal.timeline}</p>
                     </div>
@@ -130,9 +169,9 @@ const AdminProjectDetail = () => {
                     <p className="text-surface-400 text-xs mb-2">Message to Client</p>
                     <p className="whitespace-pre-wrap">{project.proposal.message}</p>
                   </div>
-                  <div className="flex justify-between items-center text-xs text-surface-400 pt-2">
+                  <div className="flex justify-between items-center text-xs text-surface-400 pt-2 border-t border-white/5 mt-4">
                     <p>Sent on: {format(new Date(project.proposal.sentAt), 'PPp')}</p>
-                    <p className={`font-bold ${project.proposal.isAccepted ? 'text-emerald-400' : 'text-amber-400'}`}>
+                    <p className={`font-bold uppercase tracking-wider px-2 py-1 rounded-full ${project.proposal.isAccepted ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-400 bg-amber-500/10'}`}>
                       {project.proposal.isAccepted ? 'Accepted by Client' : 'Awaiting Client Approval'}
                     </p>
                   </div>

@@ -15,7 +15,7 @@ import connectDB from './config/db.js';
 import { initSocketServer } from './socket/socketServer.js';
 
 import authRoutes from './routes/authRoutes.js';
-import categoryRoutes from './routes/categoryRoutes.js';
+import categoryRoutes, { adminCategoryRouter } from './routes/categoryRoutes.js';
 import serviceRoutes, { adminServiceRouter } from './routes/serviceRoutes.js';
 import internshipRoutes from './routes/internshipRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
@@ -88,6 +88,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/services', serviceRoutes);
 app.use('/api/v1/admin/services', adminServiceRouter);
 app.use('/api/v1/categories', categoryRoutes);
+app.use('/api/v1/admin/categories', adminCategoryRouter);
 app.use('/api/v1/internships', internshipRoutes);
 app.use('/api/v1/jobs', jobRoutes);
 app.use('/api/v1/projects', projectRoutes);

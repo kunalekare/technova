@@ -3,22 +3,23 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 import {
-  HiCreditCard, HiDocumentDownload, HiEye,
+  HiCreditCard, HiOutlineDocumentDownload, HiOutlineEye,
   HiFilter, HiClock, HiCheckCircle, HiExclamation,
-  HiRefresh, HiX
+  HiRefresh, HiX, HiOutlineShoppingBag
 } from 'react-icons/hi';
 import { fetchMyOrders } from '../../redux/slices/orderSlice';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const statusConfig = {
-  pending: { label: 'Pending', color: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20', icon: HiClock },
-  paid: { label: 'Paid', color: 'bg-green-500/10 text-green-400 border-green-500/20', icon: HiCheckCircle },
-  in_progress: { label: 'In Progress', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', icon: HiExclamation },
-  completed: { label: 'Completed', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', icon: HiCheckCircle },
-  refunded: { label: 'Refunded', color: 'bg-purple-500/10 text-purple-400 border-purple-500/20', icon: HiRefresh },
-  cancelled: { label: 'Cancelled', color: 'bg-red-500/10 text-red-400 border-red-500/20', icon: HiX },
+  pending: { label: 'Pending', color: 'yellow', icon: HiClock },
+  paid: { label: 'Paid', color: 'green', icon: HiCheckCircle },
+  in_progress: { label: 'In Progress', color: 'blue', icon: HiExclamation },
+  completed: { label: 'Completed', color: 'emerald', icon: HiCheckCircle },
+  refunded: { label: 'Refunded', color: 'purple', icon: HiRefresh },
+  cancelled: { label: 'Cancelled', color: 'red', icon: HiX },
 };
 
 const Orders = () => {
@@ -40,7 +41,7 @@ const Orders = () => {
       if (invoice) {
         // Generate a client-side PDF-like receipt
         generateInvoicePDF(invoice);
-        toast.success('Invoice downloaded!');
+        toast.success('Invoice generated successfully!');
       } else {
         toast.error('No invoice found for this order');
       }
@@ -152,117 +153,158 @@ const Orders = () => {
   };
 
   const filteredOrders = filter === 'all' ? orders : orders?.filter(o => o.status === filter);
+  const filters = ['all', 'pending', 'paid', 'in_progress', 'completed', 'refunded', 'cancelled'];
 
   return (
     <>
       <Helmet>
-        <title>My Orders — TechNova</title>
+        <title>Order History | TechNova</title>
       </Helmet>
       
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-display font-bold text-white">Order History</h1>
-          <p className="text-surface-400 text-sm mt-1">Track your payments, orders, and download invoices</p>
+      <div className="max-w-7xl mx-auto space-y-8">
+        
+        {/* Header section with glow */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-surface-900/50 p-8 rounded-3xl border border-white/5 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[80px] pointer-events-none" />
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500/20 to-blue-500/20 flex items-center justify-center border border-white/10 shadow-inner">
+              <HiOutlineShoppingBag className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-display font-bold text-white tracking-tight">Order History</h1>
+              <p className="text-surface-400 mt-1">Track your payments, subscriptions, and download invoices.</p>
+            </div>
+          </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2">
-          <HiFilter className="w-4 h-4 text-surface-500 flex-shrink-0" />
-          {['all', 'pending', 'paid', 'in_progress', 'completed', 'refunded', 'cancelled'].map(s => (
-            <button
-              key={s}
-              onClick={() => setFilter(s)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
-                filter === s
-                  ? 'bg-primary-500/20 text-primary-300 border border-primary-500/30'
-                  : 'text-surface-400 hover:text-white hover:bg-white/5 border border-transparent'
-              }`}
-            >
-              {s === 'all' ? 'All Orders' : s.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-            </button>
-          ))}
+        {/* Scrolling Filter Board */}
+        <div className="relative w-full">
+          <div className="flex items-center gap-2 overflow-x-auto pb-4 hide-scrollbar">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-surface-800 border border-white/5 shrink-0 shadow-inner">
+              <HiFilter className="w-5 h-5 text-surface-400" />
+            </div>
+            <div className="w-px h-8 bg-white/10 mx-2 shrink-0" />
+            <div className="flex bg-surface-900/50 p-1.5 rounded-2xl border border-white/5">
+              {filters.map(s => {
+                const isActive = filter === s;
+                return (
+                  <button
+                    key={s}
+                    onClick={() => setFilter(s)}
+                    className={`relative px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-300 z-10 ${
+                      isActive ? 'text-white' : 'text-surface-400 hover:text-white'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeOrderFilter"
+                        className="absolute inset-0 bg-primary-500 rounded-xl shadow-[0_0_15px_rgba(var(--color-primary-500),0.5)] -z-10"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-20 mix-blend-plus-lighter">
+                      {s === 'all' ? 'All Orders' : s.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
-        {/* Orders */}
-        <div className="glass-card overflow-hidden">
+        {/* Orders List */}
+        <div className="space-y-4">
           {loading ? (
-            <div className="p-12 text-center">
-              <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-              <p className="text-surface-400 text-sm">Loading orders...</p>
+            <div className="glass-card p-20 text-center rounded-3xl border border-white/5">
+              <div className="w-12 h-12 border-4 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-6" />
+              <p className="text-surface-400 font-medium text-lg">Fetching your orders...</p>
             </div>
           ) : filteredOrders?.length === 0 ? (
-            <div className="p-12 text-center">
-              <HiCreditCard className="w-12 h-12 text-surface-600 mx-auto mb-3" />
-              <p className="text-surface-400 font-medium">No orders found</p>
-              <p className="text-surface-500 text-sm mt-1">Orders will appear here once you make a purchase.</p>
+            <div className="glass-card p-20 text-center rounded-3xl border border-white/5 relative overflow-hidden">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary-500/5 rounded-full blur-[80px]" />
+              <div className="w-24 h-24 bg-surface-800 rounded-[2rem] flex items-center justify-center mx-auto mb-6 relative z-10 border border-white/5 rotate-3">
+                <HiCreditCard className="w-12 h-12 text-surface-500 -rotate-3" />
+              </div>
+              <h3 className="text-2xl font-display font-bold text-white relative z-10">No Orders Found</h3>
+              <p className="text-surface-400 mt-2 max-w-sm mx-auto relative z-10">You haven't made any purchases yet. When you do, your history and invoices will appear here.</p>
             </div>
           ) : (
-            <div className="divide-y divide-white/5">
+            <AnimatePresence>
               {filteredOrders.map((order, i) => {
                 const config = statusConfig[order.status] || statusConfig.pending;
                 const StatusIcon = config.icon;
+                const colorCode = config.color;
+
                 return (
                   <motion.div
                     key={order._id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.03 }}
-                    className="p-5 hover:bg-white/[0.02] transition-colors"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+                    transition={{ delay: i * 0.05 }}
+                    className="glass-card p-6 rounded-2xl border border-white/5 hover:border-white/10 hover:bg-surface-800/80 transition-all duration-300 group flex flex-col md:flex-row items-center gap-6"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                      {/* Order Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3 mb-1">
-                          <span className="text-sm font-bold text-white">
-                            #{order._id.slice(-6).toUpperCase()}
-                          </span>
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border ${config.color}`}>
-                            <StatusIcon className="w-3 h-3" />
-                            {config.label}
-                          </span>
-                        </div>
-                        <p className="text-sm text-surface-300">{order.service?.title || 'Custom Service'}</p>
-                        <div className="flex items-center gap-4 mt-2 text-xs text-surface-500">
-                          <span>{format(new Date(order.createdAt), 'MMM d, yyyy')}</span>
-                          <span className="text-surface-600">•</span>
-                          <span className="font-medium">{order.pricingTier} Tier</span>
-                        </div>
-                      </div>
+                    {/* Status Badge Icon */}
+                    <div className={`w-14 h-14 rounded-2xl bg-${colorCode}-500/10 flex items-center justify-center border border-${colorCode}-500/20 shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(var(--color-${colorCode}-500),0.1)] group-hover:shadow-[0_0_20px_rgba(var(--color-${colorCode}-500),0.3)]`}>
+                      <StatusIcon className={`w-7 h-7 text-${colorCode}-400`} />
+                    </div>
 
-                      {/* Amount & Actions */}
-                      <div className="flex items-center gap-4 flex-shrink-0">
-                        <p className="text-lg font-display font-bold text-primary-400">
+                    {/* Order Details */}
+                    <div className="flex-1 min-w-0 w-full text-center md:text-left">
+                      <div className="flex flex-col md:flex-row items-center gap-3 mb-2">
+                        <h3 className="text-xl font-bold text-white truncate w-full md:w-auto">
+                          {order.service?.title || 'Custom Project Service'}
+                        </h3>
+                        <span className={`px-3 py-1 text-[10px] font-black tracking-widest rounded-lg border uppercase bg-${colorCode}-500/10 text-${colorCode}-400 border-${colorCode}-500/20 shrink-0`}>
+                          {config.label}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-surface-400 font-medium">
+                        <span className="flex items-center gap-1">Order #{order._id.slice(-8).toUpperCase()}</span>
+                        <span className="hidden md:inline text-surface-600">•</span>
+                        <span>{format(new Date(order.createdAt), 'MMMM d, yyyy')}</span>
+                        <span className="hidden md:inline text-surface-600">•</span>
+                        <span className="text-primary-400 font-bold">{order.pricingTier} Tier</span>
+                      </div>
+                    </div>
+
+                    {/* Amount & Actions */}
+                    <div className="flex flex-col sm:flex-row items-center gap-6 shrink-0 w-full md:w-auto mt-4 md:mt-0 justify-between md:justify-end">
+                      <div className="text-center md:text-right">
+                        <span className="text-[10px] uppercase tracking-wider font-bold text-surface-500 mb-0.5 block">Total Amount</span>
+                        <p className="text-2xl font-display font-bold text-white group-hover:text-primary-300 transition-colors">
                           ₹{order.amount?.toLocaleString()}
                         </p>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleDownloadInvoice(order._id)}
-                            disabled={invoiceLoading === order._id}
-                            className="p-2 rounded-lg text-surface-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all"
-                            title="Download Invoice"
+                      </div>
+
+                      <div className="flex items-center gap-3 h-full">
+                        {order.project && (
+                          <Link
+                            to={`/dashboard/projects/${order.project._id || order.project}`}
+                            className="w-12 h-12 rounded-xl bg-surface-800 border border-white/5 text-surface-400 flex items-center justify-center hover:bg-primary-500/10 hover:text-primary-400 hover:border-primary-500/30 transition-all duration-300 shadow-lg group/btn"
+                            title="View Associated Project"
                           >
-                            {invoiceLoading === order._id ? (
-                              <div className="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
-                            ) : (
-                              <HiDocumentDownload className="w-5 h-5" />
-                            )}
-                          </button>
-                          {order.project && (
-                            <a
-                              href={`/dashboard/projects/${order.project._id || order.project}`}
-                              className="p-2 rounded-lg text-surface-400 hover:text-primary-400 hover:bg-primary-500/10 transition-all"
-                              title="View Project"
-                            >
-                              <HiEye className="w-5 h-5" />
-                            </a>
+                            <HiOutlineEye className="w-6 h-6 group-hover/btn:scale-110 transition-transform" />
+                          </Link>
+                        )}
+                        <button
+                          onClick={() => handleDownloadInvoice(order._id)}
+                          disabled={invoiceLoading === order._id}
+                          className="px-6 h-12 bg-surface-800 border border-white/5 text-white font-bold rounded-xl flex items-center gap-2 hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 transition-all duration-300 shadow-lg group/btn disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {invoiceLoading === order._id ? (
+                            <div className="w-5 h-5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            <HiOutlineDocumentDownload className="w-5 h-5 group-hover/btn:-translate-y-0.5 transition-transform" />
                           )}
-                        </div>
+                          Invoice
+                        </button>
                       </div>
                     </div>
                   </motion.div>
                 );
               })}
-            </div>
+            </AnimatePresence>
           )}
         </div>
       </div>

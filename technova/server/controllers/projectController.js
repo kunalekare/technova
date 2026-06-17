@@ -134,3 +134,38 @@ export const sendProjectProposal = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Update project status/team (Admin)
+// @route   PUT /api/v1/projects/:id/admin
+// @access  Private/Admin
+export const updateProjectAdmin = async (req, res, next) => {
+  try {
+    const { status, assignedTeam } = req.body;
+    
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      res.status(404);
+      throw new Error('Project not found');
+    }
+
+    if (status) project.status = status;
+    if (assignedTeam) project.assignedTeam = assignedTeam;
+
+    await project.save();
+
+    const updatedProject = await Project.findById(req.params.id)
+      .populate('service', 'title icon')
+      .populate('client', 'name email avatar')
+      .populate({
+        path: 'assignedTeam',
+        populate: { path: 'user', select: 'name avatar' }
+      });
+
+    res.status(200).json({
+      success: true,
+      data: updatedProject,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
