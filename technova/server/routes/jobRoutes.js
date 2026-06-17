@@ -14,13 +14,14 @@ import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+// Protected user routes
+router.get('/my-applications', protect, getMyApplications); 
+
 // Public routes
 router.get('/', getJobs);
 router.get('/:id', getJobById);
 
-// Protected user routes
 router.post('/:id/apply', protect, applyToJob);
-router.get('/my-applications', protect, getMyApplications); // Note: /my-applications is matched before /applications if we're not careful
 
 // Admin routes
 router.use(protect, authorize('admin', 'super_admin'));

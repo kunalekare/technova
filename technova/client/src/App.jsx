@@ -18,6 +18,7 @@ import About from './pages/public/About';
 import Contact from './pages/public/Contact';
 import Portfolio from './pages/public/Portfolio';
 import Blog from './pages/public/Blog';
+import BlogDetail from './pages/public/BlogDetail';
 import Careers from './pages/public/Careers';
 import JobDetail from './pages/public/JobDetail';
 import Internships from './pages/public/Internships';
@@ -104,6 +105,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogDetail />} />
 
           <Route path="/careers" element={<Careers />} />
           <Route path="/careers/:id" element={<JobDetail />} />

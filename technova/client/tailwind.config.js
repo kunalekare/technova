@@ -81,6 +81,9 @@ export default {
         'shimmer': 'shimmer 2s linear infinite',
         'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
         'gradient-shift': 'gradientShift 8s ease-in-out infinite',
+        'marquee': 'marquee 30s linear infinite',
+        'marquee-reverse': 'marqueeReverse 30s linear infinite',
+        'spin-slow': 'spin 8s linear infinite',
       },
       keyframes: {
         float: {
@@ -118,6 +121,14 @@ export default {
         gradientShift: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        marqueeReverse: {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' },
         },
       },
       backdropBlur: {

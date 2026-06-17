@@ -11,9 +11,6 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 
-import connectDB from './config/db.js';
-import { initSocketServer } from './socket/socketServer.js';
-
 import authRoutes from './routes/authRoutes.js';
 import categoryRoutes, { adminCategoryRouter } from './routes/categoryRoutes.js';
 import serviceRoutes, { adminServiceRouter } from './routes/serviceRoutes.js';
@@ -38,13 +35,6 @@ import { apiLimiter } from './middleware/rateLimiter.js';
 import configurePassport from './config/passport.js';
 
 const app = express();
-const httpServer = createServer(app);
-
-// Connect to Database
-connectDB();
-
-// Initialize Socket.io
-initSocketServer(httpServer);
 
 // ---- Middleware ----
 app.use(helmet({

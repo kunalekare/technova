@@ -1,26 +1,29 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'framer-motion';
 import {
   HiArrowRight, HiX, HiExternalLink, HiStar,
   HiCode, HiDeviceMobile, HiLightningBolt, HiCloud,
   HiColorSwatch, HiSpeakerphone, HiDatabase, HiCube,
   HiChartBar, HiShieldCheck, HiGlobe, HiClock,
-  HiCheck, HiUserGroup,
+  HiCheck, HiUserGroup, HiSparkles, HiBriefcase
 } from 'react-icons/hi';
 
 /* ───────────── Shared Components ───────────── */
 
-const FadeInSection = ({ children, className = '', delay = 0 }) => {
+const FadeInSection = ({ children, className = '', delay = 0, direction = 'up' }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const yOffset = direction === 'up' ? 40 : direction === 'down' ? -40 : 0;
+  const xOffset = direction === 'left' ? 40 : direction === 'right' ? -40 : 0;
+
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: yOffset, x: xOffset }}
+      animate={isInView ? { opacity: 1, y: 0, x: 0 } : {}}
+      transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={className}
     >
       {children}
@@ -46,11 +49,11 @@ const StatCounter = ({ end, suffix = '', label }) => {
   }, [isInView, end]);
 
   return (
-    <div ref={ref} className="text-center">
-      <div className="text-4xl md:text-5xl font-display font-bold gradient-text mb-1">
-        {count.toLocaleString()}{suffix}
+    <div ref={ref} className="text-center group">
+      <div className="text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-105 transition-transform duration-500">
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">{count.toLocaleString()}</span>{suffix}
       </div>
-      <div className="text-surface-400 text-sm">{label}</div>
+      <div className="text-surface-400 font-medium tracking-wide uppercase text-xs">{label}</div>
     </div>
   );
 };
@@ -326,83 +329,82 @@ const projects = [
   },
 ];
 
-/* ───────────── Project Card ───────────── */
+/* ───────────── Premium Project Card ───────────── */
 
 const ProjectCard = ({ project, index, onClick }) => {
   const gradient = gradientPalettes[index % gradientPalettes.length];
   const IconComponent = categoryIcons[project.category] || HiCube;
 
   return (
-    <FadeInSection delay={index * 0.08}>
+    <FadeInSection delay={(index % 3) * 0.1}>
       <motion.div
         layoutId={`project-card-${project.id}`}
         onClick={() => onClick(project)}
-        className="glass-card-hover cursor-pointer group flex flex-col h-full overflow-hidden"
-        whileHover={{ y: -6 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        id={`portfolio-project-${project.id}`}
+        className="group relative h-[480px] rounded-[32px] overflow-hidden cursor-pointer"
+        whileHover={{ y: -10 }}
+        transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
       >
-        {/* Thumbnail */}
-        <div className={`relative h-48 bg-gradient-to-br ${gradient} overflow-hidden`}>
-          <div className="absolute inset-0 dot-pattern opacity-20" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <IconComponent className="w-16 h-16 text-white/30" />
+        {/* Background Gradient & Texture */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-90 transition-opacity duration-500 group-hover:opacity-100`} />
+        <div className="absolute inset-0 bg-surface-950/40 mix-blend-multiply" />
+        <div className="absolute inset-0 dot-pattern opacity-30 mix-blend-overlay" />
+        
+        {/* Animated Abstract Shapes */}
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-white/10 rounded-full blur-[80px] translate-x-1/2 -translate-y-1/2 group-hover:bg-white/20 transition-colors duration-500" />
+
+        {/* Content Container */}
+        <div className="absolute inset-0 p-8 flex flex-col z-10">
+          
+          {/* Top Header */}
+          <div className="flex items-start justify-between">
+            <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
+              <IconComponent className="w-7 h-7 text-white" />
+            </div>
+            <div className="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/90 text-xs font-bold uppercase tracking-wider">
+              {project.year}
+            </div>
           </div>
-          {/* Year badge */}
-          <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-black/30 backdrop-blur-md text-white text-xs font-semibold">
-            {project.year}
-          </div>
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-surface-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-            <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-white text-sm font-semibold border border-white/20">
-              View Case Study <HiExternalLink className="w-4 h-4" />
-            </span>
+
+          <div className="mt-auto">
+            <div className="inline-block px-3 py-1 mb-4 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold">
+              {project.category}
+            </div>
+            <h3 className="text-3xl font-display font-bold text-white mb-3 leading-tight group-hover:translate-x-2 transition-transform duration-500">
+              {project.title}
+            </h3>
+            <p className="text-white/70 line-clamp-2 mb-6 group-hover:translate-x-2 transition-transform duration-500 delay-75">
+              {project.description}
+            </p>
+            
+            {/* Tech Stack Pills */}
+            <div className="flex flex-wrap gap-2 mb-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
+              {project.techStack.slice(0, 3).map((tech) => (
+                <span key={tech} className="px-3 py-1 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white/90 text-xs font-medium">
+                  {tech}
+                </span>
+              ))}
+              {project.techStack.length > 3 && (
+                <span className="px-3 py-1 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white/50 text-xs font-medium">
+                  +{project.techStack.length - 3}
+                </span>
+              )}
+            </div>
+
+            {/* View Case Study Button */}
+            <div className="flex items-center gap-2 text-white font-bold opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-150">
+              View Case Study <HiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </div>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-6 flex flex-col flex-1">
-          {/* Category */}
-          <div className="badge-primary mb-3 self-start">
-            {project.category}
-          </div>
-
-          <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">
-            {project.title}
-          </h3>
-
-          <p className="text-sm text-surface-400 mb-4 flex-1 line-clamp-2">
-            {project.description}
-          </p>
-
-          {/* Tech Stack */}
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {project.techStack.slice(0, 3).map((tech) => (
-              <span key={tech} className="px-2 py-0.5 rounded-md bg-surface-800/80 text-surface-300 text-xs border border-surface-700/50">
-                {tech}
-              </span>
-            ))}
-            {project.techStack.length > 3 && (
-              <span className="px-2 py-0.5 rounded-md bg-surface-800/80 text-surface-500 text-xs border border-surface-700/50">
-                +{project.techStack.length - 3}
-              </span>
-            )}
-          </div>
-
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-white/10">
-            <span className="text-xs text-surface-500">{project.client}</span>
-            <span className="text-primary-400 text-xs font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-              Details <HiArrowRight className="w-3 h-3" />
-            </span>
-          </div>
-        </div>
+        {/* Glossy Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
       </motion.div>
     </FadeInSection>
   );
 };
 
-/* ───────────── Case Study Modal ───────────── */
+/* ───────────── Premium Case Study Modal ───────────── */
 
 const CaseStudyModal = ({ project, onClose }) => {
   if (!project) return null;
@@ -415,125 +417,157 @@ const CaseStudyModal = ({ project, onClose }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-start justify-center p-4 pt-20 pb-8 overflow-y-auto"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
       onClick={onClose}
     >
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-surface-950/80 backdrop-blur-md" />
+      {/* Heavy Blur Backdrop */}
+      <div className="fixed inset-0 bg-surface-950/80 backdrop-blur-xl" />
 
-      {/* Modal */}
+      {/* Modal Container */}
       <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.97 }}
+        initial={{ opacity: 0, y: 50, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 40, scale: 0.97 }}
-        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-        className="relative w-full max-w-4xl glass-card overflow-hidden"
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
+        className="relative w-full max-w-5xl bg-surface-900 rounded-[40px] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
-        id="portfolio-case-study-modal"
       >
-        {/* Close button */}
+        {/* Floating Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 rounded-xl bg-black/30 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/50 transition-all"
-          id="case-study-close-btn"
+          className="absolute top-6 right-6 z-50 w-12 h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-white hover:text-black transition-colors shadow-2xl"
         >
-          <HiX className="w-5 h-5" />
+          <HiX className="w-6 h-6" />
         </button>
 
-        {/* Header */}
-        <div className={`relative h-56 md:h-64 bg-gradient-to-br ${gradient} overflow-hidden`}>
-          <div className="absolute inset-0 dot-pattern opacity-15" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <IconComponent className="w-24 h-24 text-white/20" />
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-surface-950/90 to-transparent h-24" />
-          <div className="absolute bottom-6 left-8 right-8">
-            <div className="badge-primary mb-2">{project.category}</div>
-            <h2 className="text-2xl md:text-3xl font-display font-bold text-white">{project.title}</h2>
-          </div>
-        </div>
-
-        {/* Body */}
-        <div className="p-8">
-          {/* Meta row */}
-          <div className="flex flex-wrap gap-6 mb-8 pb-6 border-b border-white/10">
-            <div>
-              <div className="text-xs text-surface-500 mb-1">Client</div>
-              <div className="text-sm font-semibold text-white">{project.client}</div>
-            </div>
-            <div>
-              <div className="text-xs text-surface-500 mb-1">Duration</div>
-              <div className="text-sm font-semibold text-white">{project.duration}</div>
-            </div>
-            <div>
-              <div className="text-xs text-surface-500 mb-1">Year</div>
-              <div className="text-sm font-semibold text-white">{project.year}</div>
-            </div>
-            <div className="flex-1 min-w-[200px]">
-              <div className="text-xs text-surface-500 mb-1">Tech Stack</div>
-              <div className="flex flex-wrap gap-1.5">
-                {project.techStack.map((tech) => (
-                  <span key={tech} className="px-2 py-0.5 rounded-md bg-surface-800 text-surface-300 text-xs border border-surface-700/50">
-                    {tech}
-                  </span>
-                ))}
+        <div className="overflow-y-auto custom-scrollbar">
+          {/* Stunning Header */}
+          <div className={`relative min-h-[40vh] bg-gradient-to-br ${gradient} flex items-end p-6 md:p-16`}>
+            <div className="absolute inset-0 bg-surface-950/20 mix-blend-multiply" />
+            <div className="absolute inset-0 dot-pattern opacity-20 mix-blend-overlay" />
+            
+            {/* Big Background Icon */}
+            <IconComponent className="absolute -right-10 -bottom-10 w-96 h-96 text-white/10 mix-blend-overlay rotate-12 pointer-events-none" />
+            
+            <div className="relative z-10 max-w-3xl">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-bold tracking-wide">
+                  {project.category}
+                </span>
+                <span className="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white text-sm font-bold tracking-wide">
+                  {project.year}
+                </span>
               </div>
-            </div>
-          </div>
-
-          {/* Challenge / Solution */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div>
-              <h3 className="text-sm font-semibold text-accent-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                <HiLightningBolt className="w-4 h-4" /> The Challenge
-              </h3>
-              <p className="text-sm text-surface-300 leading-relaxed">{project.challenge}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-primary-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                <HiCheck className="w-4 h-4" /> Our Solution
-              </h3>
-              <p className="text-sm text-surface-300 leading-relaxed">{project.solution}</p>
-            </div>
-          </div>
-
-          {/* Results */}
-          <div className="mb-8">
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
-              <HiChartBar className="w-4 h-4 text-accent-400" /> Key Results
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {project.results.map((r, i) => (
-                <div key={i} className="glass-card p-4 text-center">
-                  <div className="text-2xl font-display font-bold gradient-text mb-1">{r.metric}</div>
-                  <div className="text-xs text-surface-400">{r.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Testimonial */}
-          {project.testimonial && (
-            <div className="glass-card p-6 border-l-4 border-primary-500">
-              <div className="flex gap-1 mb-3">
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <HiStar key={s} className="w-4 h-4 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-sm text-surface-300 italic leading-relaxed mb-4">
-                "{project.testimonial.text}"
+              <h2 className="text-4xl md:text-6xl font-display font-extrabold text-white leading-tight mb-4 drop-shadow-2xl">
+                {project.title}
+              </h2>
+              <p className="text-xl text-white/90 font-medium max-w-2xl">
+                {project.client}
               </p>
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold text-sm">
-                  {project.testimonial.author.charAt(0)}
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-surface-900 to-transparent" />
+          </div>
+
+          {/* Body Content */}
+          <div className="p-6 md:p-16 bg-surface-900">
+            
+            {/* Bento Grid layout for details */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+              
+              {/* Challenge & Solution (2/3 width) */}
+              <div className="md:col-span-2 space-y-8">
+                <div className="bg-surface-800/50 rounded-[32px] p-6 md:p-8 border border-white/5">
+                  <h3 className="text-lg font-bold text-white flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400">
+                      <HiLightningBolt className="w-5 h-5" />
+                    </div>
+                    The Challenge
+                  </h3>
+                  <p className="text-surface-300 text-lg leading-relaxed">
+                    {project.challenge}
+                  </p>
                 </div>
-                <div>
-                  <div className="text-sm font-semibold text-white">{project.testimonial.author}</div>
-                  <div className="text-xs text-surface-400">{project.testimonial.role}</div>
+                
+                <div className="bg-surface-800/50 rounded-[32px] p-6 md:p-8 border border-white/5 relative overflow-hidden">
+                  <div className={`absolute top-0 right-0 w-64 h-64 bg-gradient-to-br ${gradient} opacity-5 blur-3xl`} />
+                  <h3 className="text-lg font-bold text-white flex items-center gap-3 mb-4 relative z-10">
+                    <div className="w-10 h-10 rounded-xl bg-accent-500/10 flex items-center justify-center text-accent-400">
+                      <HiCheck className="w-5 h-5" />
+                    </div>
+                    The Solution
+                  </h3>
+                  <p className="text-surface-300 text-lg leading-relaxed relative z-10">
+                    {project.solution}
+                  </p>
+                </div>
+              </div>
+
+              {/* Tech Stack & Meta (1/3 width) */}
+              <div className="space-y-6">
+                <div className="bg-surface-800/50 rounded-[32px] p-6 md:p-8 border border-white/5 h-full">
+                  <h3 className="text-sm font-bold text-surface-400 uppercase tracking-wider mb-6">Tech Stack</h3>
+                  <div className="flex flex-wrap gap-2 mb-10">
+                    {project.techStack.map(tech => (
+                      <span key={tech} className="px-4 py-2 rounded-xl bg-surface-950 border border-white/5 text-surface-200 text-sm font-medium">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  <h3 className="text-sm font-bold text-surface-400 uppercase tracking-wider mb-2">Duration</h3>
+                  <p className="text-white font-semibold text-lg mb-8">{project.duration}</p>
+
+                  <h3 className="text-sm font-bold text-surface-400 uppercase tracking-wider mb-2">Live URL</h3>
+                  <a href="#" className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-300 font-bold transition-colors">
+                    Visit Project <HiExternalLink className="w-5 h-5" />
+                  </a>
                 </div>
               </div>
             </div>
-          )}
+
+            {/* Key Results Section */}
+            <div className="mb-16">
+              <h3 className="text-2xl font-display font-bold text-white mb-8 text-center">Business Impact</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                {project.results.map((r, i) => (
+                  <div key={i} className={`bg-gradient-to-br ${gradient} p-[1px] rounded-[24px]`}>
+                    <div className="bg-surface-900 h-full rounded-[23px] p-6 text-center flex flex-col justify-center items-center">
+                      <div className="text-3xl md:text-4xl font-display font-bold text-white mb-2">{r.metric}</div>
+                      <div className="text-sm text-surface-400 font-medium uppercase tracking-wider">{r.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Testimonial */}
+            {project.testimonial && (
+              <div className="bg-gradient-to-r from-surface-800 to-surface-800/50 rounded-[32px] p-6 md:p-10 border border-white/5 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8">
+                  <HiChartBar className="w-32 h-32 text-surface-700/30" />
+                </div>
+                <div className="relative z-10">
+                  <div className="flex gap-1 mb-6">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <HiStar key={s} className="w-6 h-6 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-xl md:text-2xl text-white font-medium leading-relaxed mb-8 max-w-3xl">
+                    "{project.testimonial.text}"
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-xl shadow-lg`}>
+                      {project.testimonial.author.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="text-lg font-bold text-white">{project.testimonial.author}</div>
+                      <div className="text-surface-400">{project.testimonial.role}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </motion.div>
     </motion.div>
@@ -546,17 +580,17 @@ const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedProject, setSelectedProject] = useState(null);
 
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
+  const y2 = useTransform(scrollY, [0, 1000], [0, -200]);
+
   const filteredProjects = activeCategory === 'All'
     ? projects
     : projects.filter((p) => p.category === activeCategory);
 
-  // Lock body scroll when modal is open
   useEffect(() => {
-    if (selectedProject) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    if (selectedProject) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
     return () => { document.body.style.overflow = ''; };
   }, [selectedProject]);
 
@@ -567,104 +601,84 @@ const Portfolio = () => {
         <meta name="description" content="Explore TechNova's portfolio of 500+ successful projects across web development, mobile apps, AI/ML, cloud infrastructure, UI/UX design, and digital marketing." />
       </Helmet>
 
-      {/* ═══════════════ HERO ═══════════════ */}
-      <section className="relative min-h-[70vh] flex items-center overflow-hidden" id="portfolio-hero">
-        <div className="absolute inset-0 bg-hero-gradient" />
-        <div className="absolute inset-0 dot-pattern opacity-30" />
-        <div className="absolute top-1/3 -left-32 w-96 h-96 bg-primary-500/20 rounded-full blur-[128px] animate-pulse-glow" />
-        <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-accent-500/15 rounded-full blur-[128px] animate-pulse-glow" style={{ animationDelay: '1s' }} />
+      {/* ═══════════════ PREMIUM HERO ═══════════════ */}
+      <section className="relative min-h-[70vh] flex flex-col items-center justify-center overflow-hidden pt-20" id="portfolio-hero">
+        <div className="absolute inset-0 bg-[#020617]" />
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-900 via-[#020617] to-[#020617]" />
+        <div className="absolute inset-0 grid-pattern opacity-10 mix-blend-screen" />
+        
+        <motion.div style={{ y: y1 }} className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-primary-600/20 rounded-full blur-[120px]" />
+        <motion.div style={{ y: y2 }} className="absolute bottom-1/4 -right-32 w-[600px] h-[600px] bg-accent-600/15 rounded-full blur-[150px]" />
 
-        <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-500/10 border border-accent-500/20 text-accent-300 text-sm mb-8"
-            >
-              <span className="w-2 h-2 bg-accent-400 rounded-full animate-pulse" />
-              500+ projects delivered across 25+ countries
-            </motion.div>
+        <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-surface-900/80 border border-white/10 backdrop-blur-xl mb-8 shadow-xl shadow-primary-500/10"
+          >
+            <HiSparkles className="w-4 h-4 text-accent-400" />
+            <span className="text-sm font-medium text-surface-200">Award-Winning Digital Products</span>
+          </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-display font-bold leading-tight mb-6"
-            >
-              Our <span className="gradient-text">Portfolio</span>
-            </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="text-5xl md:text-7xl lg:text-[84px] font-display font-extrabold text-white leading-[1.1] tracking-tight mb-8"
+          >
+            Work that <br className="hidden md:block" />
+            <span className="relative inline-block mt-2">
+              <span className="relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-300 to-primary-300">
+                redefines industry.
+              </span>
+              <div className="absolute -bottom-2 left-0 right-0 h-4 bg-primary-500/20 blur-xl z-0" />
+            </span>
+          </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-lg text-surface-300 mb-10 max-w-2xl mx-auto leading-relaxed"
-            >
-              Real projects. Real results. Explore how we've helped startups and enterprises
-              transform their ideas into world-class digital products.
-            </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-lg md:text-xl text-surface-300 max-w-2xl mx-auto leading-relaxed mb-12"
+          >
+            Real projects. Real results. Explore how we've helped startups and enterprises transform their ideas into world-class digital products that dominate markets.
+          </motion.p>
+        </div>
+      </section>
 
-            {/* Quick stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto"
-            >
-              {[
-                { value: '500+', label: 'Projects Delivered' },
-                { value: '150+', label: 'Happy Clients' },
-                { value: '98%', label: 'Client Satisfaction' },
-                { value: '16+', label: 'Service Categories' },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-2xl font-display font-bold text-white mb-1">{stat.value}</div>
-                  <div className="text-xs text-surface-400">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
+      {/* ═══════════════ FLOATING FILTER BAR ═══════════════ */}
+      <section className="sticky top-20 z-40 bg-surface-950/80 backdrop-blur-xl border-y border-white/10 py-4 shadow-xl" id="portfolio-filters">
+        <div className="container-max mx-auto px-4 overflow-x-auto custom-scrollbar pb-2">
+          <div className="flex justify-start md:justify-center gap-3 min-w-max">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
+                  activeCategory === cat
+                    ? 'bg-white text-surface-950 shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105'
+                    : 'bg-surface-800/50 text-surface-400 hover:text-white hover:bg-surface-700 border border-white/5 hover:border-white/20'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-surface-950 to-transparent" />
       </section>
 
-      {/* ═══════════════ FILTER BAR ═══════════════ */}
-      <section className="section-padding !pt-8 !pb-0" id="portfolio-filters">
-        <div className="container-max mx-auto">
-          <FadeInSection>
-            <div className="flex flex-wrap justify-center gap-2 mb-12">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-5 py-2 rounded-xl text-sm font-medium transition-all duration-300 border ${
-                    activeCategory === cat
-                      ? 'bg-primary-500/20 border-primary-500/40 text-primary-300 shadow-glow-primary'
-                      : 'bg-white/5 border-white/10 text-surface-400 hover:text-white hover:border-white/20 hover:bg-white/10'
-                  }`}
-                  id={`portfolio-filter-${cat.replace(/[\s/]+/g, '-').toLowerCase()}`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* ═══════════════ PROJECT GRID ═══════════════ */}
-      <section className="section-padding !pt-0" id="portfolio-grid">
-        <div className="container-max mx-auto">
+      {/* ═══════════════ BENTO PROJECT GRID ═══════════════ */}
+      <section className="py-24 bg-[#020617]" id="portfolio-grid">
+        <div className="container-max mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCategory}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
               {filteredProjects.map((project, i) => (
                 <ProjectCard
@@ -678,175 +692,55 @@ const Portfolio = () => {
           </AnimatePresence>
 
           {filteredProjects.length === 0 && (
-            <div className="text-center py-20">
-              <HiCube className="w-16 h-16 text-surface-600 mx-auto mb-4" />
-              <p className="text-surface-400 text-lg">No projects found in this category yet.</p>
+            <div className="text-center py-32 glass-card rounded-[40px]">
+              <HiCube className="w-20 h-20 text-surface-700 mx-auto mb-6" />
+              <h3 className="text-2xl font-bold text-white mb-2">No projects found</h3>
+              <p className="text-surface-400 text-lg max-w-md mx-auto">We don't have any public case studies in this category yet. Check back soon!</p>
             </div>
           )}
         </div>
       </section>
 
-      {/* ═══════════════ RESULTS STATS ═══════════════ */}
-      <section className="section-padding relative" id="portfolio-stats">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-500/5 to-transparent" />
-        <div className="container-max mx-auto relative z-10">
-          <FadeInSection className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
-              Proven <span className="gradient-text">Results</span>
-            </h2>
-            <p className="text-surface-400 max-w-xl mx-auto">
-              Numbers don't lie. Here's the impact we've delivered across all our projects.
-            </p>
-          </FadeInSection>
-
-          <FadeInSection>
-            <div className="glass-card p-10 grid grid-cols-2 md:grid-cols-4 gap-8">
-              <StatCounter end={500} suffix="+" label="Projects Delivered" />
-              <StatCounter end={98} suffix="%" label="Client Satisfaction" />
-              <StatCounter end={25} suffix="+" label="Countries Served" />
-              <StatCounter end={99} suffix=".9%" label="Avg Uptime Delivered" />
-            </div>
-          </FadeInSection>
-
-          {/* Trust badges */}
-          <FadeInSection className="mt-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { icon: HiShieldCheck, title: 'Enterprise-Grade Security', desc: 'SOC 2, ISO 27001, and HIPAA-compliant development practices for every project.' },
-                { icon: HiGlobe, title: 'Global Delivery', desc: 'Distributed teams across 5 time zones ensuring round-the-clock progress on your project.' },
-                { icon: HiClock, title: 'On-Time Guarantee', desc: '95% of our projects are delivered on or ahead of schedule with transparent milestone tracking.' },
-              ].map((item, i) => (
-                <div key={i} className="glass-card p-6 group hover:border-accent-500/30 transition-all duration-500">
-                  <div className="w-12 h-12 rounded-xl bg-accent-500/10 flex items-center justify-center mb-4 group-hover:bg-accent-500/20 transition-colors">
-                    <item.icon className="w-6 h-6 text-accent-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
-                  <p className="text-sm text-surface-400 leading-relaxed">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* ═══════════════ TESTIMONIALS ═══════════════ */}
-      <section className="section-padding" id="portfolio-testimonials">
-        <div className="container-max mx-auto">
-          <FadeInSection className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
-              Client <span className="gradient-text">Testimonials</span>
-            </h2>
-            <p className="text-surface-400 max-w-xl mx-auto">
-              Hear directly from the founders and executives who trusted us with their vision.
-            </p>
-          </FadeInSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { text: 'TechNova delivered our banking platform 2 weeks ahead of schedule. The quality and communication were exceptional.', author: 'Sarah Chen', role: 'CTO, FinStack Inc.', rating: 5 },
-              { text: 'We\'ve used TechNova for 3 projects now — SaaS development, cloud setup, and SEO. They\'re our one-stop tech partner.', author: 'Raj Patel', role: 'Founder, GrowthOS', rating: 5 },
-              { text: 'Our infrastructure costs dropped by 65% and we now deploy 10x more frequently. TechNova made cloud migration painless.', author: 'Marcus Lee', role: 'CTO, ScaleUp SaaS', rating: 5 },
-            ].map((t, i) => (
-              <FadeInSection key={i} delay={i * 0.15}>
-                <div className="glass-card p-6 flex flex-col h-full">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(t.rating)].map((_, s) => (
-                      <HiStar key={s} className="w-5 h-5 text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-surface-300 text-sm leading-relaxed flex-1 mb-6">
-                    "{t.text}"
-                  </p>
-                  <div className="flex items-center gap-3 pt-4 border-t border-white/10">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold text-sm">
-                      {t.author.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-white">{t.author}</div>
-                      <div className="text-xs text-surface-400">{t.role}</div>
-                    </div>
-                  </div>
-                </div>
-              </FadeInSection>
-            ))}
+      {/* ═══════════════ IMPACT STATS ═══════════════ */}
+      <section className="py-24 relative overflow-hidden border-y border-white/5">
+        <div className="absolute inset-0 bg-surface-950" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-primary-600/10 via-transparent to-transparent rounded-full pointer-events-none" />
+        
+        <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <StatCounter end={500} suffix="+" label="Projects Delivered" />
+            <StatCounter end={98} suffix="%" label="Client Satisfaction" />
+            <StatCounter end={25} suffix="+" label="Countries Served" />
+            <StatCounter end={99} suffix=".9%" label="Avg Uptime Delivered" />
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ INDUSTRIES ═══════════════ */}
-      <section className="section-padding relative overflow-hidden" id="portfolio-industries">
-        <div className="absolute inset-0 grid-pattern opacity-40" />
-        <div className="container-max mx-auto relative z-10">
-          <FadeInSection className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
-              Industries We <span className="gradient-text">Serve</span>
+      {/* ═══════════════ CTA ═══════════════ */}
+      <section className="py-32 relative overflow-hidden bg-surface-900 border-b border-white/5">
+        <div className="absolute inset-0 grid-pattern opacity-30 mix-blend-overlay" />
+        <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <FadeInSection>
+            <div className="w-20 h-20 mx-auto bg-primary-500/10 rounded-3xl border border-primary-500/30 flex items-center justify-center mb-8 shadow-[0_0_30px_rgba(108,92,231,0.2)]">
+              <HiBriefcase className="w-10 h-10 text-primary-400" />
+            </div>
+            <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">
+              Let's build your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">success story.</span>
             </h2>
-            <p className="text-surface-400 max-w-xl mx-auto">
-              Deep domain expertise across verticals that matter.
+            <p className="text-xl text-surface-400 max-w-2xl mx-auto mb-10">
+              Join the hundreds of companies that have already transformed their digital presence with TechNova.
             </p>
-          </FadeInSection>
-
-          <FadeInSection>
-            <div className="flex flex-wrap justify-center gap-3">
-              {[
-                'FinTech & Banking', 'Healthcare & MedTech', 'E-Commerce & Retail',
-                'EdTech & Learning', 'SaaS & Enterprise', 'Real Estate & PropTech',
-                'Logistics & Supply Chain', 'Media & Entertainment', 'Travel & Hospitality',
-                'Legal & Compliance', 'Agriculture & AgriTech', 'Energy & CleanTech',
-              ].map((industry) => (
-                <span
-                  key={industry}
-                  className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-surface-300 text-sm font-medium hover:border-primary-500/30 hover:text-primary-300 hover:bg-primary-500/5 transition-all duration-300 cursor-default"
-                >
-                  {industry}
-                </span>
-              ))}
-            </div>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-3 px-10 py-5 bg-white text-surface-950 font-bold rounded-2xl hover:bg-surface-100 transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] hover:-translate-y-1"
+            >
+              Start a Project <HiArrowRight className="w-6 h-6" />
+            </Link>
           </FadeInSection>
         </div>
       </section>
 
-      {/* ═══════════════ CTA BANNER ═══════════════ */}
-      <section className="section-padding" id="portfolio-cta">
-        <div className="container-max mx-auto">
-          <FadeInSection>
-            <div className="relative rounded-3xl overflow-hidden p-12 md:p-16 text-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-600/90 via-primary-700/90 to-accent-600/80" />
-              <div className="absolute inset-0 dot-pattern opacity-10" />
-              <div className="absolute top-0 right-0 w-64 h-64 bg-accent-400/20 rounded-full blur-[100px]" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-400/20 rounded-full blur-[100px]" />
-
-              <div className="relative z-10">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-4">
-                  Ready to build something amazing?
-                </h2>
-                <p className="text-primary-100/80 text-lg mb-8 max-w-xl mx-auto">
-                  Let's add your success story to our portfolio. Get a free consultation and AI-powered project estimate.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center gap-2 px-8 py-3 bg-white text-primary-700 font-semibold rounded-xl hover:bg-primary-50 transition-all duration-300 hover:shadow-lg group"
-                    id="portfolio-cta-start-btn"
-                  >
-                    Start Your Project
-                    <HiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                  <Link
-                    to="/services"
-                    className="inline-flex items-center gap-2 px-8 py-3 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all duration-300"
-                    id="portfolio-cta-services-btn"
-                  >
-                    Explore Services
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* ═══════════════ CASE STUDY MODAL ═══════════════ */}
+      {/* Case Study Modal Overlay */}
       <AnimatePresence>
         {selectedProject && (
           <CaseStudyModal

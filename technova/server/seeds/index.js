@@ -272,6 +272,60 @@ const sampleServices = [
     ],
     tags: ['crm', 'erp', 'automation', 'business process', 'workflow'],
   },
+  {
+    title: 'Professional 3D Walkthrough & Rendering',
+    categoryName: '3D Architecture & Visualization',
+    subCategory: 'Walkthrough Animations',
+    description: 'Stunning 3D architectural visualization and walkthroughs for real estate, interior design, and product showcases. Photorealistic rendering with dynamic lighting and textures.',
+    shortDescription: 'Photorealistic 3D architectural rendering and animated walkthroughs.',
+    pricingTiers: [
+      { name: 'Basic', price: 499, features: ['1 Room/Space', '3 High-Res Renderings', 'Basic Textures', '1 Revision'], deliveryDays: 7 },
+      { name: 'Standard', price: 999, features: ['Full House/Apartment', '10 Renderings', '30sec Walkthrough', 'Photorealistic Textures'], deliveryDays: 14 },
+      { name: 'Premium', price: 2499, features: ['Commercial Building', 'Unlimited Renders', '2min 4K Walkthrough', 'VR Compatible', 'Source Files'], deliveryDays: 21 },
+    ],
+    tags: ['3d rendering', 'architecture', 'walkthrough', 'visualization'],
+  },
+  {
+    title: 'Modern UI/UX App Design',
+    categoryName: 'UI/UX Design',
+    subCategory: 'Mobile UI Design',
+    description: 'User-centric UI/UX design for web and mobile applications. Wireframing, prototyping, and high-fidelity mockups designed in Figma with complete design systems.',
+    shortDescription: 'Beautiful, intuitive UI/UX design for web and mobile apps using Figma.',
+    pricingTiers: [
+      { name: 'Basic', price: 399, features: ['Up to 5 Screens', 'Wireframing', 'Figma Source File', '2 Revisions'], deliveryDays: 7 },
+      { name: 'Standard', price: 899, features: ['Up to 15 Screens', 'Interactive Prototype', 'Design System Basics', '5 Revisions'], deliveryDays: 14 },
+      { name: 'Premium', price: 1999, features: ['Unlimited Screens', 'Full Design System', 'User Testing', 'Developer Handoff', 'Unlimited Revisions'], deliveryDays: 21 },
+    ],
+    tags: ['ui', 'ux', 'design', 'figma', 'prototyping'],
+    isFeatured: true,
+  },
+  {
+    title: 'Cinematic YouTube & Reel Editing',
+    categoryName: 'Video Editing',
+    subCategory: 'YouTube Editing',
+    description: 'Professional video editing services for content creators and brands. Color grading, motion graphics, sound design, and cinematic transitions for YouTube, TikTok, and Reels.',
+    shortDescription: 'Professional video editing with color grading and motion graphics.',
+    pricingTiers: [
+      { name: 'Basic', price: 149, features: ['Up to 5min Video', 'Basic Editing', 'Color Correction', '2 Revisions'], deliveryDays: 3 },
+      { name: 'Standard', price: 349, features: ['Up to 15min Video', 'Motion Graphics', 'Sound Design', 'Subtitles'], deliveryDays: 7 },
+      { name: 'Premium', price: 799, features: ['Documentary/Course', 'Cinematic Grading', 'Advanced Effects', 'Thumbnail Design', 'Unlimited Revisions'], deliveryDays: 14 },
+    ],
+    tags: ['video editing', 'youtube', 'premiere pro', 'reels', 'tiktok'],
+  },
+  {
+    title: 'Advanced Excel & VBA Automation',
+    categoryName: 'Excel Services',
+    subCategory: 'VBA Macros',
+    description: 'Transform your manual data work with advanced Excel automation. Custom VBA macros, dynamic financial models, data cleaning pipelines, and automated reporting dashboards.',
+    shortDescription: 'Custom VBA macros, automated reports, and dynamic Excel dashboards.',
+    pricingTiers: [
+      { name: 'Basic', price: 99, features: ['Simple Macro/Formula', 'Data Formatting', 'Basic Dashboard', '1 Revision'], deliveryDays: 3 },
+      { name: 'Standard', price: 299, features: ['Complex VBA Macro', 'Automated Report', 'Dynamic Dashboard', 'Data Cleaning'], deliveryDays: 7 },
+      { name: 'Premium', price: 799, features: ['Full Application in Excel', 'API Integrations', 'Financial Modeling', 'User Form Interface'], deliveryDays: 14 },
+    ],
+    tags: ['excel', 'vba', 'automation', 'dashboard', 'data'],
+    isFeatured: true,
+  },
 ];
 
 const sampleJobs = [

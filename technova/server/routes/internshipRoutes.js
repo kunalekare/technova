@@ -14,14 +14,14 @@ import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+// Protected user routes
+router.get('/my-applications', protect, getMyApplications); 
+
 // Public routes
 router.get('/', getInternships);
 router.get('/:id', getInternshipById);
 
-// Protected routes (User)
-router.use(protect);
-router.get('/my-applications', getMyApplications);
-router.post('/:id/apply', applyToInternship);
+router.post('/:id/apply', protect, applyToInternship);
 
 // Protected routes (Admin)
 const adminAuth = authorize('admin', 'super_admin');
