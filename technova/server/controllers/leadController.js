@@ -79,10 +79,11 @@ export const createLead = async (req, res, next) => {
         `,
       };
 
-      await transporter.sendMail(mailOptions);
-    } catch (emailError) {
-      console.error('Email notification failed to send:', emailError);
-      // We don't fail the lead creation if email fails
+      transporter.sendMail(mailOptions).catch(emailError => {
+        console.error('Email notification failed to send:', emailError);
+      });
+    } catch (error) {
+      console.error('Email setup failed:', error);
     }
 
     res.status(201).json({
