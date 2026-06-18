@@ -1,5 +1,5 @@
 import Lead from '../models/Lead.js';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 // @desc    Create a new lead (public)
 // @route   POST /api/v1/leads
@@ -19,20 +19,9 @@ export const createLead = async (req, res, next) => {
 
     // Attempt to send email notification to admin
     try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT || 587,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      });
+      const resend = new Resend(process.env.RESEND_API_KEY);
 
-      const mailOptions = {
-        from: process.env.SMTP_USER || '"Velixora Notifications" <noreply@velixorasolutions.com>',
-        to: 'kunalekare02@gmail.com',
-        subject: `New Contact Form Submission from ${name}`,
-        html: `
+      const htmlContent = `
           <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
             <div style="background-color: #4f46e5; background-image: linear-gradient(to right, #4f46e5, #3b82f6); color: #ffffff; padding: 24px; text-align: center;">
               <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px;">Velixora Solutions</h1>
@@ -76,10 +65,14 @@ export const createLead = async (req, res, next) => {
               <p style="margin: 6px 0 0 0;">&copy; ${new Date().getFullYear()} Velixora Solutions. All rights reserved.</p>
             </div>
           </div>
-        `,
-      };
+        `;
 
-      transporter.sendMail(mailOptions).catch(emailError => {
+      resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: process.env.ADMIN_EMAIL || 'kunalekare02@gmail.com',
+        subject: `New Contact Form Submission from ${name}`,
+        html: htmlContent,
+      }).catch(emailError => {
         console.error('Email notification failed to send:', emailError);
       });
     } catch (error) {
