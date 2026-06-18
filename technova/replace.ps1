@@ -26,6 +26,10 @@ function Process-Directory($dir) {
                     $newContent = $newContent -creplace 'Velixora', 'Tarkko'
                     $newContent = $newContent -creplace 'velixora', 'tarkko'
                     $newContent = $newContent -creplace 'VELIXORA', 'TARKKO'
+                    $newContent = $newContent -creplace 'TechNova', 'Tarkko'
+                    $newContent = $newContent -creplace 'technova_theme', 'tarkko_theme'
+                    $newContent = $newContent -creplace 'support@technova\.in', 'support@tarkko.in'
+                    $newContent = $newContent -creplace 'employee@technova\.com', 'employee@tarkko.com'
                     
                     # Fix logo text splits
                     $newContent = $newContent -creplace '>Velix<', '>Tark<'
