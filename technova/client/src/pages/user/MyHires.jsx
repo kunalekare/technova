@@ -23,13 +23,23 @@ const MyHires = () => {
         <title>My Hires | Velixora Dashboard</title>
       </Helmet>
 
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-white mb-2">My Hires</h1>
-          <p className="text-surface-400">Manage your hired talent and active engagements.</p>
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header section with glow */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-surface-900/50 p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[80px] pointer-events-none" />
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500/20 to-emerald-500/20 flex items-center justify-center border border-white/10 shadow-inner">
+              <HiUserGroup className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-display font-bold text-white tracking-tight">My Hires</h1>
+              <p className="text-surface-400 mt-1">Manage your hired talent and active engagements.</p>
+            </div>
+          </div>
+          <Link to="/hire" className="btn-primary relative z-10 !px-6 !py-3 shadow-lg shadow-primary-500/20 flex items-center gap-2 text-sm md:text-base">
+            Hire More Talent
+          </Link>
         </div>
-        <Link to="/hire" className="btn-primary">Hire More Talent</Link>
-      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {mockHires.map((hire, i) => (
@@ -80,6 +90,7 @@ const MyHires = () => {
             <Link to="/hire" className="btn-primary">Browse Talent</Link>
           </div>
         )}
+      </div>
       </div>
     </>
   );

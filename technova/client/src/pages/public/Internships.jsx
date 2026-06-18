@@ -51,21 +51,21 @@ const Internships = () => {
           </motion.div>
 
           <div className="glass-card p-4 mb-10 flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
+            <div className="flex-1 relative w-full">
               <HiSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-surface-400" />
               <input 
                 type="text" 
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search internships by role or keyword..." 
-                className="input-field pl-12 bg-surface-900 border-none"
+                className="input-field pl-12 bg-surface-900 border-none w-full"
               />
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 w-full md:w-auto">
               <select 
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="input-field bg-surface-900 border-none !w-auto"
+                className="input-field bg-surface-900 border-none w-full"
               >
                 <option value="">All Departments</option>
                 <option value="Engineering">Engineering</option>
@@ -111,26 +111,26 @@ const Internships = () => {
                       <span className="badge-primary !bg-surface-800 text-xs">{internship.department}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 mt-4 mb-6">
-                      <div className="flex items-center gap-2 text-sm text-surface-300">
+                    <div className="flex flex-wrap gap-3 mt-4 mb-6">
+                      <div className="flex items-center gap-2 text-sm text-surface-300 bg-surface-950/50 p-2.5 rounded-lg border border-white/5">
                         <HiCurrencyRupee className="w-4 h-4 text-emerald-400" />
-                        {internship.stipend}
+                        <span className="whitespace-nowrap">{internship.stipend}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-surface-300">
+                      <div className="flex items-center gap-2 text-sm text-surface-300 bg-surface-950/50 p-2.5 rounded-lg border border-white/5">
                         <HiClock className="w-4 h-4 text-blue-400" />
-                        {internship.duration}
+                        <span className="whitespace-nowrap">{internship.duration}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-surface-300">
+                      <div className="flex items-center gap-2 text-sm text-surface-300 bg-surface-950/50 p-2.5 rounded-lg border border-white/5">
                         <HiLocationMarker className="w-4 h-4 text-purple-400" />
-                        {internship.mode}
+                        <span className="whitespace-nowrap">{internship.mode}</span>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between border-t border-white/5 pt-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-white/5 pt-4 gap-4">
                       <span className="text-xs text-surface-500">
                         Apply by: {internship.deadline ? new Date(internship.deadline).toLocaleDateString() : 'Ongoing'}
                       </span>
-                      <Link to={`/internships/${internship._id}`} className="btn-primary !px-6 py-2 text-sm">
+                      <Link to={`/internships/${internship._id}`} className="btn-primary w-full sm:w-auto text-center !px-6 py-2 text-sm">
                         View Details
                       </Link>
                     </div>

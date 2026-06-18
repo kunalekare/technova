@@ -31,14 +31,14 @@ const Wishlist = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header section with glow */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-surface-900/50 p-8 rounded-3xl border border-white/5 relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-surface-900/50 p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/10 rounded-full blur-[80px] pointer-events-none" />
           <div className="relative z-10 flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 shadow-inner">
               <HiHeart className="w-7 h-7 text-pink-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-display font-bold text-white tracking-tight">My Wishlist</h1>
+              <h1 className="text-2xl md:text-3xl font-display font-bold text-white tracking-tight">My Wishlist</h1>
               <p className="text-surface-400 mt-1">Saved services and digital assets for future projects.</p>
             </div>
           </div>

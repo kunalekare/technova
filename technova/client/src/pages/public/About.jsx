@@ -51,7 +51,7 @@ const About = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="text-5xl md:text-7xl font-display font-bold text-white mb-8 leading-tight tracking-tight"
+              className="text-4xl md:text-7xl font-display font-bold text-white mb-6 md:mb-8 leading-tight tracking-tight"
             >
               Building the <span className="gradient-text">Architecture</span> of Tomorrow.
             </motion.h1>
@@ -60,7 +60,7 @@ const About = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-xl text-surface-400 leading-relaxed mb-10"
+              className="text-lg md:text-xl text-surface-400 leading-relaxed mb-8 md:mb-10"
             >
               We are an elite collective of engineers, designers, and strategists. Velixora partners with ambitious brands to build scalable software and integrate transformative AI solutions.
             </motion.p>
@@ -70,7 +70,7 @@ const About = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <Link to="/contact" className="btn-primary px-8 py-4 text-lg">Partner With Us</Link>
+              <Link to="/contact" className="btn-primary px-6 py-3 md:px-8 md:py-4 text-base md:text-lg">Partner With Us</Link>
             </motion.div>
           </div>
         </section>
@@ -78,7 +78,7 @@ const About = () => {
         {/* Stats Section */}
         <section className="border-y border-white/5 bg-surface-900/50 backdrop-blur-sm relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 divide-x divide-white/5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-6 md:gap-12 md:divide-x md:divide-white/5">
               {stats.map((stat, i) => (
                 <motion.div 
                   key={i}
@@ -86,12 +86,12 @@ const About = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="text-center px-4"
+                  className="text-center px-2 md:px-4"
                 >
-                  <div className="text-4xl md:text-5xl font-display font-bold text-white mb-2 tracking-tighter">
+                  <div className="text-3xl md:text-5xl font-display font-bold text-white mb-2 tracking-tighter">
                     {stat.value}
                   </div>
-                  <div className="text-sm font-medium text-primary-400 uppercase tracking-widest">
+                  <div className="text-[10px] md:text-sm font-medium text-primary-400 uppercase tracking-widest">
                     {stat.label}
                   </div>
                 </motion.div>
@@ -115,7 +115,7 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="p-8 rounded-3xl bg-gradient-to-b from-surface-800 to-surface-900 border border-white/5 hover:border-primary-500/30 transition-colors group"
+                className="p-6 md:p-8 rounded-3xl bg-gradient-to-b from-surface-800 to-surface-900 border border-white/5 hover:border-primary-500/30 transition-colors group"
               >
                 <div className="w-14 h-14 rounded-2xl bg-primary-500/10 flex items-center justify-center mb-6 group-hover:bg-primary-500/20 transition-colors">
                   <cap.icon className="w-7 h-7 text-primary-400" />
@@ -166,23 +166,23 @@ const About = () => {
         </section>
 
         {/* CTA */}
-        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="relative rounded-3xl overflow-hidden p-12 md:p-20 text-center border border-white/10">
+        <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="relative rounded-3xl overflow-hidden p-8 md:p-20 text-center border border-white/10">
             <div className="absolute inset-0 bg-gradient-to-br from-primary-900/40 to-accent-900/40" />
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
             
             <div className="relative z-10">
-              <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-6">
+              <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-4 md:mb-6">
                 Ready to accelerate your roadmap?
               </h2>
-              <p className="text-xl text-surface-300 mb-10 max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-surface-300 mb-8 md:mb-10 max-w-2xl mx-auto">
                 Join the fastest-growing enterprises that trust Velixora to scale their digital infrastructure.
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link to="/contact" className="btn-primary px-8 py-4 text-lg">
+              <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
+                <Link to="/contact" className="btn-primary px-6 py-3 md:px-8 md:py-4 text-base md:text-lg">
                   Start a Conversation
                 </Link>
-                <Link to="/portfolio" className="btn-secondary px-8 py-4 text-lg bg-surface-900/50">
+                <Link to="/portfolio" className="btn-secondary px-6 py-3 md:px-8 md:py-4 text-base md:text-lg bg-surface-900/50">
                   View Our Work
                 </Link>
               </div>

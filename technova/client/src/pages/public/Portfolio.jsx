@@ -50,10 +50,10 @@ const StatCounter = ({ end, suffix = '', label }) => {
 
   return (
     <div ref={ref} className="text-center group">
-      <div className="text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-105 transition-transform duration-500">
+      <div className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-2 group-hover:scale-105 transition-transform duration-500">
         <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">{count.toLocaleString()}</span>{suffix}
       </div>
-      <div className="text-surface-400 font-medium tracking-wide uppercase text-xs">{label}</div>
+      <div className="text-surface-400 font-medium tracking-wide uppercase text-[10px] md:text-xs">{label}</div>
     </div>
   );
 };
@@ -353,23 +353,23 @@ const ProjectCard = ({ project, index, onClick }) => {
         <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-white/10 rounded-full blur-[80px] translate-x-1/2 -translate-y-1/2 group-hover:bg-white/20 transition-colors duration-500" />
 
         {/* Content Container */}
-        <div className="absolute inset-0 p-8 flex flex-col z-10">
+        <div className="absolute inset-0 p-6 md:p-8 flex flex-col z-10">
           
           {/* Top Header */}
           <div className="flex items-start justify-between">
-            <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
-              <IconComponent className="w-7 h-7 text-white" />
+            <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
+              <IconComponent className="w-6 h-6 md:w-7 md:h-7 text-white" />
             </div>
-            <div className="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/90 text-xs font-bold uppercase tracking-wider">
+            <div className="px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/90 text-[10px] md:text-xs font-bold uppercase tracking-wider">
               {project.year}
             </div>
           </div>
 
           <div className="mt-auto">
-            <div className="inline-block px-3 py-1 mb-4 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold">
+            <div className="inline-block px-3 py-1 mb-3 md:mb-4 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold">
               {project.category}
             </div>
-            <h3 className="text-3xl font-display font-bold text-white mb-3 leading-tight group-hover:translate-x-2 transition-transform duration-500">
+            <h3 className="text-2xl md:text-3xl font-display font-bold text-white mb-2 md:mb-3 leading-tight group-hover:translate-x-2 transition-transform duration-500">
               {project.title}
             </h3>
             <p className="text-white/70 line-clamp-2 mb-6 group-hover:translate-x-2 transition-transform duration-500 delay-75">
@@ -450,15 +450,15 @@ const CaseStudyModal = ({ project, onClose }) => {
             <IconComponent className="absolute -right-10 -bottom-10 w-96 h-96 text-white/10 mix-blend-overlay rotate-12 pointer-events-none" />
             
             <div className="relative z-10 max-w-3xl">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-bold tracking-wide">
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                <span className="px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs md:text-sm font-bold tracking-wide">
                   {project.category}
                 </span>
-                <span className="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white text-sm font-bold tracking-wide">
+                <span className="px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white text-xs md:text-sm font-bold tracking-wide">
                   {project.year}
                 </span>
               </div>
-              <h2 className="text-4xl md:text-6xl font-display font-extrabold text-white leading-tight mb-4 drop-shadow-2xl">
+              <h2 className="text-3xl md:text-6xl font-display font-extrabold text-white leading-tight mb-4 drop-shadow-2xl">
                 {project.title}
               </h2>
               <p className="text-xl text-white/90 font-medium max-w-2xl">
@@ -528,12 +528,12 @@ const CaseStudyModal = ({ project, onClose }) => {
             {/* Key Results Section */}
             <div className="mb-16">
               <h3 className="text-2xl font-display font-bold text-white mb-8 text-center">Business Impact</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
                 {project.results.map((r, i) => (
-                  <div key={i} className={`bg-gradient-to-br ${gradient} p-[1px] rounded-[24px]`}>
-                    <div className="bg-surface-900 h-full rounded-[23px] p-6 text-center flex flex-col justify-center items-center">
-                      <div className="text-3xl md:text-4xl font-display font-bold text-white mb-2">{r.metric}</div>
-                      <div className="text-sm text-surface-400 font-medium uppercase tracking-wider">{r.label}</div>
+                  <div key={i} className={`bg-gradient-to-br ${gradient} p-[1px] rounded-[16px] md:rounded-[24px]`}>
+                    <div className="bg-surface-900 h-full rounded-[15px] md:rounded-[23px] p-4 md:p-6 text-center flex flex-col justify-center items-center">
+                      <div className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white mb-1 md:mb-2">{r.metric}</div>
+                      <div className="text-[10px] md:text-sm text-surface-400 font-medium uppercase tracking-wider">{r.label}</div>
                     </div>
                   </div>
                 ))}
@@ -625,7 +625,7 @@ const Portfolio = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="text-5xl md:text-7xl lg:text-[84px] font-display font-extrabold text-white leading-[1.1] tracking-tight mb-8"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-[84px] font-display font-extrabold text-white leading-[1.1] tracking-tight mb-6 md:mb-8"
           >
             Work that <br className="hidden md:block" />
             <span className="relative inline-block mt-2">

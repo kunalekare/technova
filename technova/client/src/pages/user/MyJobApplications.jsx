@@ -32,14 +32,14 @@ const MyJobApplications = () => {
 
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header section with glow */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-surface-900/50 p-8 rounded-3xl border border-white/5 relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-surface-900/50 p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[80px] pointer-events-none" />
           <div className="relative z-10 flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 shadow-inner">
               <HiBriefcase className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-display font-bold text-white tracking-tight">Job Applications</h1>
+              <h1 className="text-2xl md:text-3xl font-display font-bold text-white tracking-tight">Job Applications</h1>
               <p className="text-surface-400 mt-1">Track your career journey and interview pipelines.</p>
             </div>
           </div>
@@ -61,7 +61,7 @@ const MyJobApplications = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="glass-card p-8 rounded-3xl border border-white/5 relative group hover:border-white/10 hover:bg-surface-800/80 transition-all duration-500 overflow-hidden"
+              className="glass-card p-6 md:p-8 rounded-3xl border border-white/5 relative group hover:border-white/10 hover:bg-surface-800/80 transition-all duration-500 overflow-hidden"
             >
               <div className={`absolute top-0 right-0 w-40 h-40 bg-${color}-500/10 rounded-full blur-[60px] group-hover:bg-${color}-500/20 transition-colors duration-500`} />
               

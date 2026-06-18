@@ -39,7 +39,7 @@ const Contact = () => {
         <div className="container-max mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-14 pt-8">
-            <h1 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">
+            <h1 className="text-3xl md:text-5xl font-display font-bold text-white mb-3 md:mb-4">
               Let's <span className="gradient-text">Connect</span>
             </h1>
             <p className="text-surface-400 max-w-xl mx-auto">
@@ -55,25 +55,25 @@ const Contact = () => {
               transition={{ delay: 0.1 }}
               className="lg:col-span-2 space-y-6"
             >
-              <div className="glass-card p-6">
+              <div className="glass-card p-5 md:p-6">
                 <h3 className="text-lg font-display font-semibold text-white mb-6">Contact Information</h3>
                 <div className="space-y-5">
-                  <a href="mailto:hello@velixora.com" className="flex items-center gap-4 text-surface-300 hover:text-primary-400 transition-colors">
+                  <div className="flex items-center gap-4 text-surface-300">
                     <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center flex-shrink-0">
                       <HiMail className="w-5 h-5 text-primary-400" />
                     </div>
                     <div>
                       <div className="text-xs text-surface-500">Email</div>
-                      <div className="text-sm">hello@velixora.com</div>
+                      <div className="text-sm select-all">tarkkodigital@gmail.com</div>
                     </div>
-                  </a>
+                  </div>
                   <a href="tel:+919876543210" className="flex items-center gap-4 text-surface-300 hover:text-primary-400 transition-colors">
                     <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center flex-shrink-0">
                       <HiPhone className="w-5 h-5 text-primary-400" />
                     </div>
                     <div>
                       <div className="text-xs text-surface-500">Phone</div>
-                      <div className="text-sm">+91 98765 43210</div>
+                      <div className="text-sm">+91 9322433172</div>
                     </div>
                   </a>
                   <div className="flex items-center gap-4 text-surface-300">
@@ -82,13 +82,13 @@ const Contact = () => {
                     </div>
                     <div>
                       <div className="text-xs text-surface-500">Office</div>
-                      <div className="text-sm">Bangalore, India</div>
+                      <div className="text-sm">Nagpur, India</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="glass-card p-6">
+              <div className="glass-card p-5 md:p-6">
                 <h3 className="text-sm font-semibold text-white mb-3">Office Hours</h3>
                 <div className="text-sm text-surface-400 space-y-1">
                   <p>Mon – Fri: 9:00 AM – 7:00 PM IST</p>
@@ -105,7 +105,7 @@ const Contact = () => {
               transition={{ delay: 0.2 }}
               className="lg:col-span-3"
             >
-              <div className="glass-card p-8">
+              <div className="glass-card p-5 md:p-8">
                 {submitted ? (
                   <div className="text-center py-12">
                     <div className="w-16 h-16 mx-auto rounded-full bg-accent-500/20 flex items-center justify-center mb-4">

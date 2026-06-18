@@ -53,7 +53,7 @@ const Careers = () => {
           </motion.div>
 
           <div className="bg-surface-900 border border-white/10 rounded-2xl p-2 mb-10 flex flex-col md:flex-row gap-2 backdrop-blur-md relative z-10 shadow-2xl">
-            <div className="flex-1 relative flex items-center">
+            <div className="flex-1 relative flex items-center w-full">
               <HiSearch className="absolute left-4 w-5 h-5 text-primary-400" />
               <input 
                 type="text" 
@@ -63,12 +63,12 @@ const Careers = () => {
                 className="w-full bg-transparent border-none focus:ring-0 text-white pl-12 pr-4 py-3 placeholder-surface-500 outline-none"
               />
             </div>
-            <div className="h-full w-px bg-white/10 hidden md:block mx-2" />
-            <div className="flex gap-2">
+            <div className="h-px md:h-full w-full md:w-px bg-white/10 mx-0 md:mx-2" />
+            <div className="flex gap-2 w-full md:w-auto">
               <select 
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="bg-transparent text-surface-300 focus:ring-0 border-none py-3 px-4 cursor-pointer hover:text-white transition outline-none"
+                className="bg-surface-900 md:bg-transparent text-surface-300 focus:ring-0 border border-white/10 md:border-none rounded-xl md:rounded-none py-3 px-4 cursor-pointer hover:text-white transition outline-none w-full"
               >
                 <option value="" className="bg-surface-900">All Departments</option>
                 <option value="Engineering" className="bg-surface-900">Engineering</option>
@@ -118,7 +118,7 @@ const Careers = () => {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 mt-auto mb-8 pt-6 border-t border-white/5 relative z-10">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-auto mb-8 pt-6 border-t border-white/5 relative z-10">
                     <div className="flex items-center gap-3 text-sm text-surface-300 bg-surface-950 p-3 rounded-xl border border-white/5">
                       <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
                         <HiCurrencyDollar className="w-5 h-5 text-emerald-400" />

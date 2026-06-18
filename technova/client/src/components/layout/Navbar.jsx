@@ -65,15 +65,21 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center group-hover:shadow-glow-primary transition-shadow duration-300">
-              <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M6 9L12 4L18 9V18L12 22L6 18Z" />
-                <circle cx="12" cy="13" r="3" fill="currentColor" />
+            <div className="w-10 h-10 flex items-center justify-center group-hover:shadow-glow-primary rounded-xl transition-shadow duration-300">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <defs>
+                  <linearGradient id="tarkkoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#6366f1" />
+                    <stop offset="100%" stopColor="#a855f7" />
+                  </linearGradient>
+                </defs>
+                <polygon points="50 5, 90 25, 90 75, 50 95, 10 75, 10 25" fill="url(#tarkkoGrad)" />
+                <path d="M 50 28 L 72 45 L 63 54 L 55 48 L 55 72 L 45 72 L 45 48 L 37 54 L 28 45 Z" fill="white" />
               </svg>
             </div>
-            <span className="text-xl font-display font-bold">
-              <span className="text-white">Tark</span>
-              <span className="gradient-text">ko</span>
+            <span className="text-2xl font-display font-extrabold tracking-wide ml-1.5">
+              <span className="text-white">TARK</span>
+              <span className="text-primary-500">KO</span>
             </span>
           </Link>
 

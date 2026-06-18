@@ -114,14 +114,14 @@ const Tickets = () => {
         <div className="max-w-7xl mx-auto space-y-8">
           
           {/* Header section with glow */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-surface-900/50 p-8 rounded-3xl border border-white/5 relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-surface-900/50 p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[80px] pointer-events-none" />
             <div className="relative z-10 flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500/20 to-blue-500/20 flex items-center justify-center border border-white/10 shadow-inner">
                 <HiOutlineSupport className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-display font-bold text-white tracking-tight">Support Tickets</h1>
+                <h1 className="text-2xl md:text-3xl font-display font-bold text-white tracking-tight">Support Tickets</h1>
                 <p className="text-surface-400 mt-1">Get immediate help with your projects and orders.</p>
               </div>
             </div>
@@ -136,7 +136,7 @@ const Tickets = () => {
 
           {/* Scrolling Filter Board */}
           <div className="relative w-full">
-            <div className="flex items-center gap-2 overflow-x-auto pb-4 hide-scrollbar">
+            <div className="flex items-center gap-2 overflow-x-auto pb-4 hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
               <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-surface-800 border border-white/5 shrink-0 shadow-inner">
                 <HiFilter className="w-5 h-5 text-surface-400" />
               </div>
@@ -202,7 +202,7 @@ const Tickets = () => {
                       exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
                       transition={{ delay: i * 0.05 }}
                       onClick={() => handleViewTicket(ticket._id)}
-                      className="glass-card p-6 rounded-2xl border border-white/5 hover:border-white/10 hover:bg-surface-800/80 transition-all duration-300 group cursor-pointer flex flex-col md:flex-row items-start md:items-center gap-6"
+                      className="glass-card p-5 md:p-6 rounded-2xl border border-white/5 hover:border-white/10 hover:bg-surface-800/80 transition-all duration-300 group cursor-pointer flex flex-col md:flex-row items-start md:items-center gap-5 md:gap-6"
                     >
                       {/* Status Icon */}
                       <div className={`w-14 h-14 rounded-2xl bg-${colorCode}-500/10 flex items-center justify-center border border-${colorCode}-500/20 shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(var(--color-${colorCode}-500),0.1)] group-hover:shadow-[0_0_20px_rgba(var(--color-${colorCode}-500),0.3)]`}>
@@ -259,7 +259,7 @@ const Tickets = () => {
             <HiArrowLeft className="w-4 h-4 mr-1.5 group-hover:-translate-x-1 transition-transform" /> Back to Tickets
           </button>
 
-          <form onSubmit={handleCreateTicket} className="glass-card p-8 rounded-3xl border border-white/5 relative overflow-hidden">
+          <form onSubmit={handleCreateTicket} className="glass-card p-5 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[80px] pointer-events-none" />
             
             <h2 className="text-2xl font-display font-bold text-white mb-8 flex items-center gap-3 relative z-10">

@@ -53,25 +53,34 @@ const Sidebar = ({ isMobile, closeMobileSidebar }) => {
     dispatch(logout());
   };
 
-  const navContent = (
+  const getNavContent = (gradientId) => (
     <div className="flex flex-col h-full bg-surface-950 border-r border-white/5">
       {/* Brand */}
       <div className="h-20 flex items-center px-6 border-b border-white/5">
-        <Link to="/" className="flex items-center gap-2" onClick={isMobile ? closeMobileSidebar : undefined}>
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-            <svg viewBox="0 0 24 24" className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M6 9L12 4L18 9V18L12 22L6 18Z" />
-              <circle cx="12" cy="13" r="3" fill="currentColor" />
+        <Link to="/" className="flex items-center gap-2 group" onClick={isMobile ? closeMobileSidebar : undefined}>
+          <div className="w-8 h-8 flex items-center justify-center group-hover:shadow-glow-primary rounded-xl transition-shadow duration-300 shrink-0">
+            <svg viewBox="0 0 100 100" className="w-full h-full">
+              <defs>
+                <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#6366f1" />
+                  <stop offset="100%" stopColor="#a855f7" />
+                </linearGradient>
+              </defs>
+              <polygon points="50 5, 90 25, 90 75, 50 95, 10 75, 10 25" fill={`url(#${gradientId})`} />
+              <path d="M 50 28 L 72 45 L 63 54 L 55 48 L 55 72 L 45 72 L 45 48 L 37 54 L 28 45 Z" fill="white" />
             </svg>
           </div>
-          <span className="text-xl font-display font-bold text-white">TechNova</span>
+          <span className="text-xl font-display font-extrabold tracking-wide ml-1 truncate">
+            <span className="text-white">TARK</span>
+            <span className="text-primary-500">KO</span>
+          </span>
         </Link>
       </div>
 
       {/* User Info */}
       <div className="p-6 border-b border-white/5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold shrink-0">
             {user?.name?.charAt(0) || 'U'}
           </div>
           <div className="flex-1 min-w-0">
@@ -95,8 +104,8 @@ const Sidebar = ({ isMobile, closeMobileSidebar }) => {
                   : 'text-surface-300 hover:text-white hover:bg-white/5'
                 }`}
             >
-              <link.icon className={`w-5 h-5 ${isActive ? 'text-primary-400' : 'text-surface-400'}`} />
-              {link.name}
+              <link.icon className={`w-5 h-5 ${isActive ? 'text-primary-400' : 'text-surface-400'} shrink-0`} />
+              <span className="truncate">{link.name}</span>
             </Link>
           );
         })}
@@ -108,14 +117,14 @@ const Sidebar = ({ isMobile, closeMobileSidebar }) => {
           to={(user?.role?.name === 'admin' || user?.role?.name === 'super_admin') ? '/admin/settings' : '/dashboard/settings'}
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-surface-300 hover:text-white hover:bg-white/5 transition-all"
         >
-          <HiCog className="w-5 h-5 text-surface-400" />
+          <HiCog className="w-5 h-5 text-surface-400 shrink-0" />
           Settings
         </Link>
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all"
         >
-          <HiLogout className="w-5 h-5" />
+          <HiLogout className="w-5 h-5 shrink-0" />
           Sign Out
         </button>
       </div>
@@ -126,7 +135,7 @@ const Sidebar = ({ isMobile, closeMobileSidebar }) => {
     <>
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex flex-col w-64 fixed inset-y-0 z-40">
-        {navContent}
+        {getNavContent('desktop-grad')}
       </aside>
 
       {/* Mobile Sidebar overlay */}
@@ -137,7 +146,7 @@ const Sidebar = ({ isMobile, closeMobileSidebar }) => {
             onClick={closeMobileSidebar}
           />
           <div className="fixed inset-y-0 left-0 flex flex-col w-64 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out">
-            {navContent}
+            {getNavContent('mobile-grad')}
           </div>
         </div>
       )}

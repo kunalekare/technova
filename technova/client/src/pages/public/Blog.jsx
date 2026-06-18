@@ -68,12 +68,12 @@ const FeaturedPostCard = ({ post, index }) => {
           </span>
         </div>
 
-        <h2 className={`${isMain ? 'text-3xl md:text-5xl mb-4' : 'text-xl md:text-2xl mb-2'} font-display font-extrabold text-white leading-tight group-hover:text-primary-300 transition-colors`}>
+        <h2 className={`${isMain ? 'text-2xl md:text-3xl lg:text-5xl mb-3 md:mb-4' : 'text-xl md:text-2xl mb-2'} font-display font-extrabold text-white leading-tight group-hover:text-primary-300 transition-colors`}>
           {post.title}
         </h2>
 
         {isMain && (
-          <p className="text-lg text-white/70 mb-6 line-clamp-2 max-w-2xl leading-relaxed">
+          <p className="text-sm md:text-lg text-white/70 mb-4 md:mb-6 line-clamp-2 max-w-2xl leading-relaxed">
             {post.excerpt}
           </p>
         )}
@@ -175,10 +175,10 @@ const NewsletterSignup = () => {
         <div className="w-20 h-20 mx-auto rounded-3xl bg-surface-800 border border-white/10 flex items-center justify-center mb-8 shadow-xl">
           <HiSpeakerphone className="w-10 h-10 text-primary-400" />
         </div>
-        <h3 className="text-3xl md:text-5xl font-display font-bold text-white mb-6">
+        <h3 className="text-2xl md:text-3xl lg:text-5xl font-display font-bold text-white mb-4 md:mb-6">
           Stay Ahead of the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">Curve</span>
         </h3>
-        <p className="text-lg text-surface-400 mb-10">
+        <p className="text-base md:text-lg text-surface-400 mb-8 md:mb-10">
           Get elite insights on engineering, AI, design, and scaling businesses delivered straight to your inbox. Join 15,000+ tech leaders.
         </p>
 
@@ -186,21 +186,21 @@ const NewsletterSignup = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-green-500/10 border border-green-500/30 text-green-400 font-bold text-lg"
+            className="flex items-center justify-center gap-2 md:gap-3 px-6 py-3 md:px-8 md:py-4 rounded-2xl bg-green-500/10 border border-green-500/30 text-green-400 font-bold text-base md:text-lg"
           >
-            <HiShieldCheck className="w-6 h-6" /> You're on the list!
+            <HiShieldCheck className="w-5 h-5 md:w-6 md:h-6" /> You're on the list!
           </motion.div>
         ) : (
-          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
+          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 md:gap-4">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your work email..."
-              className="flex-1 px-8 py-5 rounded-2xl bg-surface-950 border border-white/10 text-white placeholder:text-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all text-lg"
+              className="flex-1 px-6 py-4 md:px-8 md:py-5 rounded-2xl bg-surface-950 border border-white/10 text-white placeholder:text-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all text-base md:text-lg"
               required
             />
-            <button type="submit" className="px-10 py-5 bg-white text-surface-950 font-bold rounded-2xl hover:bg-surface-100 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:-translate-y-1 whitespace-nowrap text-lg">
+            <button type="submit" className="px-8 py-4 md:px-10 md:py-5 bg-white text-surface-950 font-bold rounded-2xl hover:bg-surface-100 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:-translate-y-1 whitespace-nowrap text-base md:text-lg">
               Subscribe Now
             </button>
           </form>
@@ -264,7 +264,7 @@ const Blog = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="text-5xl md:text-7xl lg:text-[84px] font-display font-extrabold text-white leading-[1.1] tracking-tight mb-8"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-[84px] font-display font-extrabold text-white leading-[1.1] tracking-tight mb-6 md:mb-8"
           >
             Insights that <br className="hidden md:block" />
             <span className="relative inline-block mt-2">
@@ -283,16 +283,16 @@ const Blog = () => {
           >
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-neon-blue to-neon-purple rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-500"></div>
-              <div className="relative flex items-center bg-surface-900 border border-white/10 rounded-full p-2 pl-6">
-                <HiSearch className="w-6 h-6 text-surface-400" />
+              <div className="relative flex items-center bg-surface-900 border border-white/10 rounded-full p-1.5 md:p-2 pl-4 md:pl-6">
+                <HiSearch className="w-5 h-5 md:w-6 md:h-6 text-surface-400" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search articles, technical guides, case studies..."
-                  className="w-full bg-transparent border-none text-white placeholder:text-surface-500 focus:outline-none focus:ring-0 px-4 text-lg"
+                  placeholder="Search articles..."
+                  className="w-full bg-transparent border-none text-white placeholder:text-surface-500 focus:outline-none focus:ring-0 px-3 md:px-4 text-base md:text-lg"
                 />
-                <button className="px-6 py-3 bg-white text-black font-bold rounded-full hover:bg-surface-200 transition-colors">
+                <button className="px-5 py-2.5 md:px-6 md:py-3 bg-white text-black font-bold rounded-full hover:bg-surface-200 transition-colors text-sm md:text-base">
                   Search
                 </button>
               </div>

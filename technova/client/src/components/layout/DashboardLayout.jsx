@@ -40,7 +40,7 @@ const DashboardLayout = () => {
 
       <div className="lg:pl-64 flex flex-col min-h-screen">
         {/* Top Header */}
-        <header className="sticky top-0 z-30 h-20 bg-surface-950/80 backdrop-blur-xl border-b border-white/5 px-4 sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-30 h-20 bg-surface-950/80 backdrop-blur-xl border-b border-white/5 px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-full">
             <div className="flex items-center gap-4">
               <button
@@ -51,6 +51,26 @@ const DashboardLayout = () => {
                 <span className="sr-only">Open sidebar</span>
                 <HiMenuAlt2 className="w-6 h-6" />
               </button>
+
+              {/* Mobile Logo */}
+              <div className="lg:hidden flex items-center gap-2">
+                <div className="w-8 h-8 flex items-center justify-center rounded-xl">
+                  <svg viewBox="0 0 100 100" className="w-full h-full">
+                    <defs>
+                      <linearGradient id="tarkkoGradHeader" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#6366f1" />
+                        <stop offset="100%" stopColor="#a855f7" />
+                      </linearGradient>
+                    </defs>
+                    <polygon points="50 5, 90 25, 90 75, 50 95, 10 75, 10 25" fill="url(#tarkkoGradHeader)" />
+                    <path d="M 50 28 L 72 45 L 63 54 L 55 48 L 55 72 L 45 72 L 45 48 L 37 54 L 28 45 Z" fill="white" />
+                  </svg>
+                </div>
+                <span className="text-xl font-display font-extrabold tracking-wide">
+                  <span className="text-white">TARK</span>
+                  <span className="text-primary-500">KO</span>
+                </span>
+              </div>
 
               {/* Optional Search */}
               <div className="hidden sm:flex relative w-64 lg:w-96">
@@ -71,7 +91,7 @@ const DashboardLayout = () => {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+        <main className="flex-1 p-3 sm:p-6 lg:p-8 overflow-x-hidden">
           <Outlet />
         </main>
       </div>

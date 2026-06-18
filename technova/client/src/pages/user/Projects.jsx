@@ -99,7 +99,7 @@ const Projects = () => {
               <HiOutlineCubeTransparent className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-display font-bold text-white tracking-tight">My Projects</h1>
+              <h1 className="text-xl md:text-3xl font-display font-bold text-white tracking-tight">My Projects</h1>
               <p className="text-surface-400 text-sm mt-1">Manage, track, and request new digital operations.</p>
             </div>
           </div>
@@ -124,7 +124,7 @@ const Projects = () => {
               exit={{ opacity: 0, height: 0, y: -20 }}
               className="overflow-hidden"
             >
-              <form onSubmit={handleSubmit} className="glass-card p-8 sm:p-10 space-y-8 rounded-3xl border-primary-500/20 relative shadow-2xl">
+              <form onSubmit={handleSubmit} className="glass-card p-5 sm:p-8 md:p-10 space-y-6 md:space-y-8 rounded-3xl border-primary-500/20 relative shadow-2xl">
                 {/* Decorative Glow */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[80px] pointer-events-none" />
                 
@@ -268,7 +268,7 @@ const Projects = () => {
 
         {/* Filter Tabs */}
         <div className="bg-surface-900/50 p-2 rounded-2xl border border-white/5">
-          <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 sm:pb-0">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
             <div className="pl-2 pr-4 border-r border-white/10 flex items-center text-surface-500 font-bold text-sm shrink-0">
               <HiFilter className="w-5 h-5 mr-2" />
               Filter Board

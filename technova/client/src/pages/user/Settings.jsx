@@ -106,8 +106,8 @@ const Settings = () => {
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/5 rounded-full blur-[100px] pointer-events-none" />
 
           {/* Settings Sidebar */}
-          <div className="w-full md:w-72 bg-surface-900/80 border-r border-white/5 p-6 flex flex-col gap-2 relative z-10">
-            <h3 className="text-xs font-bold text-surface-500 uppercase tracking-widest mb-4 ml-2">Configuration</h3>
+          <div className="w-full md:w-72 bg-surface-900/80 border-b md:border-b-0 md:border-r border-white/5 p-4 md:p-6 flex flex-row md:flex-col overflow-x-auto hide-scrollbar gap-2 relative z-10">
+            <h3 className="hidden md:block text-xs font-bold text-surface-500 uppercase tracking-widest mb-4 ml-2">Configuration</h3>
             
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -116,7 +116,7 @@ const Settings = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-bold transition-all duration-300 group ${
+                  className={`relative flex items-center gap-2 md:gap-4 px-4 py-3.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-300 group ${
                     isActive ? 'text-white' : 'text-surface-400 hover:text-white hover:bg-surface-800/50'
                   }`}
                 >
@@ -135,7 +135,7 @@ const Settings = () => {
           </div>
 
           {/* Settings Content */}
-          <div className="flex-1 p-8 md:p-10 relative z-10 bg-surface-900/30">
+          <div className="flex-1 p-5 md:p-10 relative z-10 bg-surface-900/30">
             <AnimatePresence mode="wait">
               
               {/* SECURITY TAB */}

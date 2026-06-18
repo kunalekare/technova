@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { HiMail, HiPhone, HiLocationMarker } from 'react-icons/hi';
 import { FaTwitter, FaLinkedinIn, FaGithub, FaInstagram } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 const serviceLinks = [
   { name: 'Software Development', path: '/services?category=software-development' },
@@ -41,16 +42,22 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M6 9L12 4L18 9V18L12 22L6 18Z" />
-                  <circle cx="12" cy="13" r="3" fill="currentColor" />
-                </svg>
-              </div>
-              <span className="text-xl font-display font-bold">
-                <span className="text-white">Tark</span>
-                <span className="gradient-text">ko</span>
-              </span>
+            <div className="w-10 h-10 flex items-center justify-center rounded-xl">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <defs>
+                  <linearGradient id="tarkkoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#6366f1" />
+                    <stop offset="100%" stopColor="#a855f7" />
+                  </linearGradient>
+                </defs>
+                <polygon points="50 5, 90 25, 90 75, 50 95, 10 75, 10 25" fill="url(#tarkkoGrad)" />
+                <path d="M 50 28 L 72 45 L 63 54 L 55 48 L 55 72 L 45 72 L 45 48 L 37 54 L 28 45 Z" fill="white" />
+              </svg>
+            </div>
+            <span className="text-2xl font-display font-extrabold tracking-wide ml-1.5">
+              <span className="text-white">TARK</span>
+              <span className="text-primary-500">KO</span>
+            </span>
             </Link>
             <p className="text-surface-400 text-sm leading-relaxed mb-6">
               Your one-stop technology partner. From AI to enterprise software, we deliver exceptional digital solutions across 16+ service categories.
@@ -60,6 +67,9 @@ const Footer = () => {
                 <a
                   key={label}
                   href={href}
+                  target={href !== '#' ? "_blank" : undefined}
+                  rel={href !== '#' ? "noopener noreferrer" : undefined}
+                  onClick={(e) => { if(href === '#') { e.preventDefault(); toast('Coming soon!', { icon: '🚀' }); } }}
                   aria-label={label}
                   className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-surface-400 hover:text-primary-400 hover:border-primary-500/30 hover:bg-primary-500/10 transition-all duration-300"
                 >
@@ -107,28 +117,29 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-display font-semibold mb-4">Contact Us</h3>
             <div className="space-y-3">
-              <a href="mailto:hello@velixora.com" className="flex items-center gap-3 text-sm text-surface-400 hover:text-primary-400 transition-colors">
+              <div className="flex items-center gap-3 text-sm text-surface-400 select-all">
                 <HiMail className="w-4 h-4 flex-shrink-0" />
-                hello@velixora.com
-              </a>
+                tarkkodigital@gmail.com
+              </div>
               <a href="tel:+919876543210" className="flex items-center gap-3 text-sm text-surface-400 hover:text-primary-400 transition-colors">
                 <HiPhone className="w-4 h-4 flex-shrink-0" />
                 +91 98765 43210
               </a>
               <div className="flex items-start gap-3 text-sm text-surface-400">
                 <HiLocationMarker className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>Bangalore, India</span>
+                <span>Nagpur, India</span>
               </div>
             </div>
 
             {/* Newsletter */}
             <div className="mt-6">
               <p className="text-sm text-surface-300 font-medium mb-2">Stay Updated</p>
-              <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
+              <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); toast.success('Subscribed successfully!'); e.target.reset(); }}>
                 <input
                   type="email"
                   placeholder="your@email.com"
                   className="input-field !py-2 text-sm flex-1"
+                  required
                   id="footer-newsletter-input"
                 />
                 <button type="submit" className="btn-primary !px-4 !py-2 text-sm" id="footer-newsletter-btn">
@@ -142,7 +153,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-surface-500">
-            © {currentYear} Velixora Solutions. All rights reserved.
+            © {currentYear} Tarkko Solutions. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link to="/privacy" className="text-sm text-surface-500 hover:text-surface-300 transition-colors">

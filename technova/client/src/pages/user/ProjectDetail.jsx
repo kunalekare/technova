@@ -81,8 +81,8 @@ const ProjectDetail = () => {
           </div>
 
           {/* Status Progress Track */}
-          <div className="mt-6">
-            <div className="flex items-center justify-between">
+          <div className="mt-6 overflow-x-auto pb-4 scrollbar-hide -mx-6 px-6 sm:mx-0 sm:px-0">
+            <div className="flex items-center justify-between min-w-[500px] sm:min-w-0">
               {allStatuses.map((s, i) => {
                 const isCompleted = i <= currentStep;
                 const isCurrent = i === currentStep;
@@ -109,7 +109,7 @@ const ProjectDetail = () => {
           </div>
 
           {/* Quick Info */}
-          <div className="flex flex-wrap gap-6 mt-6 pt-5 border-t border-white/5">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 sm:gap-6 mt-6 pt-5 border-t border-white/5">
             {project.budget > 0 && (
               <div className="flex items-center gap-2 text-sm">
                 <HiCurrencyRupee className="w-4 h-4 text-emerald-400" />
@@ -138,7 +138,7 @@ const ProjectDetail = () => {
         </motion.div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-1 bg-surface-900/50 rounded-xl p-1 overflow-x-auto">
+        <div className="flex items-center gap-1 bg-surface-900/50 rounded-xl p-1 overflow-x-auto scrollbar-hide">
           {tabs.map(tab => (
             <button
               key={tab}

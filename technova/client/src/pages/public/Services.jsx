@@ -134,15 +134,15 @@ const Services = () => {
               </p>
 
               {/* Advanced Search Bar */}
-              <div className="mt-8 flex flex-col sm:flex-row gap-4 bg-surface-950/50 p-2 rounded-2xl border border-white/10 backdrop-blur-md">
-                <form onSubmit={handleSearch} className="flex-1 relative flex items-center">
+              <div className="mt-8 flex flex-col lg:flex-row gap-4 bg-surface-950/50 p-2 sm:p-3 rounded-2xl border border-white/10 backdrop-blur-md">
+                <form onSubmit={handleSearch} className="flex-1 relative flex items-center w-full">
                   <HiSearch className="absolute left-4 w-5 h-5 text-primary-400" />
                   <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search by keywords, tags, or service names..."
-                    className="w-full bg-transparent border-none focus:ring-0 text-white pl-12 pr-4 py-3 placeholder-surface-500"
+                    className="w-full bg-transparent border-none focus:ring-0 text-white pl-12 pr-12 py-3 placeholder-surface-500 outline-none"
                     id="services-search-input"
                   />
                   {search && (
@@ -155,37 +155,36 @@ const Services = () => {
                     </button>
                   )}
                 </form>
-                <div className="h-full w-px bg-white/10 hidden sm:block mx-2" />
-                <div className="flex gap-2">
-                  <select
-                    value={currentSort}
-                    onChange={(e) => handleSortChange(e.target.value)}
-                    className="bg-transparent text-surface-300 focus:ring-0 border-none py-3 px-4 cursor-pointer hover:text-white transition outline-none"
-                    id="services-sort-select"
-                  >
-                    {sortOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value} className="bg-surface-900">{opt.label}</option>
-                    ))}
-                  </select>
-                  <button type="submit" onClick={handleSearch} className="btn-primary !px-6 !py-3 !rounded-xl hidden sm:flex">
-                    Search
-                  </button>
+
+                <div className="h-full w-px bg-white/10 hidden lg:block mx-2" />
+
+                <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                  <div className="flex gap-3 w-full sm:w-auto">
+                    <select
+                      value={currentSort}
+                      onChange={(e) => handleSortChange(e.target.value)}
+                      className="bg-surface-900 lg:bg-transparent text-surface-300 border border-white/10 lg:border-none rounded-xl lg:rounded-none py-3 px-4 outline-none flex-1 sm:flex-none cursor-pointer hover:text-white transition"
+                      id="services-sort-select"
+                    >
+                      {sortOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value} className="bg-surface-900">{opt.label}</option>
+                      ))}
+                    </select>
+                    
+                    <button type="submit" onClick={handleSearch} className="btn-primary !px-6 !py-3 !rounded-xl flex-1 sm:flex-none flex justify-center items-center">
+                      Search
+                    </button>
+                  </div>
+                  
                   <button 
                     type="button" 
                     onClick={() => setShowCustomModal(true)} 
-                    className="bg-surface-800 hover:bg-surface-700 text-white !px-6 !py-3 !rounded-xl hidden sm:flex font-medium transition-colors border border-white/10"
+                    className="bg-surface-800 hover:bg-surface-700 text-white !px-6 !py-3 !rounded-xl flex justify-center items-center font-medium transition-colors border border-white/10 w-full sm:w-auto"
                   >
-                    Request Custom Service
+                    Custom Request
                   </button>
                 </div>
               </div>
-              <button 
-                type="button" 
-                onClick={() => setShowCustomModal(true)} 
-                className="mt-4 w-full bg-surface-800 hover:bg-surface-700 text-white py-3 rounded-xl sm:hidden font-medium transition-colors border border-white/10"
-              >
-                Request Custom Service
-              </button>
             </div>
           </motion.div>
         </div>
@@ -206,7 +205,20 @@ const Services = () => {
                     </button>
                   )}
                 </div>
-                <div className="space-y-1.5 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
+                <div className="block lg:hidden mb-2">
+                  <select
+                    value={currentCategory}
+                    onChange={(e) => handleCategoryFilter(e.target.value)}
+                    className="w-full bg-surface-900 text-white border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-primary-500 transition-colors"
+                  >
+                    <option value="">All Categories</option>
+                    {categories.map(cat => (
+                      <option key={cat._id} value={cat.slug}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="hidden lg:block space-y-1.5 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
                   <button
                     onClick={() => handleCategoryFilter('')}
                     className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${

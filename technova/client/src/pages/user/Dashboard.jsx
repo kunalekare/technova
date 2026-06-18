@@ -68,14 +68,14 @@ const Dashboard = () => {
       
       <div className="space-y-8 max-w-7xl mx-auto">
         {/* Welcome Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-surface-900/50 p-8 rounded-3xl border border-white/5 relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 bg-surface-900/50 p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 rounded-full blur-[100px] pointer-events-none -mr-20 -mt-20" />
           
           <div className="relative z-10">
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-3xl md:text-4xl font-display font-bold text-white tracking-tight"
+              className="text-2xl md:text-4xl font-display font-bold text-white tracking-tight"
             >
               Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-purple-400">{user?.name?.split(' ')[0]}</span>! 👋
             </motion.h1>
@@ -138,9 +138,9 @@ const Dashboard = () => {
                   >
                     <Link
                       to={action.path}
-                      className="group flex items-center gap-4 p-5 glass-card rounded-2xl hover:bg-surface-800 transition-all duration-300 border border-white/5 hover:border-white/10"
+                      className="group flex items-center gap-4 p-4 md:p-5 glass-card rounded-2xl hover:bg-surface-800 transition-all duration-300 border border-white/5 hover:border-white/10"
                     >
-                      <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center shrink-0 shadow-lg ${action.shadow} group-hover:scale-105 transition-transform duration-300`}>
+                      <div className={`w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center shrink-0 shadow-lg ${action.shadow} group-hover:scale-105 transition-transform duration-300`}>
                         <action.icon className="w-6 h-6 text-white" />
                       </div>
                       <div>
@@ -155,7 +155,7 @@ const Dashboard = () => {
 
             {/* Activity Feed */}
             <div className="glass-card rounded-3xl overflow-hidden border border-white/5">
-              <div className="px-8 py-6 border-b border-white/5 flex items-center justify-between bg-surface-900/50">
+              <div className="px-5 py-4 md:px-8 md:py-6 border-b border-white/5 flex items-center justify-between bg-surface-900/50">
                 <div>
                   <h2 className="text-lg font-display font-bold text-white">Recent Activity Tracker</h2>
                   <p className="text-xs text-surface-400 mt-1">Live updates on your operations.</p>
@@ -192,7 +192,7 @@ const Dashboard = () => {
                       >
                         <Link
                           to={activity.link}
-                          className="flex items-start sm:items-center gap-5 px-8 py-5 hover:bg-surface-800/50 transition-colors group relative"
+                          className="flex items-start sm:items-center gap-4 md:gap-5 px-5 py-4 md:px-8 md:py-5 hover:bg-surface-800/50 transition-colors group relative"
                         >
                           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 border ${colorClass} group-hover:scale-105 transition-transform`}>
                             <Icon className="w-5 h-5" />
@@ -225,7 +225,7 @@ const Dashboard = () => {
           <div className="space-y-6">
             
             {/* Project Status Ring / Bar */}
-            <div className="glass-card p-8 rounded-3xl border border-white/5 relative overflow-hidden">
+            <div className="glass-card p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[50px]" />
               <h3 className="text-sm font-bold text-surface-400 uppercase tracking-widest mb-6">Global Status</h3>
               

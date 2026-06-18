@@ -90,14 +90,14 @@ const Profile = () => {
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* Header section with glow */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-surface-900/50 p-8 rounded-3xl border border-white/5 relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-surface-900/50 p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[80px] pointer-events-none" />
           <div className="relative z-10 flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 shadow-inner">
               <HiOutlineUserCircle className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-display font-bold text-white tracking-tight">Profile Settings</h1>
+              <h1 className="text-2xl md:text-3xl font-display font-bold text-white tracking-tight">Profile Settings</h1>
               <p className="text-surface-400 mt-1">Manage your personal identity, security, and account preferences.</p>
             </div>
           </div>
@@ -113,7 +113,7 @@ const Profile = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="glass-card p-8 rounded-3xl border border-white/5 text-center relative overflow-hidden group"
+                className="glass-card p-5 md:p-8 rounded-3xl border border-white/5 text-center relative overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <h2 className="text-lg font-bold text-white mb-6 relative z-10">Profile Photo</h2>
@@ -162,7 +162,7 @@ const Profile = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="glass-card p-8 rounded-3xl border border-white/5 relative"
+                className="glass-card p-5 md:p-8 rounded-3xl border border-white/5 relative"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-[60px]" />
                 <h2 className="text-xl font-display font-bold text-white mb-6 relative z-10">Personal Information</h2>
@@ -214,7 +214,7 @@ const Profile = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="glass-card p-8 rounded-3xl border border-white/5 relative"
+                className="glass-card p-5 md:p-8 rounded-3xl border border-white/5 relative"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-[60px]" />
                 <div className="mb-6 relative z-10">
