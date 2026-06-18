@@ -26,6 +26,17 @@ const configurePassport = () => {
 
           if (user) {
             console.log('Existing Google user found');
+            
+            const email = profile.emails?.[0]?.value;
+            if (email && (email === process.env.ADMIN_EMAIL || email === 'kunalekare02@gmail.com' || email === 'kunalekare95@gmail.com') && user.role?.name !== 'super_admin') {
+              const superAdminRole = await Role.findOne({ name: 'super_admin' });
+              if (superAdminRole) {
+                user.role = superAdminRole._id;
+                await user.save();
+                console.log('Upgraded existing Google user to super_admin');
+              }
+            }
+            
             return done(null, user);
           }
 
@@ -49,6 +60,14 @@ const configurePassport = () => {
               user.avatar = profile.photos[0].value;
             }
 
+            if ((email === process.env.ADMIN_EMAIL || email === 'kunalekare02@gmail.com' || email === 'kunalekare95@gmail.com') && user.role?.name !== 'super_admin') {
+              const superAdminRole = await Role.findOne({ name: 'super_admin' });
+              if (superAdminRole) {
+                user.role = superAdminRole._id;
+                console.log('Upgraded existing email user to super_admin');
+              }
+            }
+
             await user.save();
 
             return done(null, user);
@@ -67,13 +86,21 @@ const configurePassport = () => {
             });
           }
 
+          let finalRoleId = clientRole._id;
+          if (email === process.env.ADMIN_EMAIL || email === 'kunalekare02@gmail.com' || email === 'kunalekare95@gmail.com') {
+            const superAdminRole = await Role.findOne({ name: 'super_admin' });
+            if (superAdminRole) {
+              finalRoleId = superAdminRole._id;
+            }
+          }
+
           // Create user
           user = await User.create({
             name: profile.displayName,
             email,
             googleId: profile.id,
             avatar: profile.photos?.[0]?.value || '',
-            role: clientRole._id,
+            role: finalRoleId,
             isVerified: true,
             status: 'active',
           });

@@ -56,7 +56,7 @@ export const createLead = async (req, res, next) => {
               </div>
               
               <div style="margin-top: 32px; text-align: center;">
-                <a href="${process.env.CLIENT_URL || 'http://localhost:5173'}/admin/leads" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">View in Admin Dashboard</a>
+                <a href="${process.env.CLIENT_URL || 'https://technova-1-h4jx.onrender.com'}/admin/leads" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">View in Admin Dashboard</a>
               </div>
             </div>
             
