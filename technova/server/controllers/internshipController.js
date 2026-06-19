@@ -111,13 +111,13 @@ export const applyToInternship = async (req, res, next) => {
       });
 
       const mailOptions = {
-        from: process.env.SMTP_USER || '"Velixora Notifications" <noreply@velixorasolutions.com>',
+        from: process.env.SMTP_USER || '"Tarkko Notifications" <noreply@tarkkosolutions.com>',
         to: process.env.SMTP_USER || 'kunalekare02@gmail.com',
         subject: `New Internship Application: ${internship.title}`,
         html: `
           <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
             <div style="background-color: #4f46e5; background-image: linear-gradient(to right, #4f46e5, #3b82f6); color: #ffffff; padding: 24px; text-align: center;">
-              <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px;">Velixora Internships</h1>
+              <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px;">Tarkko Internships</h1>
             </div>
             <div style="padding: 32px; background-color: #ffffff; color: #1f2937;">
               <h2 style="margin-top: 0; color: #111827; font-size: 20px; font-weight: 600; border-bottom: 2px solid #f3f4f6; padding-bottom: 12px;">New Internship Application Received</h2>
@@ -173,8 +173,8 @@ export const applyToInternship = async (req, res, next) => {
             </div>
             
             <div style="background-color: #f8fafc; padding: 20px; text-align: center; color: #64748b; font-size: 13px; border-top: 1px solid #e2e8f0;">
-              <p style="margin: 0;">This is an automated notification from the Velixora platform.</p>
-              <p style="margin: 6px 0 0 0;">&copy; ${new Date().getFullYear()} Velixora Solutions. All rights reserved.</p>
+              <p style="margin: 0;">This is an automated notification from the Tarkko platform.</p>
+              <p style="margin: 6px 0 0 0;">&copy; ${new Date().getFullYear()} Tarkko Solutions. All rights reserved.</p>
             </div>
           </div>
         `,

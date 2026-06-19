@@ -50,7 +50,7 @@ const Register = () => {
   return (
     <>
       <Helmet>
-        <title>Register — TechNova Solutions</title>
+        <title>Register — Tarkko Solutions</title>
       </Helmet>
 
       <div className="min-h-screen flex items-center justify-center px-4 py-20">
@@ -81,7 +81,7 @@ const Register = () => {
                 </span>
               </Link>
               <h1 className="text-2xl font-display font-bold text-white mb-1">Create Account</h1>
-              <p className="text-surface-400 text-sm">Join TechNova and start building</p>
+              <p className="text-surface-400 text-sm">Join Tarkko and start building</p>
             </div>
 
             {/* Google Sign Up */}

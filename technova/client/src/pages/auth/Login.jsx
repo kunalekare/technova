@@ -62,7 +62,7 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>Login — TechNova Solutions</title>
+        <title>Login — Tarkko Solutions</title>
       </Helmet>
 
       <div className="min-h-screen flex items-center justify-center px-4 py-20">

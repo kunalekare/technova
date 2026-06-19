@@ -50,11 +50,20 @@ allFiles.forEach(file => {
         newContent = newContent.replace(/velixora/g, 'tarkko');
         newContent = newContent.replace(/VELIXORA/g, 'TARKKO');
         
+        newContent = newContent.replace(/Velixira/g, 'Tarkko');
+        newContent = newContent.replace(/velixira/g, 'tarkko');
+        newContent = newContent.replace(/VELIXIRA/g, 'TARKKO');
+        
+        newContent = newContent.replace(/TechNova/g, 'Tarkko');
+        newContent = newContent.replace(/technova_theme/g, 'tarkko_theme');
+        newContent = newContent.replace(/support@technova\.in/g, 'support@tarkko.in');
+        newContent = newContent.replace(/employee@technova\.com/g, 'employee@tarkko.com');
+
         // Also fix the logo text we just modified in Login.jsx, Register.jsx, Navbar.jsx, Footer.jsx
         // We split it as "Velix" and "ora", so we should change it to "Tar" and "kko" or something similar if it exists.
-        // Let's replace "Velix" -> "Tar", "ora" -> "kko" where they appear consecutively in JSX.
-        newContent = newContent.replace(/>Velix</g, '>Tar<');
-        newContent = newContent.replace(/>ora</g, '>kko<');
+        // Let's replace "Velix" -> "TARK", "ora" -> "KO" where they appear consecutively in JSX.
+        newContent = newContent.replace(/>Velix</g, '>TARK<');
+        newContent = newContent.replace(/>ora</g, '>KO<');
 
         // Unmask credentials
         newContent = newContent.replace(/__ADMIN_CRED_MASK__/g, 'admin@technova.com');

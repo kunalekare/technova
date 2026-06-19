@@ -5,7 +5,7 @@ const ForgotPassword = () => {
   return (
     <>
       <Helmet>
-        <title>Forgot Password — TechNova Solutions</title>
+        <title>Forgot Password — Tarkko Solutions</title>
       </Helmet>
       <div className="min-h-screen flex items-center justify-center pt-24 pb-16 px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md glass-card p-8 text-center">
