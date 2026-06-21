@@ -25,6 +25,7 @@ const clientSections = [
       { name: 'My Projects', path: '/dashboard/projects', icon: HiFolderOpen },
       { name: 'Orders & Payments', path: '/dashboard/orders', icon: HiCreditCard },
       { name: 'My Retainers', path: '/dashboard/retainers', icon: HiCurrencyRupee },
+      { name: 'Subscriptions', path: '/dashboard/subscriptions', icon: HiCreditCard },
       { name: 'Team Access', path: '/dashboard/team', icon: HiUserGroup },
       { name: 'Branding', path: '/dashboard/branding', icon: HiColorSwatch },
       { name: 'Book Consultation', path: '/dashboard/book-consultation', icon: HiUserGroup },

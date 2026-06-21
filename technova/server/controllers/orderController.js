@@ -1,6 +1,7 @@
 import Order from '../models/Order.js';
 import Project from '../models/Project.js';
 import Payment from '../models/Payment.js';
+import Invoice from '../models/Invoice.js';
 import { createOrder, verifyPaymentSignature } from '../services/payment/razorpayService.js';
 import { holdFunds } from '../services/escrow/escrowService.js';
 
@@ -84,6 +85,17 @@ export const verifyPayment = async (req, res, next) => {
     order.paymentId = payment._id;
     order.status = 'paid';
     await order.save();
+
+    // Create an Invoice for this order
+    const invoice = await Invoice.create({
+      client: req.user._id,
+      service: order.service,
+      order: order._id,
+      amount: order.amount,
+      status: 'paid',
+      dueDate: new Date(),
+      paidAt: new Date(),
+    });
 
     // ESCROW LOGIC - Feature Flagged
     if (process.env.ESCROW_ENABLED === 'true') {

@@ -12,17 +12,20 @@ const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
 const AdminFinanceDashboard = () => {
   const [forecast, setForecast] = useState(null);
   const [profitability, setProfitability] = useState([]);
+  const [advancedBi, setAdvancedBi] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchFinanceData = async () => {
     setLoading(true);
     try {
-      const [forecastRes, profitRes] = await Promise.all([
+      const [forecastRes, profitRes, advancedRes] = await Promise.all([
         api.get('/finance/forecast'),
-        api.get('/finance/profitability')
+        api.get('/finance/profitability'),
+        api.get('/finance/advanced-bi')
       ]);
       setForecast(forecastRes.data.data);
       setProfitability(profitRes.data.data);
+      setAdvancedBi(advancedRes.data.data);
     } catch (error) {
       toast.error('Failed to load financial data');
     } finally {
@@ -39,17 +42,18 @@ const AdminFinanceDashboard = () => {
   }
 
   // Prepare data for bar chart
-  const barData = profitability.map(p => ({
-    name: p.projectTitle.length > 15 ? p.projectTitle.substring(0, 15) + '...' : p.projectTitle,
-    Revenue: p.revenue_inr,
-    Cost: p.cost_inr,
-    Profit: p.profit_inr
-  }));
+  const barData = advancedBi?.profitMargins?.map(p => ({
+    name: p.projectName?.length > 15 ? p.projectName.substring(0, 15) + '...' : (p.projectName || 'Unknown'),
+    Gross: p.totalGross,
+    PartnerPayout: p.partnerPayout,
+    PlatformProfit: p.platformProfit
+  })) || [];
 
-  // Prepare data for pie chart (Forecast breakdown)
-  const pieData = [
-    { name: 'Retainer MRR', value: forecast?.mrr_inr || 0 },
-    { name: 'Pending Orders', value: forecast?.pending_orders_inr || 0 }
+  // Prepare data for pie chart (Conversion Rates)
+  const pieData = advancedBi?.conversionRates?.length > 0 ? advancedBi.conversionRates : [
+    { name: 'Pending', value: 1 },
+    { name: 'Approved', value: 0 },
+    { name: 'Rejected', value: 0 }
   ];
 
   return (
@@ -89,10 +93,10 @@ const AdminFinanceDashboard = () => {
               <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
                 <HiTrendingUp className="w-6 h-6" />
               </div>
-              <p className="text-sm font-semibold text-surface-300">Retainer MRR</p>
+              <p className="text-sm font-semibold text-surface-300">Live MRR (Aggregated)</p>
             </div>
-            <h3 className="text-3xl font-bold text-white">₹{forecast?.mrr_inr?.toLocaleString() || 0}</h3>
-            <p className="text-xs text-surface-500 mt-1">Monthly Recurring Revenue</p>
+            <h3 className="text-3xl font-bold text-white">₹{advancedBi?.mrr?.toLocaleString() || 0}</h3>
+            <p className="text-xs text-surface-500 mt-1">From active Subscriptions</p>
           </div>
 
           <div className="glass-card p-6">
@@ -108,7 +112,7 @@ const AdminFinanceDashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="glass-card p-6 lg:col-span-2 border-primary-500/10">
-            <h3 className="text-lg font-semibold text-white mb-6">Project Profitability Analysis</h3>
+            <h3 className="text-lg font-semibold text-white mb-6">Commission Ledger Profitability</h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={barData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -120,16 +124,16 @@ const AdminFinanceDashboard = () => {
                     itemStyle={{ color: '#e5e7eb' }}
                   />
                   <Legend />
-                  <Bar dataKey="Revenue" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="Cost" fill="#ef4444" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="Profit" fill="#10b981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="Gross" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="PartnerPayout" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="PlatformProfit" fill="#10b981" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
 
           <div className="glass-card p-6 border-primary-500/10">
-            <h3 className="text-lg font-semibold text-white mb-6">Revenue Forecast Breakdown</h3>
+            <h3 className="text-lg font-semibold text-white mb-6">Partner Application Conversion</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>

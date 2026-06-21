@@ -25,6 +25,7 @@ const Services = () => {
 
   const dispatch = useDispatch();
   const { categories, services, loading, pagination } = useSelector((state) => state.services);
+  const { user } = useSelector((state) => state.auth);
 
   const currentCategory = searchParams.get('category') || '';
   const currentSort = searchParams.get('sort') || '-createdAt';
@@ -33,6 +34,12 @@ const Services = () => {
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      setCustomForm(prev => ({ ...prev, name: user.name || '', email: user.email || '' }));
+    }
+  }, [user]);
 
   useEffect(() => {
     // Prevent race condition: if a category is selected in URL, wait for categories to load first

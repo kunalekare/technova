@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { 
   HiCreditCard, HiDownload, HiOutlineDocumentText, HiOutlineCash, 
   HiOutlineExclamationCircle, HiOutlineReceiptRefund, HiX,
-  HiOutlineUser, HiOutlineTag, HiDotsVertical, HiOutlineEye
+  HiOutlineUser, HiOutlineTag, HiDotsVertical, HiOutlineEye, HiCheckCircle
 } from 'react-icons/hi';
 import api from '../../services/api';
 import { format } from 'date-fns';

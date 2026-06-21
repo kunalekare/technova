@@ -82,3 +82,44 @@ export const generateProjectScope = async (projectDescription) => {
     throw new Error('Failed to generate project scope');
   }
 };
+
+/**
+ * Client Assistant Chat (RAG Context)
+ */
+export const generateClientAssistantResponse = async (messages, contextData) => {
+  if (isMockMode) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return {
+      role: 'assistant',
+      content: `[MOCK AI] I see you have ${contextData.projects.length} active project(s) and ${contextData.invoices.length} invoices. This is a mock response because OPENAI_API_KEY is not set. Please provide a key for the real RAG assistant.`,
+    };
+  }
+
+  try {
+    const systemPrompt = {
+      role: 'system',
+      content: `You are Nova, the official AI assistant for this agency's client dashboard. 
+      You are speaking to an authenticated client. Answer their questions based ONLY on the following context about their account:
+      
+      CONTEXT:
+      ${JSON.stringify(contextData, null, 2)}
+      
+      If they ask about something not in the context, politely explain you only have access to their dashboard data.`
+    };
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini", // Using a fast, cheap model
+      messages: [systemPrompt, ...messages],
+      temperature: 0.3,
+    });
+
+    return response.choices[0].message;
+  } catch (error) {
+    console.error('OpenAI Client Assistant Error:', error);
+    return {
+      role: 'assistant',
+      content: `❌ OpenAI API Error: ${error.message}`
+    };
+  }
+};
+

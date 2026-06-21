@@ -349,13 +349,24 @@ const ProjectDetail = () => {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {project.files?.map((fileUrl, i) => {
-                    const fileName = fileUrl.split('/').pop() || `File ${i + 1}`;
-                    const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileUrl);
+                    if (typeof fileUrl !== 'string') return null;
+                    const isDataURI = fileUrl.startsWith('data:');
+                    let fileName;
+                    if (isDataURI) {
+                      const mimeMatch = fileUrl.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
+                      const ext = mimeMatch ? mimeMatch[1].split('/')[1] : 'file';
+                      fileName = `Deliverable_${i + 1}.${ext}`;
+                    } else {
+                      fileName = fileUrl.split('/').pop() || `File ${i + 1}`;
+                    }
+                    const isImage = isDataURI ? fileUrl.startsWith('data:image/') : /\.(jpg|jpeg|png|gif|webp)$/i.test(fileUrl);
+                    
                     return (
                       <a
                         key={i}
                         href={fileUrl}
-                        target="_blank"
+                        download={fileName}
+                        target={isDataURI ? '_self' : '_blank'}
                         rel="noopener noreferrer"
                         className="flex items-center gap-3 bg-surface-800/50 rounded-xl p-4 border border-white/5 hover:border-primary-500/30 transition-colors group"
                       >

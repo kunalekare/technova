@@ -9,6 +9,10 @@ const partnerApplicationSchema = new mongoose.Schema(
     },
     submittedDocs: [String],
     portfolioLink: String,
+    linkedinUrl: String,
+    experienceYears: Number,
+    expectedHourlyRate: Number,
+    availability: String,
     coverLetter: String,
     status: {
       type: String,

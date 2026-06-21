@@ -50,23 +50,25 @@ export const initSocketServer = (httpServer) => {
 
     // Handle project chat messages
     socket.on('sendMessage', async (data) => {
-      const { projectId, content, attachments } = data;
-      
-      const message = {
-        _id: new Date().getTime().toString(),
-        projectId,
-        content,
-        attachments: attachments || [],
-        sender: {
-          _id: socket.user._id,
-          name: socket.user.name,
-          avatar: socket.user.avatar,
-        },
-        createdAt: new Date(),
-      };
+      try {
+        const { projectId, content, attachments } = data;
+        
+        // Save to DB
+        const newMessage = await import('../models/Message.js').then(m => m.default.create({
+          project: projectId,
+          sender: socket.user._id,
+          content,
+          attachments: attachments || []
+        }));
 
-      // Broadcast to everyone in the project room
-      io.to(`project_${projectId}`).emit('receiveMessage', message);
+        // Populate sender for broadcasting
+        const populatedMessage = await newMessage.populate('sender', 'name avatar');
+
+        // Broadcast to everyone in the project room
+        io.to(`project_${projectId}`).emit('receiveMessage', populatedMessage);
+      } catch (error) {
+        console.error('Socket sendMessage error:', error);
+      }
     });
 
     // Handle typing indicators

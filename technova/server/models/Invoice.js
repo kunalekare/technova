@@ -2,10 +2,21 @@ import mongoose from 'mongoose';
 
 const invoiceSchema = new mongoose.Schema(
   {
+    client: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    service: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Service',
+    },
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Order',
-      required: true,
+    },
+    subscription: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Subscription',
     },
     invoiceNumber: {
       type: String,

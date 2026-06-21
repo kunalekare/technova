@@ -14,7 +14,7 @@ const orderSchema = new mongoose.Schema(
     },
     pricingTier: {
       type: String,
-      enum: ['Basic', 'Standard', 'Premium'],
+      enum: ['Basic', 'Standard', 'Premium', 'Custom'],
       required: true,
     },
     amount: {

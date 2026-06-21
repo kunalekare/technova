@@ -96,6 +96,73 @@ const DropdownItem = ({ link, location }) => {
   );
 };
 
+const MobileNavItem = ({ link, location, setIsMobileOpen }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const hasDropdown = !!link.dropdown;
+
+  return (
+    <div className="flex flex-col border-b border-white/5 last:border-0">
+      {hasDropdown ? (
+        <div className="flex items-center justify-between w-full py-4">
+          <Link
+            to={link.path}
+            onClick={() => setIsMobileOpen(false)}
+            className={`text-lg font-medium transition-colors ${
+              location.pathname === link.path ? 'text-primary-400' : 'text-surface-200 hover:text-white'
+            }`}
+          >
+            {link.name}
+          </Link>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 -mr-2 text-surface-400 hover:text-white transition-colors rounded-lg"
+          >
+            <HiChevronDown className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+      ) : (
+        <Link
+          to={link.path}
+          onClick={() => setIsMobileOpen(false)}
+          className={`flex items-center w-full py-4 text-left text-lg font-medium transition-colors ${
+            location.pathname === link.path ? 'text-primary-400' : 'text-surface-200 hover:text-white'
+          }`}
+        >
+          {link.name}
+        </Link>
+      )}
+
+      {hasDropdown && (
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="flex flex-col gap-2 pb-4 pl-4 border-l-2 border-white/10 ml-2 mt-1">
+                {link.dropdown.map(subLink => (
+                  <Link
+                    key={subLink.name}
+                    to={subLink.path}
+                    onClick={() => setIsMobileOpen(false)}
+                    className={`py-2 text-base transition-colors ${
+                      location.pathname === subLink.path ? 'text-primary-400' : 'text-surface-400 hover:text-white'
+                    }`}
+                  >
+                    {subLink.name}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
+    </div>
+  );
+};
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -118,6 +185,15 @@ const Navbar = () => {
     setIsMobileOpen(false);
     setIsProfileOpen(false);
   }, [location]);
+
+  useEffect(() => {
+    if (isMobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobileOpen]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -294,51 +370,59 @@ const Navbar = () => {
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-surface-900/95 backdrop-blur-xl border-b border-white/10 overflow-hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed top-[64px] sm:top-[80px] left-0 right-0 h-[calc(100vh-64px)] sm:h-[calc(100vh-80px)] bg-surface-950 overflow-y-auto z-50 shadow-2xl"
           >
-            <div className="px-4 py-4 space-y-1">
-              {navLinks.map((link) => (
-                <div key={link.name}>
-                  <Link
-                    to={link.path}
-                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                      location.pathname === link.path
-                        ? 'text-primary-400 bg-primary-500/10'
-                        : 'text-surface-300 hover:text-white hover:bg-white/5'
-                    }`}
+            <div className="flex flex-col min-h-full px-6 py-6">
+              <div className="flex-1 flex flex-col">
+                {navLinks.map((link) => (
+                  <MobileNavItem 
+                    key={link.name} 
+                    link={link} 
+                    location={location} 
+                    setIsMobileOpen={setIsMobileOpen} 
+                  />
+                ))}
+              </div>
+
+              {!isAuthenticated ? (
+                <div className="mt-12 pt-8 border-t border-white/10 flex flex-col gap-4 pb-8">
+                  <Link 
+                    to="/login" 
+                    onClick={() => setIsMobileOpen(false)}
+                    className="w-full py-4 rounded-xl text-center text-lg font-bold text-white bg-surface-800 hover:bg-surface-700 transition-colors border border-white/5 shadow-lg"
                   >
-                    {link.name}
+                    Log In
                   </Link>
-                  {link.dropdown && (
-                    <div className="pl-6 pr-4 py-1 space-y-1 border-l-2 border-white/5 ml-4">
-                      {link.dropdown.map(subLink => (
-                        <Link
-                          key={subLink.name}
-                          to={subLink.path}
-                          className={`block px-4 py-2 rounded-lg text-sm transition-all ${
-                            location.pathname === subLink.path
-                              ? 'text-primary-400 bg-primary-500/10'
-                              : 'text-surface-400 hover:text-white hover:bg-white/5'
-                          }`}
-                        >
-                          {subLink.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <Link 
+                    to="/register" 
+                    onClick={() => setIsMobileOpen(false)}
+                    className="w-full py-4 rounded-xl text-center text-lg font-bold text-white bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 transition-all shadow-lg shadow-primary-500/25"
+                  >
+                    Get Started for Free
+                  </Link>
                 </div>
-              ))}
-              {!isAuthenticated && (
-                <div className="pt-3 border-t border-white/10 flex gap-3">
-                  <Link to="/login" className="flex-1 text-center py-3 rounded-lg text-sm font-medium text-surface-300 border border-surface-600/50 hover:border-primary-500/50 transition-all">
-                    Login
+              ) : (
+                <div className="mt-12 pt-8 border-t border-white/10 pb-8 flex flex-col gap-4">
+                  <Link
+                    to={user?.role?.name === 'admin' || user?.role?.name === 'super_admin' ? '/admin' : '/dashboard'}
+                    onClick={() => setIsMobileOpen(false)}
+                    className="w-full py-4 rounded-xl text-center text-lg font-bold text-white bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 transition-all shadow-lg shadow-primary-500/25 flex items-center justify-center gap-2"
+                  >
+                    <HiViewGrid className="w-6 h-6" /> Go to Dashboard
                   </Link>
-                  <Link to="/register" className="flex-1 btn-primary text-center !py-3 text-sm">
-                    Get Started
-                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileOpen(false);
+                    }}
+                    className="w-full py-4 rounded-xl text-center text-lg font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 transition-colors border border-red-500/10 flex items-center justify-center gap-2"
+                  >
+                    <HiLogout className="w-6 h-6" /> Sign Out
+                  </button>
                 </div>
               )}
             </div>

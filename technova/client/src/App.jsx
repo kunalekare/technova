@@ -8,7 +8,7 @@ import AuthCallback from './pages/auth/AuthCallback';
 // Layout & UI
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
-import ChatbotWidget from './components/ai/ChatbotWidget';
+import GlobalChatbot from './components/ai/GlobalChatbot';
 
 // Public Pages
 import Home from './pages/public/Home';
@@ -53,6 +53,7 @@ import Verification from './pages/user/Verification';
 import Branding from './pages/user/Branding';
 import Team from './pages/user/Team';
 import ClientRetainers from './pages/user/ClientRetainers';
+import Subscriptions from './pages/user/Subscriptions';
 import BookConsultation from './pages/user/BookConsultation';
 import ClientReferrals from './pages/user/ClientReferrals';
 
@@ -193,6 +194,7 @@ const App = () => {
           <Route path="branding" element={<Branding />} />
           <Route path="team" element={<Team />} />
           <Route path="retainers" element={<ClientRetainers />} />
+          <Route path="subscriptions" element={<Subscriptions />} />
           <Route path="book-consultation" element={<BookConsultation />} />
           <Route path="referrals" element={<ClientReferrals />} />
           <Route path="scoper" element={
@@ -250,7 +252,7 @@ const App = () => {
           <Route path="partners" element={<AdminPartners />} />
         </Route>
       </Routes>
-      <ChatbotWidget />
+      <GlobalChatbot />
     </>
   );
 };

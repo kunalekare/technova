@@ -38,7 +38,8 @@ const AdminBookings = () => {
           <div className="text-surface-400 py-8 text-center">Loading bookings...</div>
         ) : (
           <div className="glass-card overflow-hidden">
-            <table className="w-full text-left border-collapse">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
                 <tr className="bg-surface-900/50">
                   <th className="p-4 text-xs font-semibold text-surface-400 uppercase tracking-wider">Client</th>
@@ -100,6 +101,7 @@ const AdminBookings = () => {
                 )}
               </tbody>
             </table>
+          </div>
           </div>
         )}
       </div>

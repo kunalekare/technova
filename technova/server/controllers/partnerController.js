@@ -4,7 +4,7 @@ import User from '../models/User.js';
 
 export const applyForPartner = async (req, res, next) => {
   try {
-    const { type, skills, portfolioLink, coverLetter } = req.body;
+    const { type, skills, portfolioLink, linkedinUrl, experienceYears, expectedHourlyRate, availability, coverLetter } = req.body;
 
     // Check if user is already a partner
     let partner = await Partner.findOne({ user: req.user.id });
@@ -20,6 +20,10 @@ export const applyForPartner = async (req, res, next) => {
     const application = await PartnerApplication.create({
       partner: partner._id,
       portfolioLink,
+      linkedinUrl,
+      experienceYears: Number(experienceYears),
+      expectedHourlyRate: Number(expectedHourlyRate),
+      availability,
       coverLetter,
     });
 

@@ -1,5 +1,6 @@
 import DesignAnnotation from '../models/DesignAnnotation.js';
 import Project from '../models/Project.js';
+import { getIO } from '../socket/socketServer.js';
 
 export const getAnnotationsByProject = async (req, res, next) => {
   try {
@@ -11,7 +12,8 @@ export const getAnnotationsByProject = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Project not found' });
     }
 
-    if (req.user.role !== 'admin' && req.user.role !== 'staff' && req.user.role !== 'super_admin' && project.client.toString() !== req.user.id) {
+    const userRole = req.user.role?.name || req.user.role;
+    if (userRole !== 'admin' && userRole !== 'staff' && userRole !== 'super_admin' && project.client.toString() !== req.user.id) {
       return res.status(403).json({ success: false, message: 'Not authorized to view annotations for this project' });
     }
 
@@ -41,9 +43,16 @@ export const addAnnotationComment = async (req, res, next) => {
     });
 
     await annotation.save();
-    
     // Populate author before returning
     await annotation.populate('comments.author', 'name avatar');
+
+    // Emit socket event to project room
+    try {
+      const io = getIO();
+      io.to(`project_${projectId}`).emit('annotationUpdated', { fileUrl });
+    } catch (err) {
+      console.error('Socket emission failed:', err);
+    }
 
     res.status(201).json({ success: true, data: annotation });
   } catch (error) {
@@ -64,6 +73,14 @@ export const resolveAnnotationComment = async (req, res, next) => {
     comment.resolved = true;
     await annotation.save();
     await annotation.populate('comments.author', 'name avatar');
+
+    // Emit socket event
+    try {
+      const io = getIO();
+      io.to(`project_${projectId}`).emit('annotationUpdated', { fileUrl: annotation.fileUrl });
+    } catch (err) {
+      console.error('Socket emission failed:', err);
+    }
 
     res.status(200).json({ success: true, data: annotation });
   } catch (error) {

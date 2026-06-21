@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { HiClock, HiOutlineChevronRight, HiFolderOpen } from 'react-icons/hi';
+import { HiClock, HiOutlineChevronRight, HiFolderOpen, HiOutlineSparkles } from 'react-icons/hi';
+import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 
@@ -16,11 +17,11 @@ const statusStyles = {
 const ProjectCard = ({ project }) => {
   const statusTheme = statusStyles[project.status] || statusStyles.new;
 
+  const CardWrapper = Link;
+  const wrapperProps = { to: `/dashboard/projects/${project._id}`, className: "block relative group h-full" };
+
   return (
-    <Link 
-      to={`/dashboard/projects/${project._id}`}
-      className="block relative group h-full"
-    >
+    <CardWrapper {...wrapperProps}>
       <div className={`absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${statusTheme.glow} shadow-xl`} />
       
       <div className="glass-card p-6 rounded-3xl h-full flex flex-col hover:border-white/10 hover:bg-surface-800/80 transition-all duration-300 relative overflow-hidden border border-white/5">
@@ -31,7 +32,7 @@ const ProjectCard = ({ project }) => {
         <div className="flex items-start justify-between mb-6 relative z-10">
           <div className="flex items-start gap-4">
             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border ${statusTheme.bg} ${statusTheme.text} ${statusTheme.border} group-hover:scale-105 transition-transform duration-300`}>
-              <HiFolderOpen className="w-6 h-6" />
+              {project.isCustomRequest ? <HiOutlineSparkles className="w-6 h-6" /> : <HiFolderOpen className="w-6 h-6" />}
             </div>
             <div>
               <h3 className="text-xl font-bold text-white group-hover:text-primary-300 transition-colors line-clamp-1">
@@ -57,7 +58,7 @@ const ProjectCard = ({ project }) => {
           </div>
         </div>
       </div>
-    </Link>
+    </CardWrapper>
   );
 };
 

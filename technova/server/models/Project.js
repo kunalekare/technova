@@ -95,6 +95,15 @@ const projectSchema = new mongoose.Schema(
         default: false,
       },
     },
+    isCustomRequest: {
+      type: Boolean,
+      default: false,
+    },
+    customRequestId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'CustomRequest',
+      default: null,
+    },
     aiEstimate: {
       estimatedCost: Number,
       estimatedDays: Number,

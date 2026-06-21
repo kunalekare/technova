@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProject, getMyProjects, getProjectById, sendProjectProposal, updateProjectAdmin, scheduleMeeting, summarizeProjectMeeting, matchPartnersForProject } from '../controllers/projectController.js';
+import { createProject, getMyProjects, getProjectById, sendProjectProposal, updateProjectAdmin, scheduleMeeting, summarizeProjectMeeting, matchPartnersForProject, uploadProjectFiles } from '../controllers/projectController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 import { upload } from '../middleware/upload.js';
 
@@ -19,6 +19,9 @@ router.route('/:id/admin')
 
 router.route('/:id/match-partners')
   .get(authorize('admin', 'super_admin'), matchPartnersForProject);
+
+router.route('/:id/files')
+  .post(authorize('admin', 'super_admin', 'partner'), upload.array('files', 10), uploadProjectFiles);
 
 router.route('/:id')
   .get(getProjectById);

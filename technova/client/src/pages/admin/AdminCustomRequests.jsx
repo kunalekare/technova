@@ -15,6 +15,11 @@ const AdminCustomRequests = () => {
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('');
   const [updatingId, setUpdatingId] = useState(null);
+  
+  // Phase 8: AI Proposal States
+  const [generatingAi, setGeneratingAi] = useState(null);
+  const [aiProposals, setAiProposals] = useState({});
+  const [converting, setConverting] = useState(null);
 
   useEffect(() => {
     fetchRequests();
@@ -46,6 +51,35 @@ const AdminCustomRequests = () => {
       toast.error('Failed to update status');
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+  const handleGenerateProposal = async (id) => {
+    setGeneratingAi(id);
+    try {
+      const res = await api.get(`/ai/generate-proposal/${id}`);
+      setAiProposals(prev => ({ ...prev, [id]: res.data.data }));
+      toast.success('AI Proposal generated successfully!');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to generate AI proposal');
+    } finally {
+      setGeneratingAi(null);
+    }
+  };
+
+  const handleConvertToProject = async (id) => {
+    const proposalData = aiProposals[id];
+    if (!proposalData) return;
+    
+    setConverting(id);
+    try {
+      await api.post(`/custom-requests/${id}/convert-to-project`, { proposalData });
+      toast.success('Successfully converted to project and proposal sent!');
+      fetchRequests(); // Refresh list to remove resolved items
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to convert to project');
+    } finally {
+      setConverting(null);
     }
   };
 
@@ -213,9 +247,88 @@ const AdminCustomRequests = () => {
                         >
                           <HiOutlineMail className="w-4 h-4 mr-2" /> Email Client
                         </a>
+
+                        {/* Phase 8: AI Quote Generator */}
+                        {req.status !== 'resolved' && !aiProposals[req._id] && (
+                          <button
+                            onClick={() => handleGenerateProposal(req._id)}
+                            disabled={generatingAi === req._id}
+                            className="w-full bg-gradient-to-r from-purple-600 to-primary-600 hover:from-purple-500 hover:to-primary-500 text-white font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center text-sm"
+                          >
+                            {generatingAi === req._id ? (
+                              <HiRefresh className="w-4 h-4 mr-2 animate-spin" />
+                            ) : (
+                              <span className="mr-2">✨</span>
+                            )}
+                            {generatingAi === req._id ? 'Generating...' : 'Auto-Generate Proposal'}
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
+
+                  {/* Render AI Proposal if generated */}
+                  {aiProposals[req._id] && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      className="border-t border-white/5 bg-surface-900/30 p-6 sm:p-8"
+                    >
+                      <div className="flex items-center gap-2 mb-6">
+                        <span className="text-xl">✨</span>
+                        <h4 className="text-lg font-bold text-white">AI Generated Proposal</h4>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div className="bg-surface-800 rounded-xl p-5 border border-white/5">
+                          <p className="text-xs text-surface-400 mb-1 uppercase tracking-wider font-semibold">Estimated Cost</p>
+                          <p className="text-2xl font-bold text-emerald-400">${aiProposals[req._id].price.toLocaleString()}</p>
+                        </div>
+                        <div className="bg-surface-800 rounded-xl p-5 border border-white/5 md:col-span-2">
+                          <p className="text-xs text-surface-400 mb-1 uppercase tracking-wider font-semibold">Timeline & Scope</p>
+                          <p className="text-sm text-primary-400 font-bold mb-2">{aiProposals[req._id].timeline}</p>
+                          <p className="text-sm text-surface-300 leading-relaxed">{aiProposals[req._id].scopeSummary}</p>
+                        </div>
+                      </div>
+
+                      <div className="mb-8">
+                        <h5 className="text-sm font-bold text-white mb-4">Proposed Milestones</h5>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {aiProposals[req._id].milestones.map((m, i) => (
+                            <div key={i} className="bg-surface-900 rounded-xl p-4 border border-white/5 flex gap-4">
+                              <div className="w-8 h-8 rounded-lg bg-primary-500/10 text-primary-400 flex items-center justify-center font-bold flex-shrink-0">
+                                {i + 1}
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-white mb-1">{m.title}</p>
+                                <p className="text-xs text-surface-400">{m.description}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end gap-3">
+                        <button 
+                          onClick={() => setAiProposals(prev => { const n = {...prev}; delete n[req._id]; return n; })}
+                          className="px-4 py-2 text-sm text-surface-400 hover:text-white transition-colors"
+                        >
+                          Discard
+                        </button>
+                        <button
+                          onClick={() => handleConvertToProject(req._id)}
+                          disabled={converting === req._id}
+                          className="btn-primary py-2 px-6 flex items-center"
+                        >
+                          {converting === req._id ? (
+                            <><HiRefresh className="w-4 h-4 mr-2 animate-spin" /> Converting...</>
+                          ) : (
+                            'Convert to Project & Send Proposal'
+                          )}
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
                 </motion.div>
               );
             })}

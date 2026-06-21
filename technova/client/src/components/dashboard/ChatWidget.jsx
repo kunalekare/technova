@@ -3,6 +3,8 @@ import { useSocket } from '../../hooks/useSocket';
 import { HiPaperAirplane, HiPhotograph, HiPaperClip, HiX } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
+import api from '../../services/api';
+import toast from 'react-hot-toast';
 
 const ChatWidget = ({ projectId }) => {
   const { socket, connected } = useSocket();
@@ -11,8 +13,24 @@ const ChatWidget = ({ projectId }) => {
   const [inputValue, setInputValue] = useState('');
   const [typing, setTyping] = useState(null);
   const [attachments, setAttachments] = useState([]);
+  const [loadingHistory, setLoadingHistory] = useState(true);
   const messagesEndRef = useRef(null);
   const typingTimeout = useRef(null);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (!projectId) return;
+      try {
+        const res = await api.get(`/messages/${projectId}`);
+        setMessages(res.data.data);
+      } catch (err) {
+        toast.error('Failed to load chat history');
+      } finally {
+        setLoadingHistory(false);
+      }
+    };
+    fetchHistory();
+  }, [projectId]);
 
   useEffect(() => {
     if (socket && connected && projectId) {
@@ -91,7 +109,9 @@ const ChatWidget = ({ projectId }) => {
 
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
-        {messages.length === 0 ? (
+        {loadingHistory ? (
+          <div className="h-full flex items-center justify-center text-surface-400">Loading chat...</div>
+        ) : messages.length === 0 ? (
           <div className="h-full flex items-center justify-center text-surface-400 text-sm text-center flex-col gap-2">
             <div className="w-16 h-16 rounded-2xl bg-surface-800/50 flex items-center justify-center mb-2">
               <HiPaperAirplane className="w-8 h-8 text-surface-600 rotate-90" />

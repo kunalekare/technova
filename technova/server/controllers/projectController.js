@@ -18,7 +18,14 @@ export const createProject = async (req, res, next) => {
       throw new Error('Service not found');
     }
 
-    const fileUrls = req.files ? req.files.map(file => file.path) : [];
+    const fileUrls = req.files ? req.files.map(file => {
+      if (file.path) return file.path;
+      if (file.buffer) {
+        const b64 = Buffer.from(file.buffer).toString('base64');
+        return `data:${file.mimetype};base64,${b64}`;
+      }
+      return null;
+    }).filter(url => url !== null) : [];
 
     const project = await Project.create({
       client: req.user._id,
@@ -312,6 +319,45 @@ export const matchPartnersForProject = async (req, res, next) => {
     const matched = await matchPartners(project.requirements, partners);
 
     res.status(200).json({ success: true, data: matched });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Upload deliverables/files to a project
+// @route   POST /api/v1/projects/:id/files
+// @access  Private (Admin/Team/Partner)
+export const uploadProjectFiles = async (req, res, next) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      return res.status(404).json({ success: false, message: 'Project not found' });
+    }
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ success: false, message: 'No files uploaded' });
+    }
+
+    const newFileUrls = req.files.map(file => {
+      if (file.path) return file.path;
+      if (file.buffer) {
+        const b64 = Buffer.from(file.buffer).toString('base64');
+        return `data:${file.mimetype};base64,${b64}`;
+      }
+      return null;
+    }).filter(url => url !== null);
+
+    // Clean up any existing bad data (nulls/undefined/objects)
+    const existingValidFiles = (project.files || []).filter(f => typeof f === 'string' && f.trim() !== '');
+
+    project.files = [...existingValidFiles, ...newFileUrls];
+
+    await project.save();
+
+    res.status(200).json({
+      success: true,
+      data: project.files,
+    });
   } catch (error) {
     next(error);
   }

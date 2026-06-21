@@ -1,6 +1,9 @@
 import RetainerPlan from '../models/RetainerPlan.js';
 import Project from '../models/Project.js';
 import Order from '../models/Order.js';
+import Subscription from '../models/Subscription.js';
+import CommissionLedger from '../models/CommissionLedger.js';
+import PartnerApplication from '../models/PartnerApplication.js';
 import { getRate } from '../services/payment/currencyService.js';
 
 // @desc    Get financial forecast (Upcoming revenue)
@@ -92,6 +95,92 @@ export const getProfitability = async (req, res, next) => {
       success: true,
       data: profitabilityStats
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get advanced BI analytics via aggregation pipelines
+// @route   GET /api/v1/finance/advanced-bi
+// @access  Private/Admin
+export const getAdvancedBI = async (req, res, next) => {
+  try {
+    // 1. MRR Pipeline (Subscription & RetainerPlan)
+    const subMrrAgg = await Subscription.aggregate([
+      { $match: { status: 'active' } },
+      { $group: { _id: null, totalMRR: { $sum: "$amount" } } }
+    ]);
+    const totalMRR = subMrrAgg[0]?.totalMRR || 0;
+
+    // 2. Profit Margins Pipeline (CommissionLedger)
+    const marginsAgg = await CommissionLedger.aggregate([
+      { $match: { status: 'paid' } },
+      { 
+        $group: { 
+          _id: "$project", 
+          totalGross: { $sum: "$grossAmount" },
+          platformProfit: { $sum: "$commissionAmount" },
+          partnerPayout: { $sum: "$netPayout" }
+        } 
+      },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'projectData'
+        }
+      },
+      { $unwind: "$projectData" },
+      {
+        $project: {
+          projectName: "$projectData.title",
+          totalGross: 1,
+          platformProfit: 1,
+          partnerPayout: 1,
+          profitMarginPct: {
+            $cond: [
+              { $eq: ["$totalGross", 0] },
+              0,
+              {
+                $multiply: [
+                  { $divide: ["$platformProfit", "$totalGross"] },
+                  100
+                ]
+              }
+            ]
+          }
+        }
+      },
+      { $sort: { platformProfit: -1 } },
+      { $limit: 10 }
+    ]);
+
+    // 3. Conversion Rates Pipeline (PartnerApplication)
+    const conversionAgg = await PartnerApplication.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+    
+    // Format conversion data for Recharts PieChart
+    const conversionData = conversionAgg.map(item => ({
+      name: item._id ? item._id.charAt(0).toUpperCase() + item._id.slice(1) : 'Unknown',
+      value: item.count
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        mrr: totalMRR,
+        profitMargins: marginsAgg,
+        conversionRates: conversionData
+      }
+    });
+
   } catch (error) {
     next(error);
   }

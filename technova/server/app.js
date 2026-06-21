@@ -49,6 +49,9 @@ import referralRoutes from './routes/referralRoutes.js';
 import industryPageRoutes from './routes/industryPageRoutes.js';
 import partnerRoutes from './routes/partnerRoutes.js';
 import commissionRoutes from './routes/commissionRoutes.js';
+import messageRoutes from './routes/messageRoutes.js';
+import subscriptionRoutes from './routes/subscriptionRoutes.js';
+import webhookRoutes from './routes/webhookRoutes.js';
 
 const app = express();
 
@@ -134,6 +137,9 @@ app.use('/api/v1/referrals', referralRoutes);
 app.use('/api/v1/industries', industryPageRoutes);
 app.use('/api/v1/partners', partnerRoutes);
 app.use('/api/v1/commissions', commissionRoutes);
+app.use('/api/v1/messages', messageRoutes);
+app.use('/api/v1/subscriptions', subscriptionRoutes);
+app.use('/api/v1/webhooks', webhookRoutes);
 
 // Temporary production seeding route
 app.use('/api/v1/seed-production', seedProdRoute);

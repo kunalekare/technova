@@ -8,8 +8,10 @@ import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 import { 
   HiArrowLeft, HiOutlineDocumentText, HiOutlineCurrencyDollar, 
-  HiOutlineCalendar, HiPaperAirplane, HiRefresh, HiLightningBolt, HiUserGroup, HiOutlineVideoCamera
+  HiOutlineCalendar, HiPaperAirplane, HiRefresh, HiLightningBolt, HiUserGroup, HiOutlineVideoCamera, HiUpload
 } from 'react-icons/hi';
+import ChatWidget from '../../components/dashboard/ChatWidget';
+import DesignFeedbackTab from '../../components/projects/DesignFeedbackTab';
 
 const projectStatuses = [
   { value: 'new', label: 'New' },
@@ -43,6 +45,9 @@ const AdminProjectDetail = () => {
   const [assignmentMode, setAssignmentMode] = useState('internal');
   const [matchingPartners, setMatchingPartners] = useState(false);
   const [partnerMatches, setPartnerMatches] = useState(null);
+  
+  // File Upload
+  const [uploadingFiles, setUploadingFiles] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProjectById(id));
@@ -77,6 +82,27 @@ const AdminProjectDetail = () => {
       toast.error(error.response?.data?.message || 'Failed to update status');
     } finally {
       setUpdatingStatus(false);
+    }
+  };
+
+  const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    const formData = new FormData();
+    files.forEach(file => formData.append('files', file));
+
+    setUploadingFiles(true);
+    try {
+      await api.post(`/projects/${id}/files`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      toast.success('Files uploaded successfully!');
+      dispatch(fetchProjectById(id));
+    } catch (error) {
+      toast.error('Failed to upload files');
+    } finally {
+      setUploadingFiles(false);
     }
   };
 
@@ -239,14 +265,42 @@ const AdminProjectDetail = () => {
                 <div className="mt-6">
                   <h3 className="text-sm font-semibold text-white mb-3">Attached Files</h3>
                   <div className="flex flex-wrap gap-3">
-                    {project.files.map((file, idx) => (
-                      <a key={idx} href={file} target="_blank" rel="noreferrer" className="px-3 py-2 rounded-lg bg-surface-900 border border-white/5 text-sm text-primary-400 hover:text-primary-300 transition-colors">
-                        Attachment {idx + 1}
-                      </a>
-                    ))}
+                    {project.files.map((file, idx) => {
+                      if (typeof file !== 'string') return null;
+                      const isDataURI = file.startsWith('data:');
+                      let fileName;
+                      if (isDataURI) {
+                        const mimeMatch = file.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
+                        const ext = mimeMatch ? mimeMatch[1].split('/')[1] : 'file';
+                        fileName = `Deliverable_${idx + 1}.${ext}`;
+                      } else {
+                        fileName = file.split('/').pop() || `Attachment ${idx + 1}`;
+                      }
+                      
+                      return (
+                        <a key={idx} href={file} download={fileName} target={isDataURI ? '_self' : '_blank'} rel="noreferrer" className="px-3 py-2 rounded-lg bg-surface-900 border border-white/5 text-sm text-primary-400 hover:text-primary-300 transition-colors">
+                          {fileName}
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               )}
+
+              <div className="mt-6 border-t border-white/5 pt-6">
+                <label className="flex items-center justify-center w-full p-4 border-2 border-dashed border-white/10 rounded-xl hover:border-primary-500/50 hover:bg-primary-500/5 transition-colors cursor-pointer group">
+                  <div className="text-center">
+                    {uploadingFiles ? (
+                      <HiRefresh className="w-6 h-6 text-primary-400 animate-spin mx-auto mb-2" />
+                    ) : (
+                      <HiUpload className="w-6 h-6 text-surface-400 group-hover:text-primary-400 mx-auto mb-2 transition-colors" />
+                    )}
+                    <p className="text-sm font-medium text-white">{uploadingFiles ? 'Uploading...' : 'Upload Deliverables & Designs'}</p>
+                    <p className="text-xs text-surface-500 mt-1">Images uploaded here will appear in the Client's Design Feedback tab</p>
+                  </div>
+                  <input type="file" multiple className="hidden" disabled={uploadingFiles} onChange={handleFileUpload} accept="image/*,.pdf,.zip,.fig" />
+                </label>
+              </div>
             </div>
             
             {project.proposal?.sentAt && (
@@ -456,6 +510,17 @@ const AdminProjectDetail = () => {
               ) : (
                 <p className="text-xs text-surface-400">No meetings scheduled.</p>
               )}
+            </div>
+
+            {/* Design Feedback */}
+            <div className="glass-card p-6 border-primary-500/20">
+              <h2 className="text-lg font-bold text-white mb-4">Design Feedback & Annotations</h2>
+              <DesignFeedbackTab project={project} />
+            </div>
+
+            {/* Chat Widget placed at the bottom */}
+            <div className="mt-6">
+              <ChatWidget projectId={project._id} />
             </div>
 
             {project.status === 'new' || project.status === 'in_review' ? (

@@ -4,6 +4,7 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { HiOutlineChatAlt, HiCheckCircle, HiCheck } from 'react-icons/hi';
 import { format } from 'date-fns';
+import { useSocket } from '../../hooks/useSocket';
 
 const DesignFeedbackTab = ({ project }) => {
   const { user } = useSelector(state => state.auth);
@@ -13,8 +14,11 @@ const DesignFeedbackTab = ({ project }) => {
   const [newCommentText, setNewCommentText] = useState('');
   const [loading, setLoading] = useState(false);
   const imgRef = useRef(null);
+  const { socket, connected } = useSocket();
 
-  const images = project.files.filter(f => f.fileUrl.match(/\.(jpeg|jpg|gif|png)$/i));
+  const images = (project.files || [])
+    .filter(f => typeof f === 'string' && (f.match(/\.(jpeg|jpg|gif|png|webp)$/i) || f.startsWith('data:image/')))
+    .map(f => ({ fileUrl: f }));
 
   const fetchAnnotations = async () => {
     try {
@@ -31,6 +35,24 @@ const DesignFeedbackTab = ({ project }) => {
       setSelectedFile(images[0].fileUrl);
     }
   }, [project]);
+
+  // Real-time synchronization
+  useEffect(() => {
+    if (socket && connected && project._id) {
+      // Ensure we are in the project room
+      socket.emit('joinProject', project._id);
+
+      const handleUpdate = () => {
+        fetchAnnotations();
+      };
+
+      socket.on('annotationUpdated', handleUpdate);
+
+      return () => {
+        socket.off('annotationUpdated', handleUpdate);
+      };
+    }
+  }, [socket, connected, project._id]);
 
   const currentAnnotation = annotations.find(a => a.fileUrl === selectedFile);
   const comments = currentAnnotation?.comments || [];

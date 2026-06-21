@@ -7,6 +7,7 @@ import Sidebar from './Sidebar';
 import NotificationBell from '../dashboard/NotificationBell';
 import { useSocket } from '../../hooks/useSocket';
 import { addNotification } from '../../redux/slices/notificationSlice';
+import ClientAssistant from '../dashboard/ClientAssistant';
 
 const DashboardLayout = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -62,7 +63,7 @@ const DashboardLayout = () => {
         closeMobileSidebar={() => setMobileMenuOpen(false)} 
       />
 
-      <div className="lg:pl-64 flex flex-col min-h-screen">
+      <div className="lg:pl-64 flex flex-col min-h-screen w-full max-w-[100vw] overflow-x-hidden">
         {/* Top Header */}
         <header className="sticky top-0 z-30 h-20 bg-surface-950/80 backdrop-blur-xl border-b border-white/5 px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-full">
@@ -98,10 +99,7 @@ const DashboardLayout = () => {
                   {branding?.companyName ? (
                     <span className="text-white">{branding.companyName}</span>
                   ) : (
-                    <>
-                      <span className="text-white">TARK</span>
-                      <span className="text-primary-500">KO</span>
-                    </>
+                    <>TARK<span className="gradient-text">KO</span></>
                   )}
                 </span>
               </div>
@@ -129,6 +127,9 @@ const DashboardLayout = () => {
           <Outlet />
         </main>
       </div>
+      
+      {/* Client AI Assistant Widget */}
+      <ClientAssistant />
     </div>
   );
 };

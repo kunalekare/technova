@@ -20,9 +20,26 @@ const Checkout = () => {
   // We'll calculate mock exchange rate if it's not INR
   const exchangeRateAtPurchase = currency === 'INR' ? null : (currency === 'USD' ? 83.5 : 90);
 
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleCheckout = async () => {
     setLoading(true);
     try {
+      const res = await loadRazorpay();
+      if (!res) {
+        toast.error('Razorpay SDK failed to load');
+        setLoading(false);
+        return;
+      }
+
       // 1. Create order
       const { data } = await api.post('/orders', {
         projectId,
@@ -34,23 +51,49 @@ const Checkout = () => {
       
       const { order, paymentDetails } = data.data;
 
-      // 2. Simulate Razorpay verification
-      // In a real app we'd load Razorpay SDK, but here we just simulate it
-      setTimeout(async () => {
-        try {
-          await api.post(`/orders/${order._id}/verify-payment`, {
-            razorpay_order_id: paymentDetails.id,
-            razorpay_payment_id: 'pay_mock_' + Math.floor(Math.random()*1000000),
-            razorpay_signature: 'mock_sig'
-          });
-          setSuccess(true);
-          toast.success('Payment Successful!');
-          setTimeout(() => navigate('/dashboard/orders'), 2000);
-        } catch (err) {
-          toast.error('Payment verification failed');
-          setLoading(false);
+      // 2. Open Razorpay Checkout
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_T4FMQmvKwnT7c2',
+        amount: paymentDetails.amount,
+        currency: paymentDetails.currency,
+        name: 'Velixora',
+        description: `Payment for ${pricingTier} tier`,
+        order_id: paymentDetails.id,
+        handler: async function (response) {
+          try {
+            await api.post(`/orders/${order._id}/verify-payment`, {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            });
+            setSuccess(true);
+            toast.success('Payment Successful!');
+            setTimeout(() => navigate('/dashboard/orders'), 2000);
+          } catch (err) {
+            toast.error(err.response?.data?.message || 'Payment verification failed');
+            setLoading(false);
+          }
+        },
+        prefill: {
+          name: 'Client',
+          email: 'client@velixora.com'
+        },
+        theme: { color: '#6c5ce7' },
+        modal: {
+          ondismiss: function() {
+            setLoading(false);
+          }
         }
-      }, 1500);
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      
+      paymentObject.on('payment.failed', function (response) {
+        toast.error(response.error.description || 'Payment Failed');
+        setLoading(false);
+      });
+
+      paymentObject.open();
 
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to initiate checkout');
