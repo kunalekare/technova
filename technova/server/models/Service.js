@@ -71,6 +71,14 @@ const serviceSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    internalCostEstimate: {
+      type: Number,
+      default: null, // Admin only field
+    },
+    isInternational: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

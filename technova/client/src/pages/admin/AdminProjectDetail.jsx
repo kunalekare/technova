@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 import { 
   HiArrowLeft, HiOutlineDocumentText, HiOutlineCurrencyDollar, 
-  HiOutlineCalendar, HiPaperAirplane, HiRefresh
+  HiOutlineCalendar, HiPaperAirplane, HiRefresh, HiLightningBolt, HiUserGroup, HiOutlineVideoCamera
 } from 'react-icons/hi';
 
 const projectStatuses = [
@@ -34,6 +34,15 @@ const AdminProjectDetail = () => {
   });
   const [sending, setSending] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [suggestingTeam, setSuggestingTeam] = useState(false);
+  const [teamSuggestion, setTeamSuggestion] = useState(null);
+  const [schedulingMeeting, setSchedulingMeeting] = useState(false);
+  const [summarizingMeeting, setSummarizingMeeting] = useState(null);
+  
+  // Phase 6: Partner Assignment
+  const [assignmentMode, setAssignmentMode] = useState('internal');
+  const [matchingPartners, setMatchingPartners] = useState(false);
+  const [partnerMatches, setPartnerMatches] = useState(null);
 
   useEffect(() => {
     dispatch(fetchProjectById(id));
@@ -71,6 +80,84 @@ const AdminProjectDetail = () => {
     }
   };
 
+  const handleSuggestTeam = async () => {
+    setSuggestingTeam(true);
+    try {
+      const response = await api.get(`/admin/projects/${id}/suggest-team`);
+      setTeamSuggestion(response.data.data);
+      toast.success('AI Team Suggestion generated!');
+    } catch (error) {
+      toast.error('Failed to get team suggestion');
+    } finally {
+      setSuggestingTeam(false);
+    }
+  };
+
+  const handleMatchPartners = async () => {
+    setMatchingPartners(true);
+    try {
+      const response = await api.get(`/projects/${id}/match-partners`);
+      setPartnerMatches(response.data.data);
+      toast.success('AI Partner Matches generated!');
+    } catch (error) {
+      toast.error('Failed to get partner matches');
+    } finally {
+      setMatchingPartners(false);
+    }
+  };
+
+  const handleAssignPartner = async (partnerId) => {
+    try {
+      await api.put(`/projects/${id}/admin`, { assignedPartner: partnerId, assignedTeam: [] });
+      toast.success('Project assigned to Partner!');
+      dispatch(fetchProjectById(id));
+    } catch (error) {
+      toast.error('Failed to assign partner');
+    }
+  };
+
+  const handleScheduleMeeting = async () => {
+    const meetLink = window.prompt("Enter the real Google Meet link (e.g. https://meet.google.com/abc-defg-hij):", "");
+    if (!meetLink) {
+      toast.error('Meeting scheduling cancelled. A valid Google Meet link is required.');
+      return;
+    }
+
+    const title = window.prompt("Enter meeting title:", "Project Sync");
+    if (!title) return;
+
+    setSchedulingMeeting(true);
+    try {
+      await api.post(`/projects/${id}/meetings`, {
+        title,
+        date: new Date(Date.now() + 86400000).toISOString(), // Tomorrow
+        meetLink
+      });
+      toast.success('Meeting Scheduled!');
+      dispatch(fetchProjectById(id));
+    } catch (error) {
+      toast.error('Failed to schedule meeting');
+    } finally {
+      setSchedulingMeeting(false);
+    }
+  };
+
+  const handleSummarizeMeeting = async (meetingId) => {
+    const transcript = window.prompt("Paste the meeting transcript text here to summarize:", "John: Let's finalize the escrow feature.\nSarah: Agreed, it will take 1 week.");
+    if (!transcript) return;
+
+    setSummarizingMeeting(meetingId);
+    try {
+      await api.post(`/projects/${id}/meetings/${meetingId}/summarize`, { textTranscript: transcript });
+      toast.success('Meeting Summarized with AI!');
+      dispatch(fetchProjectById(id));
+    } catch (error) {
+      toast.error('Failed to summarize meeting');
+    } finally {
+      setSummarizingMeeting(null);
+    }
+  };
+
   if (loading) return <div className="p-12 text-center text-surface-400">Loading project...</div>;
   if (!project) return <div className="p-12 text-center text-surface-400">Project not found</div>;
 
@@ -91,7 +178,18 @@ const AdminProjectDetail = () => {
             <div className="glass-card p-6">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-4">
                 <div>
-                  <h1 className="text-2xl font-display font-bold text-white">{project.title}</h1>
+                  <div className="flex items-center gap-3">
+                    <h1 className="text-2xl font-display font-bold text-white">{project.title}</h1>
+                    {project.riskScore !== null && project.riskScore !== undefined && (
+                      <span className={`px-2 py-0.5 text-xs font-bold rounded-full ${
+                        project.riskScore > 70 ? 'bg-red-500/20 text-red-400' :
+                        project.riskScore > 30 ? 'bg-yellow-500/20 text-yellow-400' :
+                        'bg-emerald-500/20 text-emerald-400'
+                      }`}>
+                        Risk Score: {project.riskScore}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-primary-400 font-medium text-sm mt-1">{project.service?.title}</p>
                 </div>
                 
@@ -193,6 +291,171 @@ const AdminProjectDetail = () => {
                   <p className="text-xs text-surface-400">{project.client?.email}</p>
                 </div>
               </div>
+            </div>
+
+            <div className="glass-card p-6 border-primary-500/10">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <HiUserGroup className="text-primary-400" /> Assignment Mode
+                </h3>
+              </div>
+
+              {/* Toggle Tab */}
+              <div className="flex p-1 bg-surface-900 rounded-lg mb-4 border border-white/5">
+                <button 
+                  onClick={() => setAssignmentMode('internal')} 
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-colors ${assignmentMode === 'internal' ? 'bg-primary-500 text-white' : 'text-surface-400 hover:text-white'}`}
+                >
+                  Internal Team
+                </button>
+                <button 
+                  onClick={() => setAssignmentMode('partner')} 
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-colors ${assignmentMode === 'partner' ? 'bg-primary-500 text-white' : 'text-surface-400 hover:text-white'}`}
+                >
+                  Partner Network
+                </button>
+              </div>
+              
+              {assignmentMode === 'internal' ? (
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-xs text-surface-400">Internal Agency Staff</p>
+                    <button 
+                      onClick={handleSuggestTeam}
+                      disabled={suggestingTeam}
+                      className="text-xs bg-primary-600 hover:bg-primary-500 text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+                    >
+                      {suggestingTeam ? <HiRefresh className="animate-spin" /> : <HiLightningBolt />}
+                      Suggest Team
+                    </button>
+                  </div>
+                  
+                  {teamSuggestion && (
+                    <div className="bg-primary-900/40 border border-primary-500/30 rounded-lg p-3 mb-4">
+                      <p className="text-xs font-bold text-primary-300 mb-1 flex items-center gap-1"><HiLightningBolt /> AI Suggestion</p>
+                      <p className="text-xs text-surface-200">{teamSuggestion.reasoning}</p>
+                      <div className="mt-2 text-xs text-primary-400 font-medium">Suggested IDs: {teamSuggestion.suggestedTeam.join(', ')}</div>
+                    </div>
+                  )}
+                  
+                  {project.assignedTeam?.length > 0 ? (
+                    <div className="space-y-2">
+                      {project.assignedTeam.map((member, idx) => (
+                        <div key={idx} className="text-sm text-surface-300 bg-surface-900 p-2 rounded border border-white/5">
+                          {member.user?.name || member._id}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-surface-400">No team members assigned yet.</p>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-xs text-surface-400">External Marketplace Partners</p>
+                    <button 
+                      onClick={handleMatchPartners}
+                      disabled={matchingPartners}
+                      className="text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+                    >
+                      {matchingPartners ? <HiRefresh className="animate-spin" /> : <HiLightningBolt />}
+                      Match Partners
+                    </button>
+                  </div>
+
+                  {project.assignedPartner ? (
+                    <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg mb-4">
+                      <p className="text-xs text-emerald-400 font-bold mb-1">Assigned Partner</p>
+                      <p className="text-sm text-white">{project.assignedPartner.user?.name || 'Partner'}</p>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-surface-400 mb-4">No partner assigned.</p>
+                  )}
+
+                  {partnerMatches && (
+                    <div className="space-y-3">
+                      <p className="text-xs font-bold text-primary-300 mb-2 flex items-center gap-1"><HiLightningBolt /> AI Partner Matches</p>
+                      {partnerMatches.map(match => (
+                        <div key={match._id} className="bg-surface-900 border border-white/5 rounded-lg p-3">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <p className="text-sm font-bold text-white">{match.user?.name || 'Partner'}</p>
+                              <p className="text-[10px] text-surface-400 uppercase">{match.type}</p>
+                            </div>
+                            <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">{match.matchScore}% Match</span>
+                          </div>
+                          <p className="text-xs text-surface-300 mb-3">{match.reasoning}</p>
+                          <button onClick={() => handleAssignPartner(match._id)} className="w-full text-xs font-bold bg-white/5 hover:bg-white/10 text-white py-1.5 rounded transition-colors">
+                            Assign Partner
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className="glass-card p-6 border-primary-500/10">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <HiOutlineVideoCamera className="text-primary-400" /> Google Meets
+                </h3>
+                <button 
+                  onClick={handleScheduleMeeting}
+                  disabled={schedulingMeeting}
+                  className="text-xs bg-primary-600 hover:bg-primary-500 text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+                >
+                  {schedulingMeeting ? <HiRefresh className="animate-spin" /> : 'Schedule'}
+                </button>
+              </div>
+              
+              {project.meetings?.length > 0 ? (
+                <div className="space-y-3">
+                  {project.meetings.map(m => (
+                    <div key={m._id} className="bg-surface-900 border border-white/5 rounded-lg p-3">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="text-sm font-bold text-white">{m.title}</p>
+                          <p className="text-[10px] text-surface-400">{format(new Date(m.date), 'PPp')}</p>
+                        </div>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-bold ${m.status === 'completed' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}`}>
+                          {m.status}
+                        </span>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        <a href={m.meetLink} target="_blank" rel="noreferrer" className="text-xs bg-surface-800 hover:bg-surface-700 text-white px-2 py-1 rounded transition-colors">
+                          Join Meet
+                        </a>
+                        {m.status === 'scheduled' && (
+                          <button 
+                            onClick={() => handleSummarizeMeeting(m._id)}
+                            disabled={summarizingMeeting === m._id}
+                            className="text-xs text-primary-400 hover:text-primary-300 bg-primary-500/10 px-2 py-1 rounded transition-colors"
+                          >
+                            {summarizingMeeting === m._id ? 'Generating...' : 'AI Summary'}
+                          </button>
+                        )}
+                      </div>
+
+                      {m.summary && (
+                        <div className="mt-3 pt-3 border-t border-white/5">
+                          <p className="text-xs text-surface-300 leading-relaxed mb-2">{m.summary}</p>
+                          {m.actionItems?.length > 0 && (
+                            <ul className="text-xs text-primary-400 list-disc pl-4 space-y-1">
+                              {m.actionItems.map((item, idx) => <li key={idx}>{item}</li>)}
+                            </ul>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-surface-400">No meetings scheduled.</p>
+              )}
             </div>
 
             {project.status === 'new' || project.status === 'in_review' ? (

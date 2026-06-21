@@ -21,6 +21,15 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    currency: {
+      type: String,
+      enum: ['INR', 'USD', 'EUR', 'GBP', 'AUD', 'CAD'],
+      default: 'INR',
+    },
+    exchangeRateAtPurchase: {
+      type: Number,
+      default: null,
+    },
     status: {
       type: String,
       enum: ['pending', 'paid', 'in_progress', 'completed', 'refunded', 'cancelled'],

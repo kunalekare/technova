@@ -1,5 +1,22 @@
 import mongoose from 'mongoose';
 
+const meetingSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    date: { type: Date, required: true },
+    meetLink: String,
+    status: {
+      type: String,
+      enum: ['scheduled', 'completed', 'cancelled'],
+      default: 'scheduled',
+    },
+    summary: String,
+    actionItems: [String],
+    keyDecisions: [String],
+  },
+  { _id: true, timestamps: true }
+);
+
 const milestoneSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
@@ -56,7 +73,13 @@ const projectSchema = new mongoose.Schema(
         ref: 'TeamMember',
       },
     ],
+    assignedPartner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Partner',
+      default: null,
+    },
     milestones: [milestoneSchema],
+    meetings: [meetingSchema],
     budget: {
       type: Number,
       default: 0,
@@ -77,6 +100,10 @@ const projectSchema = new mongoose.Schema(
       estimatedDays: Number,
       scopeSummary: String,
       generatedAt: Date,
+    },
+    riskScore: {
+      type: Number,
+      default: null, // Populated via nightly AI cron job
     },
   },
   { timestamps: true }

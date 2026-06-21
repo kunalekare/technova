@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { HiStar, HiCheck, HiClock, HiArrowRight, HiShoppingCart } from 'react-icons/hi';
 import { fetchServiceById, clearCurrentService } from '../../redux/slices/serviceSlice';
+import api from '../../services/api';
 
 const tierColors = {
   Basic: 'from-surface-600 to-surface-700',
@@ -17,12 +18,32 @@ const ServiceDetail = () => {
   const dispatch = useDispatch();
   const { currentService: service, reviews, relatedServices, loading } = useSelector((state) => state.services);
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const [selectedCurrency, setSelectedCurrency] = useState('INR');
+  const [rates, setRates] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(fetchServiceById(id));
     return () => { dispatch(clearCurrentService()); };
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (service?.isInternational) {
+      api.get('/services/rates').then(res => setRates(res.data.data)).catch(console.error);
+    }
+  }, [service]);
+
+  const convertPrice = (priceInr) => {
+    if (selectedCurrency === 'INR' || !rates) return Math.round(priceInr).toLocaleString('en-IN');
+    const rate = rates[selectedCurrency];
+    if (!rate) return Math.round(priceInr).toLocaleString('en-IN');
+    return Number((priceInr * rate).toFixed(2)).toLocaleString();
+  };
+
+  const getCurrencySymbol = (curr) => {
+    const map = { INR: '₹', USD: '$', EUR: '€', GBP: '£', AUD: 'A$', CAD: 'C$' };
+    return map[curr] || '₹';
+  };
 
   if (loading || !service) {
     return (
@@ -89,7 +110,26 @@ const ServiceDetail = () => {
 
           {/* Pricing Tiers */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <h2 className="text-2xl font-display font-bold text-white mb-6">Choose Your Plan</h2>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4">
+              <h2 className="text-2xl font-display font-bold text-white">Choose Your Plan</h2>
+              {service.isInternational && (
+                <div className="bg-surface-800 rounded-xl p-1 border border-white/10 flex items-center shadow-lg">
+                  <span className="text-sm text-surface-400 px-3 font-medium">Currency</span>
+                  <select 
+                    value={selectedCurrency}
+                    onChange={(e) => setSelectedCurrency(e.target.value)}
+                    className="bg-surface-900 text-white text-sm font-bold border-0 rounded-lg focus:ring-0 py-2 pl-3 pr-8 cursor-pointer appearance-none"
+                  >
+                    <option value="INR">INR (₹)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="AUD">AUD (A$)</option>
+                    <option value="CAD">CAD (C$)</option>
+                  </select>
+                </div>
+              )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
               {service.pricingTiers?.map((tier, i) => (
                 <div
@@ -104,7 +144,9 @@ const ServiceDetail = () => {
                   <div className={`inline-flex self-start px-3 py-1 rounded-lg bg-gradient-to-r ${tierColors[tier.name]} text-white text-sm font-semibold mb-4`}>
                     {tier.name}
                   </div>
-                  <div className="text-3xl font-display font-bold text-white mb-1">${tier.price}</div>
+                  <div className="text-3xl font-display font-bold text-white mb-1">
+                    {getCurrencySymbol(selectedCurrency)}{convertPrice(tier.price)}
+                  </div>
                   <div className="flex items-center gap-1 text-sm text-surface-400 mb-6">
                     <HiClock className="w-4 h-4" />
                     {tier.deliveryDays} day delivery
@@ -118,8 +160,8 @@ const ServiceDetail = () => {
                     ))}
                   </ul>
                   <Link
-                    to={isAuthenticated ? `/dashboard/projects?new=true&service=${service._id}&tier=${tier.name}` : '/login'}
-                    state={!isAuthenticated ? { from: { pathname: '/dashboard/projects', search: `?new=true&service=${service._id}&tier=${tier.name}` } } : null}
+                    to={isAuthenticated ? `/dashboard/projects?new=true&service=${service._id}&tier=${tier.name}&currency=${selectedCurrency}` : '/login'}
+                    state={!isAuthenticated ? { from: { pathname: '/dashboard/projects', search: `?new=true&service=${service._id}&tier=${tier.name}&currency=${selectedCurrency}` } } : null}
                     className={`w-full text-center py-3 rounded-xl font-semibold transition-all duration-300 ${
                       tier.name === 'Standard'
                         ? 'btn-primary'
@@ -171,7 +213,7 @@ const ServiceDetail = () => {
                   <Link key={rs._id} to={`/services/${rs._id}`} className="glass-card-hover p-5 group block">
                     <h3 className="text-sm font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">{rs.title}</h3>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-bold text-white">From ${rs.pricingTiers?.[0]?.price}</span>
+                      <span className="text-sm font-bold text-white">From ₹{rs.pricingTiers?.[0]?.price}</span>
                       <HiArrowRight className="w-4 h-4 text-primary-400" />
                     </div>
                   </Link>

@@ -9,13 +9,12 @@ import { protect, authorize } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router.use(protect);
-router.use(authorize('admin', 'super_admin'));
 
 router.route('/')
   .get(getTeamMembers)
-  .post(addTeamMember);
+  .post(authorize('admin', 'super_admin'), addTeamMember);
 
 router.route('/:id')
-  .put(updateTeamMember);
+  .put(authorize('admin', 'super_admin'), updateTeamMember);
 
 export default router;

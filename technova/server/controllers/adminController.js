@@ -2,6 +2,8 @@ import User from '../models/User.js';
 import Project from '../models/Project.js';
 import Order from '../models/Order.js';
 import Review from '../models/Review.js';
+import SentimentFlag from '../models/SentimentFlag.js';
+import { suggestTeamAllocation } from '../services/ai/resourceSuggestorService.js';
 
 // @desc    Get dashboard KPIs
 // @route   GET /api/v1/admin/dashboard
@@ -212,6 +214,36 @@ export const moderateReview = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: review,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Suggest team for a project
+// @route   GET /api/v1/admin/projects/:id/suggest-team
+// @access  Private/Admin
+export const handleSuggestTeam = async (req, res, next) => {
+  try {
+    const suggestion = await suggestTeamAllocation(req.params.id);
+    res.status(200).json({
+      success: true,
+      data: suggestion,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get all sentiment flags
+// @route   GET /api/v1/admin/sentiments
+// @access  Private/Admin
+export const handleGetSentiments = async (req, res, next) => {
+  try {
+    const sentiments = await SentimentFlag.find().sort('-createdAt');
+    res.status(200).json({
+      success: true,
+      data: sentiments,
     });
   } catch (error) {
     next(error);

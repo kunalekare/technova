@@ -39,6 +39,30 @@ export const fetchProjectById = createAsyncThunk(
   }
 );
 
+export const scheduleMeeting = createAsyncThunk(
+  'project/scheduleMeeting',
+  async ({ projectId, meetingData }, { rejectWithValue }) => {
+    try {
+      const { data } = await api.post(`/projects/${projectId}/meetings`, meetingData);
+      return data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to schedule meeting');
+    }
+  }
+);
+
+export const summarizeProjectMeeting = createAsyncThunk(
+  'project/summarizeProjectMeeting',
+  async ({ projectId, meetingId, transcriptText }, { rejectWithValue }) => {
+    try {
+      const { data } = await api.post(`/projects/${projectId}/meetings/${meetingId}/summarize`, { textTranscript: transcriptText });
+      return data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to summarize meeting');
+    }
+  }
+);
+
 const projectSlice = createSlice({
   name: 'project',
   initialState: {
@@ -101,6 +125,14 @@ const projectSlice = createSlice({
       .addCase(fetchProjectById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      // Schedule Meeting
+      .addCase(scheduleMeeting.fulfilled, (state, action) => {
+        state.currentProject = action.payload;
+      })
+      // Summarize Meeting
+      .addCase(summarizeProjectMeeting.fulfilled, (state, action) => {
+        state.currentProject = action.payload;
       });
   },
 });

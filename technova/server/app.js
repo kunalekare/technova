@@ -35,6 +35,21 @@ import errorHandler from './middleware/errorHandler.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
 import configurePassport from './config/passport.js';
 
+import contractRoutes from './routes/contractRoutes.js';
+import escrowRoutes from './routes/escrowRoutes.js';
+import verificationRoutes from './routes/verificationRoutes.js';
+import auditRoutes from './routes/auditRoutes.js';
+import brandingRoutes from './routes/brandingRoutes.js';
+import teamInviteRoutes from './routes/teamInviteRoutes.js';
+import financeRoutes from './routes/financeRoutes.js';
+import retainerRoutes from './routes/retainerRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
+import annotationRoutes from './routes/annotationRoutes.js';
+import referralRoutes from './routes/referralRoutes.js';
+import industryPageRoutes from './routes/industryPageRoutes.js';
+import partnerRoutes from './routes/partnerRoutes.js';
+import commissionRoutes from './routes/commissionRoutes.js';
+
 const app = express();
 
 // ---- Middleware ----
@@ -105,6 +120,20 @@ app.use('/api/v1/blogs', blogRoutes);
 app.use('/api/v1/portfolio', portfolioRoutes);
 app.use('/api/v1/team', teamRoutes);
 app.use('/api/v1/custom-requests', customRequestRoutes);
+app.use('/api/v1/contracts', contractRoutes);
+app.use('/api/v1/escrow', escrowRoutes);
+app.use('/api/v1/verifications', verificationRoutes);
+app.use('/api/v1/audit-logs', auditRoutes);
+app.use('/api/v1/branding', brandingRoutes);
+app.use('/api/v1/team-invites', teamInviteRoutes);
+app.use('/api/v1/finance', financeRoutes);
+app.use('/api/v1/retainers', retainerRoutes);
+app.use('/api/v1/bookings', bookingRoutes);
+app.use('/api/v1/annotations', annotationRoutes);
+app.use('/api/v1/referrals', referralRoutes);
+app.use('/api/v1/industries', industryPageRoutes);
+app.use('/api/v1/partners', partnerRoutes);
+app.use('/api/v1/commissions', commissionRoutes);
 
 // Temporary production seeding route
 app.use('/api/v1/seed-production', seedProdRoute);

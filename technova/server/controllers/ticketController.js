@@ -1,5 +1,6 @@
 import Ticket from '../models/Ticket.js';
 import Notification from '../models/Notification.js';
+import { analyzeMessage } from '../services/ai/sentimentService.js';
 
 // @desc    Create a new support ticket
 // @route   POST /api/v1/tickets
@@ -22,6 +23,9 @@ export const createTicket = async (req, res, next) => {
         }
       ]
     });
+
+    // Start sentiment analysis in background (fire-and-forget)
+    analyzeMessage(message, 'ticket', ticket.messages[0]._id);
 
     const populated = await Ticket.findById(ticket._id)
       .populate('user', 'name email avatar')
@@ -125,6 +129,10 @@ export const addTicketMessage = async (req, res, next) => {
       message,
       attachments,
     });
+
+    // Start sentiment analysis in background
+    const newMessage = ticket.messages[ticket.messages.length - 1];
+    analyzeMessage(message, 'ticket', newMessage._id);
 
     // If admin replies, move to in_progress
     if (isAdmin && ticket.status === 'open') {

@@ -1,13 +1,9 @@
-import OpenAI from 'openai';
-
-// OpenAI client will be initialized dynamically inside functions
+import { openai, isMockMode } from './aiClient.js';
 
 /**
  * Generate a response from the AI assistant
  */
 export const generateChatResponse = async (messages) => {
-  const isMockMode = !process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'placeholder';
-  
   if (isMockMode) {
     // Return a mock response after a short delay
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -17,12 +13,10 @@ export const generateChatResponse = async (messages) => {
     };
   }
 
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
   try {
     const systemPrompt = {
       role: 'system',
-      content: "You are Nova, an expert technology consultant and project manager at Velixora Solutions. Your job is to help clients understand tech services (web dev, mobile apps, AI, marketing) and guide them to submit their project requirements. Be professional, concise, and helpful."
+      content: "You are Nova, an expert technology consultant and project manager at Velixora Solutions. Your job is to help clients understand tech services (web dev, mobile apps, AI, marketing) and guide them to submit their project requirements. Be professional, concise, and helpful. IMPORTANT: Multi-language support - detect the input language and reply in the same language."
     };
 
     const response = await openai.chat.completions.create({
@@ -46,8 +40,6 @@ export const generateChatResponse = async (messages) => {
  * AI Project Scoping - Generates structured milestones and technical stack suggestions
  */
 export const generateProjectScope = async (projectDescription) => {
-  const isMockMode = !process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'placeholder';
-
   if (isMockMode) {
     await new Promise(resolve => setTimeout(resolve, 1500));
     return {
@@ -62,8 +54,6 @@ export const generateProjectScope = async (projectDescription) => {
       estimatedTimeline: "6-8 weeks",
     };
   }
-
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   try {
     const response = await openai.chat.completions.create({

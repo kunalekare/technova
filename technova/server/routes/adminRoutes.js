@@ -1,5 +1,5 @@
 import express from 'express';
-import { getDashboardStats, getAllUsers, updateUser, getAllProjects, getPendingReviews, moderateReview } from '../controllers/adminController.js';
+import { getDashboardStats, getAllUsers, updateUser, getAllProjects, getPendingReviews, moderateReview, handleSuggestTeam, handleGetSentiments } from '../controllers/adminController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -11,6 +11,8 @@ router.get('/dashboard', getDashboardStats);
 router.get('/users', getAllUsers);
 router.put('/users/:id', updateUser);
 router.get('/projects', getAllProjects);
+router.get('/projects/:id/suggest-team', handleSuggestTeam);
+router.get('/sentiments', handleGetSentiments);
 
 // Review Moderation
 router.get('/reviews/pending', getPendingReviews);

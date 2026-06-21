@@ -12,6 +12,12 @@ import dashboardReducer from './slices/dashboardSlice';
 import blogReducer from './slices/blogSlice';
 import portfolioReducer from './slices/portfolioSlice';
 import teamReducer from './slices/teamSlice';
+import contractReducer from './slices/contractSlice';
+import escrowReducer from './slices/escrowSlice';
+import verificationReducer from './slices/verificationSlice';
+import auditReducer from './slices/auditSlice';
+import brandingReducer from './slices/brandingSlice';
+import teamInviteReducer from './slices/teamInviteSlice';
 
 export const store = configureStore({
   reducer: {
@@ -28,10 +34,15 @@ export const store = configureStore({
     blog: blogReducer,
     portfolio: portfolioReducer,
     team: teamReducer,
+    contract: contractReducer,
+    escrow: escrowReducer,
+    verification: verificationReducer,
+    audit: auditReducer,
+    branding: brandingReducer,
+    teamInvites: teamInviteReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
 });
-

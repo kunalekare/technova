@@ -38,6 +38,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    parentAccount: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
     savedServices: [
       {
         type: mongoose.Schema.Types.ObjectId,

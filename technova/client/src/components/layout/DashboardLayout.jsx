@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { HiMenuAlt2, HiSearch } from 'react-icons/hi';
+import { fetchBranding } from '../../redux/slices/brandingSlice';
 import Sidebar from './Sidebar';
 import NotificationBell from '../dashboard/NotificationBell';
 import { useSocket } from '../../hooks/useSocket';
@@ -12,6 +13,11 @@ const DashboardLayout = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { socket, connected } = useSocket();
+  const { branding } = useSelector((state) => state.branding);
+
+  useEffect(() => {
+    dispatch(fetchBranding());
+  }, [dispatch]);
 
   useEffect(() => {
     // Scroll to top on route change within dashboard
@@ -33,6 +39,24 @@ const DashboardLayout = () => {
 
   return (
     <div className="min-h-screen bg-surface-950">
+      {branding && (
+        <style>
+          {`
+            :root {
+              --color-primary-500: ${branding.primaryColor};
+              --color-primary-600: ${branding.primaryColor};
+              --color-primary-400: ${branding.primaryColor};
+            }
+            /* A simple text gradient override using the secondary color */
+            .gradient-text {
+              background: linear-gradient(to right, ${branding.primaryColor}, ${branding.secondaryColor});
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            }
+          `}
+        </style>
+      )}
+
       <Sidebar 
         isMobile={mobileMenuOpen} 
         closeMobileSidebar={() => setMobileMenuOpen(false)} 
@@ -54,21 +78,31 @@ const DashboardLayout = () => {
 
               {/* Mobile Logo */}
               <div className="lg:hidden flex items-center gap-2">
-                <div className="w-8 h-8 flex items-center justify-center rounded-xl">
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <defs>
-                      <linearGradient id="tarkkoGradHeader" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#6366f1" />
-                        <stop offset="100%" stopColor="#a855f7" />
-                      </linearGradient>
-                    </defs>
-                    <polygon points="50 5, 90 25, 90 75, 50 95, 10 75, 10 25" fill="url(#tarkkoGradHeader)" />
-                    <path d="M 50 28 L 72 45 L 63 54 L 55 48 L 55 72 L 45 72 L 45 48 L 37 54 L 28 45 Z" fill="white" />
-                  </svg>
-                </div>
+                {branding?.logoUrl ? (
+                  <img src={branding.logoUrl} alt="Logo" className="w-8 h-8 rounded" />
+                ) : (
+                  <div className="w-8 h-8 flex items-center justify-center rounded-xl">
+                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                      <defs>
+                        <linearGradient id="tarkkoGradHeader" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#6366f1" />
+                          <stop offset="100%" stopColor="#a855f7" />
+                        </linearGradient>
+                      </defs>
+                      <polygon points="50 5, 90 25, 90 75, 50 95, 10 75, 10 25" fill="url(#tarkkoGradHeader)" />
+                      <path d="M 50 28 L 72 45 L 63 54 L 55 48 L 55 72 L 45 72 L 45 48 L 37 54 L 28 45 Z" fill="white" />
+                    </svg>
+                  </div>
+                )}
                 <span className="text-xl font-display font-extrabold tracking-wide">
-                  <span className="text-white">TARK</span>
-                  <span className="text-primary-500">KO</span>
+                  {branding?.companyName ? (
+                    <span className="text-white">{branding.companyName}</span>
+                  ) : (
+                    <>
+                      <span className="text-white">TARK</span>
+                      <span className="text-primary-500">KO</span>
+                    </>
+                  )}
                 </span>
               </div>
 

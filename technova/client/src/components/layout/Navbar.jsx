@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,13 +7,94 @@ import { logout } from '../../redux/slices/authSlice';
 
 const navLinks = [
   { name: 'Services', path: '/services' },
-  { name: 'Careers', path: '/careers' },
-  { name: 'Internships', path: '/internships' },
-  { name: 'Portfolio', path: '/portfolio' },
-  { name: 'Blog', path: '/blog' },
-  { name: 'About', path: '/about' },
-  { name: 'Contact', path: '/contact' },
+  { 
+    name: 'Careers', 
+    path: '/careers',
+    dropdown: [
+      { name: 'Internships', path: '/internships' }
+    ]
+  },
+  {
+    name: 'Partners',
+    path: '/partners/apply'
+  },
+  { 
+    name: 'Portfolio', 
+    path: '/portfolio',
+    dropdown: [
+      { name: 'Blog', path: '/blog' }
+    ]
+  },
+  { 
+    name: 'Contact Us', 
+    path: '/contact',
+    dropdown: [
+      { name: 'About', path: '/about' },
+      { name: 'Trust Center', path: '/trust' }
+    ]
+  },
 ];
+
+const DropdownItem = ({ link, location }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    clearTimeout(timeoutRef.current);
+    setIsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => setIsOpen(false), 150);
+  };
+
+  return (
+    <div 
+      className="relative"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <Link
+        to={link.path}
+        className={`flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+          location.pathname === link.path
+            ? 'text-primary-400 bg-primary-500/10'
+            : 'text-surface-300 hover:text-white'
+        }`}
+      >
+        {link.name}
+        <HiChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+      </Link>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-full left-0 mt-2 w-48 glass-card p-2 border border-white/10"
+          >
+            {link.dropdown.map((subLink) => (
+              <Link
+                key={subLink.name}
+                to={subLink.path}
+                className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
+                  location.pathname === subLink.path
+                    ? 'bg-primary-500/10 text-primary-400'
+                    : 'text-surface-300 hover:text-white hover:bg-white/5'
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                {subLink.name}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -84,19 +165,23 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-2">
             {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 animated-underline ${
-                  location.pathname === link.path
-                    ? 'text-primary-400'
-                    : 'text-surface-300 hover:text-white'
-                }`}
-              >
-                {link.name}
-              </Link>
+              link.dropdown ? (
+                <DropdownItem key={link.name} link={link} location={location} />
+              ) : (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 animated-underline ${
+                    location.pathname === link.path
+                      ? 'text-primary-400 bg-primary-500/10'
+                      : 'text-surface-300 hover:text-white'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
           </div>
 
@@ -132,7 +217,7 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 8, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute right-0 mt-2 w-56 glass-card p-2 origin-top-right"
+                      className="absolute right-0 mt-2 w-56 glass-card p-2 origin-top-right border border-white/10"
                     >
                       <div className="px-3 py-2 border-b border-white/10 mb-1">
                         <p className="text-sm font-semibold text-white truncate">{user?.name}</p>
@@ -145,8 +230,8 @@ const Navbar = () => {
                         <HiUser className="w-4 h-4" /> Profile
                       </Link>
                       <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all"
+                         onClick={handleLogout}
+                         className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all"
                       >
                         <HiLogout className="w-4 h-4" /> Sign Out
                       </button>
@@ -194,7 +279,7 @@ const Navbar = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search services, categories, velixoralogies..."
+                  placeholder="Search services, categories..."
                   className="input-field pl-12 pr-4"
                   autoFocus
                   id="nav-search-input"
@@ -216,17 +301,35 @@ const Navbar = () => {
           >
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                    location.pathname === link.path
-                      ? 'text-primary-400 bg-primary-500/10'
-                      : 'text-surface-300 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  {link.name}
-                </Link>
+                <div key={link.name}>
+                  <Link
+                    to={link.path}
+                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                      location.pathname === link.path
+                        ? 'text-primary-400 bg-primary-500/10'
+                        : 'text-surface-300 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                  {link.dropdown && (
+                    <div className="pl-6 pr-4 py-1 space-y-1 border-l-2 border-white/5 ml-4">
+                      {link.dropdown.map(subLink => (
+                        <Link
+                          key={subLink.name}
+                          to={subLink.path}
+                          className={`block px-4 py-2 rounded-lg text-sm transition-all ${
+                            location.pathname === subLink.path
+                              ? 'text-primary-400 bg-primary-500/10'
+                              : 'text-surface-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          {subLink.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
               {!isAuthenticated && (
                 <div className="pt-3 border-t border-white/10 flex gap-3">

@@ -17,7 +17,7 @@ const ServicesManager = () => {
   const [categoryForm, setCategoryForm] = useState({ _id: '', name: '', slug: '', icon: '', description: '' });
   
   const [showServiceModal, setShowServiceModal] = useState(false);
-  const [serviceForm, setServiceForm] = useState({ _id: '', title: '', description: '', shortDescription: '', category: '', price: '', deliveryDays: '', isActive: true });
+  const [serviceForm, setServiceForm] = useState({ _id: '', title: '', description: '', shortDescription: '', category: '', price: '', deliveryDays: '', isActive: true, internalCostEstimate: '', isInternational: false });
   
   const [saving, setSaving] = useState(false);
 
@@ -76,10 +76,12 @@ const ServicesManager = () => {
         category: srv.category?._id || srv.category,
         price: srv.pricingTiers?.[0]?.price || '',
         deliveryDays: srv.pricingTiers?.[0]?.deliveryDays || '',
-        isActive: srv.isActive
+        isActive: srv.isActive,
+        internalCostEstimate: srv.internalCostEstimate || '',
+        isInternational: srv.isInternational || false
       });
     } else {
-      setServiceForm({ _id: '', title: '', description: '', shortDescription: '', category: categories[0]?._id || '', price: '', deliveryDays: '', isActive: true });
+      setServiceForm({ _id: '', title: '', description: '', shortDescription: '', category: categories[0]?._id || '', price: '', deliveryDays: '', isActive: true, internalCostEstimate: '', isInternational: false });
     }
     setShowServiceModal(true);
   };
@@ -94,6 +96,8 @@ const ServicesManager = () => {
         shortDescription: serviceForm.shortDescription,
         category: serviceForm.category,
         isActive: serviceForm.isActive,
+        internalCostEstimate: Number(serviceForm.internalCostEstimate) || null,
+        isInternational: serviceForm.isInternational,
         pricingTiers: [{
           name: 'Basic',
           price: Number(serviceForm.price),
@@ -422,6 +426,26 @@ const ServicesManager = () => {
                     <div className="relative">
                       <input required type="number" value={serviceForm.deliveryDays} onChange={e => setServiceForm({...serviceForm, deliveryDays: e.target.value})} className="w-full bg-surface-900 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-primary-500 transition-colors" placeholder="14" />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-surface-400 text-sm">Days</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-5 rounded-xl border border-white/5 bg-surface-800/50">
+                <div>
+                  <label className="block text-sm font-medium text-surface-300 mb-1.5">Internal Cost Estimate (INR)</label>
+                  <input type="number" value={serviceForm.internalCostEstimate} onChange={e => setServiceForm({...serviceForm, internalCostEstimate: e.target.value})} className="w-full bg-surface-900 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-primary-500 transition-colors" placeholder="e.g. 5000" />
+                  <p className="text-xs text-surface-500 mt-1">For Admin Profitability Tracking</p>
+                </div>
+                <div className="flex flex-col justify-center">
+                  <div className="flex items-center gap-3">
+                    <div className="relative flex items-center">
+                      <input type="checkbox" id="isInternational" checked={serviceForm.isInternational} onChange={e => setServiceForm({...serviceForm, isInternational: e.target.checked})} className="peer sr-only" />
+                      <div className="w-11 h-6 bg-surface-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-surface-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-500 transition-colors cursor-pointer" onClick={() => setServiceForm({...serviceForm, isInternational: !serviceForm.isInternational})}></div>
+                    </div>
+                    <div className="flex flex-col">
+                      <label htmlFor="isInternational" className="text-sm font-medium text-white cursor-pointer" onClick={() => setServiceForm({...serviceForm, isInternational: !serviceForm.isInternational})}>International Ready</label>
+                      <span className="text-xs text-surface-400">Enable multi-currency purchasing for this service.</span>
                     </div>
                   </div>
                 </div>

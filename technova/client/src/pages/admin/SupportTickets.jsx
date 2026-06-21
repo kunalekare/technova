@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useState, useEffect } from 'react';
 import { 
   HiTicket, HiOutlineUserGroup, HiReply, HiOutlineCheckCircle, 
-  HiOutlineExclamationCircle, HiOutlineClock, HiOutlineChatAlt2, HiX 
+  HiOutlineExclamationCircle, HiOutlineClock, HiOutlineChatAlt2, HiX, HiOutlineFire 
 } from 'react-icons/hi';
 import { format } from 'date-fns';
 import api from '../../services/api';
@@ -18,6 +18,7 @@ const statusConfig = {
 
 const SupportTickets = () => {
   const [tickets, setTickets] = useState([]);
+  const [sentiments, setSentiments] = useState([]);
   const [loading, setLoading] = useState(true);
   
   // Reply Modal State
@@ -28,8 +29,12 @@ const SupportTickets = () => {
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const { data } = await api.get('/tickets/all');
-        setTickets(data.data || []);
+        const [ticketsRes, sentimentsRes] = await Promise.all([
+          api.get('/tickets/all'),
+          api.get('/admin/sentiments')
+        ]);
+        setTickets(ticketsRes.data.data || []);
+        setSentiments(sentimentsRes.data.data || []);
       } catch (err) {
         console.error('Failed to fetch admin tickets:', err);
       } finally {
@@ -146,7 +151,14 @@ const SupportTickets = () => {
                             <HiTicket className="w-5 h-5" />
                           </div>
                           <div>
-                            <p className="text-sm font-bold text-white group-hover:text-primary-400 transition-colors">{t.subject}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="text-sm font-bold text-white group-hover:text-primary-400 transition-colors">{t.subject}</p>
+                              {sentiments.some(s => t.messages?.some(m => m._id === s.messageId) && s.sentiment === 'negative') && (
+                                <span title="Negative Sentiment Detected" className="flex items-center text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded text-[10px] font-bold border border-red-500/20">
+                                  <HiOutlineFire className="mr-1" /> Flagged
+                                </span>
+                              )}
+                            </div>
                             <p className="text-[11px] font-mono text-surface-500 mt-1 uppercase tracking-widest">TK-{t._id.substring(0, 6)}</p>
                           </div>
                         </div>

@@ -1,6 +1,7 @@
 import Service from '../models/Service.js';
 import Review from '../models/Review.js';
 import Category from '../models/Category.js';
+import { getExchangeRates } from '../services/payment/currencyService.js';
 
 // @desc    Get services with filters, search, sort, pagination
 // @route   GET /api/v1/services
@@ -72,6 +73,7 @@ export const getServices = async (req, res, next) => {
 
     const [services, total] = await Promise.all([
       Service.find(query)
+        .select('-internalCostEstimate')
         .populate('category', 'name slug icon')
         .sort(sortObj)
         .skip(skip)
@@ -97,10 +99,12 @@ export const getServices = async (req, res, next) => {
 // @access  Public
 export const getServiceById = async (req, res, next) => {
   try {
-    const service = await Service.findById(req.params.id).populate(
-      'category',
-      'name slug icon subCategories'
-    );
+    const service = await Service.findById(req.params.id)
+      .select('-internalCostEstimate')
+      .populate(
+        'category',
+        'name slug icon subCategories'
+      );
 
     if (!service || !service.isActive) {
       return res.status(404).json({
@@ -286,6 +290,21 @@ export const fixCategories = async (req, res, next) => {
     }
 
     res.json({ success: true, message: `Successfully seeded ${count} missing services directly to existing categories!` });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get current exchange rates
+// @route   GET /api/v1/services/rates
+// @access  Public
+export const getRatesPublic = async (req, res, next) => {
+  try {
+    const rates = await getExchangeRates();
+    res.json({
+      success: true,
+      data: rates
+    });
   } catch (error) {
     next(error);
   }

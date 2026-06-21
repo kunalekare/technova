@@ -1,5 +1,5 @@
 import express from 'express';
-import { placeOrder, getMyOrders, getOrderById, getAllOrders } from '../controllers/orderController.js';
+import { placeOrder, verifyPayment, getMyOrders, getOrderById, getAllOrders } from '../controllers/orderController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -15,5 +15,8 @@ router.route('/myorders')
 
 router.route('/:id')
   .get(getOrderById);
+
+router.route('/:id/verify-payment')
+  .post(verifyPayment);
 
 export default router;

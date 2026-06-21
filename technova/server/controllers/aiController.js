@@ -1,4 +1,5 @@
 import { generateChatResponse, generateProjectScope } from '../services/ai/openaiService.js';
+import { summarizeMeeting } from '../services/ai/meetingSummarizerService.js';
 
 // @desc    Chat with AI assistant
 // @route   POST /api/v1/ai/chat
@@ -40,6 +41,36 @@ export const generateScope = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: scope,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Summarize a meeting transcript or audio
+// @route   POST /api/v1/ai/meetings/summarize
+// @access  Private
+export const handleMeetingSummarize = async (req, res, next) => {
+  try {
+    const { textTranscript } = req.body;
+    let filePath = null;
+    let mimeType = null;
+
+    if (req.file) {
+      filePath = req.file.path;
+      mimeType = req.file.mimetype;
+    }
+
+    if (!textTranscript && !filePath) {
+      res.status(400);
+      throw new Error('Please provide either a text transcript or an audio file');
+    }
+
+    const summary = await summarizeMeeting(null, filePath, mimeType, textTranscript);
+
+    res.status(200).json({
+      success: true,
+      data: summary,
     });
   } catch (error) {
     next(error);

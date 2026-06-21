@@ -7,11 +7,13 @@ import { format } from 'date-fns';
 import {
   HiArrowLeft, HiCalendar, HiCurrencyRupee, HiUsers,
   HiDocumentDownload, HiChat, HiClipboardList, HiClock,
-  HiCheckCircle, HiExclamation, HiPhotograph
+  HiCheckCircle, HiExclamation, HiPhotograph, HiOutlineVideoCamera
 } from 'react-icons/hi';
 import { fetchProjectById, clearCurrentProject } from '../../redux/slices/projectSlice';
 import Timeline from '../../components/dashboard/Timeline';
 import ChatWidget from '../../components/dashboard/ChatWidget';
+import EscrowStatus from '../../components/dashboard/EscrowStatus'; // We will create this component
+import DesignFeedbackTab from '../../components/projects/DesignFeedbackTab';
 
 const statusConfig = {
   new: { label: 'New', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', icon: HiClock },
@@ -23,7 +25,7 @@ const statusConfig = {
   cancelled: { label: 'Cancelled', color: 'bg-red-500/10 text-red-400 border-red-500/20', icon: HiExclamation },
 };
 
-const tabs = ['overview', 'milestones', 'team', 'files', 'chat'];
+const tabs = ['overview', 'milestones', 'meetings', 'team', 'files', 'design feedback', 'chat', 'escrow'];
 
 const ProjectDetail = () => {
   const { id } = useParams();
@@ -236,6 +238,59 @@ const ProjectDetail = () => {
             </div>
           )}
 
+          {activeTab === 'meetings' && (
+            <div className="glass-card p-6">
+              <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+                <HiOutlineVideoCamera className="text-primary-400" />
+                Google Meets
+              </h3>
+              {project.meetings?.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {project.meetings.map(m => (
+                    <div key={m._id} className="bg-surface-800/50 border border-white/5 rounded-xl p-5 hover:border-primary-500/30 transition-colors">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <p className="text-base font-bold text-white">{m.title}</p>
+                          <p className="text-xs text-surface-400 mt-0.5">{format(new Date(m.date), 'PPp')}</p>
+                        </div>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-bold ${m.status === 'completed' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}`}>
+                          {m.status}
+                        </span>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        <a href={m.meetLink} target="_blank" rel="noreferrer" className="text-sm font-medium bg-primary-600 hover:bg-primary-500 text-white px-4 py-2 rounded-lg transition-colors flex-1 text-center">
+                          Join Google Meet
+                        </a>
+                      </div>
+
+                      {m.summary && (
+                        <div className="mt-4 pt-4 border-t border-white/5">
+                          <p className="text-xs font-bold text-primary-400 mb-1">AI Summary</p>
+                          <p className="text-xs text-surface-300 leading-relaxed mb-3">{m.summary}</p>
+                          {m.actionItems?.length > 0 && (
+                            <>
+                              <p className="text-xs font-bold text-emerald-400 mb-1">Action Items</p>
+                              <ul className="text-xs text-surface-300 list-disc pl-4 space-y-1">
+                                {m.actionItems.map((item, idx) => <li key={idx}>{item}</li>)}
+                              </ul>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-8 text-center border border-white/5 rounded-xl bg-surface-800/30">
+                  <HiOutlineVideoCamera className="w-10 h-10 text-surface-600 mx-auto mb-2" />
+                  <p className="text-surface-400">No meetings scheduled yet.</p>
+                  <p className="text-xs text-surface-500 mt-1">Your assigned team will schedule Google Meets here.</p>
+                </div>
+              )}
+            </div>
+          )}
+
           {activeTab === 'team' && (
             <div className="glass-card p-6">
               <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
@@ -267,6 +322,16 @@ const ProjectDetail = () => {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {activeTab === 'escrow' && (
+            <div className="glass-card p-6">
+              <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+                <HiCurrencyRupee className="w-5 h-5 text-primary-400" />
+                Escrow Milestones & Payments
+              </h3>
+              <EscrowStatus projectId={project._id} />
             </div>
           )}
 
@@ -310,6 +375,13 @@ const ProjectDetail = () => {
                   })}
                 </div>
               )}
+            </div>
+          )}
+
+          {activeTab === 'design feedback' && (
+            <div className="glass-card p-6">
+              <h3 className="text-xl font-bold text-white mb-4">Design Feedback & Annotations</h3>
+              <DesignFeedbackTab project={project} />
             </div>
           )}
 
